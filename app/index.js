@@ -11,7 +11,13 @@ module.exports = generators.Base.extend({
       name: process.cwd().split(path.sep).pop()
     };
     this.dotfiles = ['editorconfig', 'gitignore', 'jshintrc', 'npmignore', 'travis.yml'];
-    this.files = ['package.json', 'src/index.js', 'test/index.test.js', 'LICENSE', 'README.md'];
+    this.files = [
+      'package.json',
+      'src/index.js',
+      'test/index.test.js',
+      'LICENSE',
+      'README.md'
+    ];
   },
 
   prompting: function () {
@@ -22,17 +28,66 @@ module.exports = generators.Base.extend({
       when: !this.pkg.name,
       default: this.props.name
     }, {
-      name: 'repository',
-      message: 'The GitHub repository URL (e.g. feathersjs/feathers-myplugin)',
-      default: 'feathersjs/' + this.props.name
-    }, {
       name: 'description',
       message: 'Description',
       when: !this.pkg.description
+    }, {
+      type: 'checkbox',
+      name: 'providers',
+      message: 'What providers should your API support?',
+      choices: [{
+        name: 'REST',
+        checked: true
+      }, {
+        name: 'Socket.io',
+        checked: true
+      }, {
+        name: 'Primus'
+      }]
+    }, {
+      type: 'list',
+      name: 'database',
+      message: 'What database do you primarily want to use?',
+      choices: [{
+        name: 'I will choose my own',
+        checked: true
+      }, {
+        name: 'memory'
+      }, {
+        name: 'mongodb'
+      }, {
+        name: 'mongoose'
+      }, {
+        name: 'nedb'
+      }, {
+        name: 'mysql'
+      }, {
+        name: 'postgresql'
+      }, {
+        name: 'sqlite'
+      }]
+    }, {
+      type: 'checkbox',
+      name: 'authentication',
+      message: 'What authentication methods would you like to support?',
+      choices: [{
+        name: 'basic'
+      }, {
+        name: 'local'
+      }, {
+        name: 'google'
+      }, {
+        name: 'facebook'
+      }, {
+        name: 'twitter'
+      }, {
+        name: 'github'
+      }]
     }];
 
     this.prompt(prompts, function (props) {
       this.props = _.extend(this.props, props);
+      this.config.set('database', this.props.database);
 
       done();
     }.bind(this));
@@ -56,10 +111,14 @@ module.exports = generators.Base.extend({
     }.bind(this));
 
     this.npmInstall([
+      'feathers',
+      'feathers-hooks'
+    ], { save: true });
+
+    this.npmInstall([
       'babel',
       'jshint',
-      'mocha',
-      'feathers'
+      'mocha'
     ], { saveDev: true});
   }
 });
