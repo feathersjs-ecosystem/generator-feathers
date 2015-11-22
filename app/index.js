@@ -117,7 +117,8 @@ module.exports = generators.Base.extend({
 
     this.npmInstall([
       'jshint',
-      'mocha'
+      'mocha',
+      'request'
     ], { saveDev: true});
   }
 });

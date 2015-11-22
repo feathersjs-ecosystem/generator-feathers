@@ -8,7 +8,7 @@ import hooks from './hooks';
 import authentication from './authentication';
 
 const app = feathers()
-  .configure(configuration(path.join(__dirname, '..')))
+  .configure(configuration(join(__dirname, '..')))
   <% if(providers.indexOf('REST') !== -1) { %>.configure(feathers.rest())
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
