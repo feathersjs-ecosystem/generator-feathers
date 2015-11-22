@@ -10,14 +10,6 @@ module.exports = generators.Base.extend({
     this.props = {
       name: process.cwd().split(path.sep).pop()
     };
-    this.dotfiles = ['editorconfig', 'gitignore', 'jshintrc', 'npmignore', 'travis.yml'];
-    this.files = [
-      'package.json',
-      'src/index.js',
-      'test/index.test.js',
-      'LICENSE',
-      'README.md'
-    ];
   },
 
   prompting: function () {
@@ -94,29 +86,36 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    this.dotfiles.forEach(function(file) {
-      this.fs.copyTpl(
-        this.templatePath(file),
-        this.destinationPath('.' + file),
-        this.props
-      );
-    }.bind(this));
-
-    this.files.forEach(function(file) {
-      this.fs.copyTpl(
-        this.templatePath(file),
-        this.destinationPath(file),
-        this.props
-      );
-    }.bind(this));
-
-    this.npmInstall([
+    var dependencies = [
       'feathers',
-      'feathers-hooks'
-    ], { save: true });
+      'feathers-hooks',
+      'feathers-configuration',
+      'babel-core',
+      'babel-preset-es2015'
+    ];
+
+    if(this.props.providers.indexOf('REST') !== -1) {
+      dependencies.push('body-parser');
+    }
+
+    this.fs.copy(this.templatePath('static'), this.destinationPath());
+    this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
+
+    this.fs.copyTpl(
+      this.templatePath('app.js'),
+      this.destinationPath('src', 'app.js'),
+      this.props
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('package.json'),
+      this.destinationPath('package.json'),
+      this.props
+    );
+
+    this.npmInstall(dependencies, { save: true });
 
     this.npmInstall([
-      'babel',
       'jshint',
       'mocha'
     ], { saveDev: true});
