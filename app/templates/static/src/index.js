@@ -1,6 +1,6 @@
 require('babel-core/register');
 
-var app = require('./app');
+var app = require('./app').default;
 var port = app.get('port');
 var server = app.listen(port);
 
