@@ -89,6 +89,7 @@ module.exports = generators.Base.extend({
     var dependencies = [
       'feathers',
       'feathers-hooks',
+      'feathers-authentication',
       'feathers-configuration',
       'babel-core',
       'babel-preset-es2015'
