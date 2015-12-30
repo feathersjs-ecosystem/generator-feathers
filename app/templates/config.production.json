@@ -1,0 +1,13 @@
+{
+  "host": "myapp.com",
+  "port": 80,
+  "public": "../public/"<% if(authentication.length){ %>,
+  "auth": {<% if(authentication.indexOf('local' > -1)){ %>
+    "local": {
+      "secret": "FEATHERS_AUTH_SECRET",
+      "loginEndpoint": "/login",
+      "userEndpoint": "/users",
+      "usernameField": "email"
+    }<% } %>
+  }<% } %>
+}

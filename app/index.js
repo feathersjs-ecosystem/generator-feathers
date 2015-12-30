@@ -2,6 +2,7 @@
 
 var generators = require('yeoman-generator');
 var path = require('path');
+var crypto = require('crypto');
 var _ = require('lodash');
 
 module.exports = generators.Base.extend({
@@ -63,17 +64,17 @@ module.exports = generators.Base.extend({
       name: 'authentication',
       message: 'What authentication methods would you like to support?',
       choices: [{
-        name: 'basic'
-      }, {
+      //   name: 'basic'
+      // }, {
         name: 'local'
-      }, {
-        name: 'google'
-      }, {
-        name: 'facebook'
-      }, {
-        name: 'twitter'
-      }, {
-        name: 'github'
+      // }, {
+      //   name: 'google'
+      // }, {
+      //   name: 'facebook'
+      // }, {
+      //   name: 'twitter'
+      // }, {
+      //   name: 'github'
       }]
     }];
 
@@ -86,10 +87,10 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
+    this.props.secret = crypto.randomBytes(64).toString('base64'); 
     var dependencies = [
       'feathers',
       'feathers-hooks',
-      'feathers-authentication',
       'feathers-configuration',
       'babel-core',
       'babel-preset-es2015'
@@ -97,6 +98,10 @@ module.exports = generators.Base.extend({
 
     if(this.props.providers.indexOf('REST') !== -1) {
       dependencies.push('body-parser');
+    }
+
+    if(this.props.authentication.length) {
+      dependencies.push('feathers-authentication');
     }
 
     this.fs.copy(this.templatePath('static'), this.destinationPath());
@@ -107,7 +112,19 @@ module.exports = generators.Base.extend({
       this.destinationPath('src', 'app.js'),
       this.props
     );
-
+    
+    this.fs.copyTpl(
+      this.templatePath('config.default.json'),
+      this.destinationPath('config', 'default.json'),
+      this.props
+    );
+    
+    this.fs.copyTpl(
+      this.templatePath('config.production.json'),
+      this.destinationPath('config', 'production.json'),
+      this.props
+    );
+    
     this.fs.copyTpl(
       this.templatePath('package.json'),
       this.destinationPath('package.json'),
