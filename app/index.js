@@ -39,6 +39,28 @@ module.exports = generators.Base.extend({
       }]
     }, {
       type: 'list',
+      name: 'cors',
+      message: 'CORS configuration',
+      choices: [{
+        name: 'Enabled for all domains',
+        value: 'enabled',
+        checked: true
+      },{
+        name: 'Enabled for whitelisted domains',
+        value: 'whitelisted'
+      },{
+        name: 'Disabled',
+        value: false
+      }]
+    }, {
+      type: 'input',
+      name: 'corsWhitelist',
+      message: 'Comma-separated domains for CORS whitelist. Include http(s)',
+      when: function(props){
+        return props.cors === 'whitelisted';
+      }
+    }, {
+      type: 'list',
       name: 'database',
       message: 'What database do you primarily want to use?',
       choices: [{
@@ -87,7 +109,8 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    this.props.secret = crypto.randomBytes(64).toString('base64'); 
+    this.props.secret = crypto.randomBytes(64).toString('base64');
+    this.props.corsWhitelist = this.props.corsWhitelist && this.props.corsWhitelist.split(',');
     var dependencies = [
       'feathers',
       'feathers-hooks',
@@ -102,6 +125,10 @@ module.exports = generators.Base.extend({
 
     if(this.props.authentication.length) {
       dependencies.push('feathers-authentication');
+    }
+    
+    if(this.props.cors) {
+      dependencies.push('cors');
     }
 
     this.fs.copy(this.templatePath('static'), this.destinationPath());
@@ -130,6 +157,8 @@ module.exports = generators.Base.extend({
       this.destinationPath('package.json'),
       this.props
     );
+    
+    this.log(this.props);
 
     this.npmInstall(dependencies, { save: true });
 

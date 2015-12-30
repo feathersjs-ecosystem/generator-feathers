@@ -9,5 +9,8 @@
       "userEndpoint": "/users",
       "usernameField": "email"
     }<% } %>
-  }<% } %>
+  }<% } %><% if (cors === 'whitelisted') { %>,
+  "corsWhitelist": [<% corsWhitelist.forEach(function(domain, index, list){ %>
+    "<%= domain.trim() %>"<% if(index + 1 !== list.length){ %>,<% } %><% }); %>
+  ]<% } %>
 }
