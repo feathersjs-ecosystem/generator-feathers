@@ -149,6 +149,8 @@ module.exports = generators.Base.extend({
       'feathers@2.0.0-pre.2',
       'feathers-hooks@1.0.0-pre.1',
       'feathers-configuration',
+      'serve-favicon',
+      'compression',
       'babel-core',
       'babel-preset-es2015'
     ];
