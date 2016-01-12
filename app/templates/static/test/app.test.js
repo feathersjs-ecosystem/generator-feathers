@@ -1,10 +1,10 @@
 import assert from 'assert';
 import request from 'request';
-import app from '../src/app';
+import app from '../server/app';
 
 describe('Feathers application tests', () => {
   before(function(done) {
-    this.server = app.listen(8787);
+    this.server = app.listen(3030);
     this.server.once('listening', () => done());
   });
 
@@ -13,7 +13,7 @@ describe('Feathers application tests', () => {
   });
 
   it('starts and shows the index page', done => {
-    request('http://localhost:8787', (err, res, body) => {
+    request('http://localhost:3030', (err, res, body) => {
       assert.ok(body.indexOf('<!DOCTYPE html>') !== -1);
       done(err);
     });
@@ -21,7 +21,7 @@ describe('Feathers application tests', () => {
 
   describe('404', () => {
     it('shows a 404 HTML page', done => {
-      request('http://localhost:8787/path/to/nowhere', (err, res, body) => {
+      request('http://localhost:3030/path/to/nowhere', (err, res, body) => {
         assert.equal(res.statusCode, 404);
         assert.ok(body.indexOf('<!DOCTYPE html>') !== -1);
         done(err);
@@ -30,7 +30,7 @@ describe('Feathers application tests', () => {
 
     it('shows a 404 JSON error with stack trace', done => {
       request({
-        url: 'http://localhost:8787/path/to/nowhere',
+        url: 'http://localhost:3030/path/to/nowhere',
         json: true
       }, (err, res, body) => {
         assert.equal(res.statusCode, 404);
