@@ -1,12 +1,16 @@
 import { join } from 'path';
 import feathers from 'feathers';
 import configuration from 'feathers-configuration';
-<% if(providers.indexOf('REST') !== -1) { %>import bodyParser from 'body-parser';<% } %>
+import hooks from 'feathers-hooks';<% if (providers.indexOf('rest') !== -1) { %>
+import rest from 'feathers-rest';
+import bodyParser from 'body-parser';
+<% } %><% if (providers.indexOf('socket.io') !== -1) { %>import socketio from 'feathers-socketio';<% } %>
+<% if (providers.indexOf('primus') !== -1) { %>import primus from 'feathers-primus';<% } %>
+<% if (authentication.length) { %>import feathersAuth from 'feathers-authentication';<% } %>
+<% if (cors) { %>import cors from 'cors';<% } %>
 import middleware from './middleware';
 import services from './services';
-import hooks from './hooks';<% if(authentication.length) { %>
-import feathersAuth from 'feathers-authentication';<% } %><% if(cors) { %>
-import cors from 'cors';<% } %>
+import myHooks from './hooks';
 
 let app = feathers();<% if (cors === 'whitelisted') { %>
 let whitelist = app.get('corsWhitelist');
@@ -18,18 +22,19 @@ let corsOptions = {
 };<% } %>
 
 app.configure(configuration(join(__dirname, '..')))
-  <% if(providers.indexOf('REST') !== -1) { %>.configure(feathers.rest())
+  .configure(hooks())<% if(providers.indexOf('rest') !== -1) { %>
+  .configure(rest())
   .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: true }))<% } if (cors) { %>
+  .use(bodyParser.urlencoded({ extended: true }))<% } %><% if (cors) { %>
   .options('*', cors(<% if (cors === 'whitelisted') { %>corsOptions<% } %>))
-  .use(cors(<% if (cors === 'whitelisted') { %>corsOptions<% } %>))
-  <% } if(providers.indexOf('Socket.io') !== -1) { %>.configure(feathers.socketio())<% } if(providers.indexOf('Primus') !== -1) { %>
-  .configure(feathers.primus({
+  .use(cors(<% if (cors === 'whitelisted') { %>corsOptions<% } %>))<% } %><% if (providers.indexOf('socket.io') !== -1) { %>
+  .configure(socketio())<% } %><% if(providers.indexOf('primus') !== -1) { %>
+  .configure(primus({
     transformer: 'sockjs'
-  }))<% } %><% if(authentication.length) { %>
-  .configure(feathersAuth(app.get('auth').local))
-  <% } %>.configure(services)
-  .configure(hooks)
+  }))<% } %><% if (authentication.length) { %>
+  .configure(feathersAuth(app.get('auth').local))<% } %>
+  .configure(services)
+  .configure(myHooks)
   .configure(middleware);
 
 export default app;
