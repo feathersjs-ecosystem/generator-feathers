@@ -15,94 +15,128 @@ module.exports = generators.Base.extend({
 
   prompting: function () {
     var done = this.async();
-    var prompts = [{
-      name: 'name',
-      message: 'Project name',
-      when: !this.pkg.name,
-      default: this.props.name
-    }, {
-      name: 'description',
-      message: 'Description',
-      when: !this.pkg.description
-    }, {
-      type: 'checkbox',
-      name: 'providers',
-      message: 'What providers should your API support?',
-      choices: [{
-        name: 'REST',
-        checked: true
-      }, {
-        name: 'Socket.io',
-        checked: true
-      }, {
-        name: 'Primus'
-      }]
-    }, {
-      type: 'list',
-      name: 'cors',
-      message: 'CORS configuration',
-      choices: [{
-        name: 'Enabled for all domains',
-        value: 'enabled',
-        checked: true
-      },{
-        name: 'Enabled for whitelisted domains',
-        value: 'whitelisted'
-      },{
-        name: 'Disabled',
-        value: false
-      }]
-    }, {
-      type: 'input',
-      name: 'corsWhitelist',
-      message: 'Comma-separated domains for CORS whitelist. Include http(s)',
-      when: function(props){
-        return props.cors === 'whitelisted';
+    var prompts = [
+      {
+        name: 'name',
+        message: 'Project name',
+        when: !this.pkg.name,
+        default: this.props.name
+      },
+      {
+        name: 'description',
+        message: 'Description',
+        when: !this.pkg.description
+      },
+      {
+        type: 'checkbox',
+        name: 'providers',
+        message: 'What type of API are you making?',
+        choices: [
+          {
+            name: 'REST',
+            value: 'rest',
+            checked: true
+          },
+          {
+            name: 'Realtime via Socket.io',
+            value: 'socket.io',
+            checked: true
+          },
+          {
+            name: 'Realtime via Primus',
+            value: 'primus',
+          }
+        ]
+      }, 
+      {
+        type: 'list',
+        name: 'cors',
+        message: 'CORS configuration',
+        choices: [
+          {
+            name: 'Enabled for all domains',
+            value: 'enabled',
+            checked: true
+          },
+          {
+            name: 'Enabled for whitelisted domains',
+            value: 'whitelisted'
+          },
+          {
+            name: 'Disabled',
+            value: false
+          }
+        ]
+      }, 
+      {
+        type: 'input',
+        name: 'corsWhitelist',
+        message: 'Comma-separated domains for CORS whitelist. Include http(s)',
+        when: function(props){
+          return props.cors === 'whitelisted';
+        }
+      }, 
+      {
+        type: 'list',
+        name: 'database',
+        message: 'What database do you primarily want to use?',
+        choices: [
+          {
+            name: 'I will choose my own',
+            checked: true
+          },
+          {
+            name: 'Memory'
+          },
+          {
+            name: 'MongoDB'
+          },
+          {
+            name: 'MySQL'
+          },
+          {
+            name: 'MariaDB'
+          },
+          {
+            name: 'NeDB'
+          },
+          {
+            name: 'PostgreSQL'
+          },
+          {
+            name: 'SQLite'
+          },
+          {
+           name: 'SQL Server'
+          }
+        ]
+      },
+      {
+        type: 'checkbox',
+        name: 'authentication',
+        message: 'What authentication methods would you like to support?',
+        choices: [
+          {
+            name: 'local',
+            checked: true
+          }
+        //   name: 'basic'
+        // }, {
+          
+        // }, {
+        //   name: 'google'
+        // }, {
+        //   name: 'facebook'
+        // }, {
+        //   name: 'twitter'
+        // }, {
+        //   name: 'github'
+        ]
       }
-    }, {
-      type: 'list',
-      name: 'database',
-      message: 'What database do you primarily want to use?',
-      choices: [{
-        name: 'I will choose my own',
-        checked: true
-      }, {
-        name: 'memory'
-      }, {
-        name: 'mongodb'
-      }, {
-        name: 'mongoose'
-      }, {
-        name: 'nedb'
-      }, {
-        name: 'mysql'
-      }, {
-        name: 'postgresql'
-      }, {
-        name: 'sqlite'
-      }]
-    }, {
-      type: 'checkbox',
-      name: 'authentication',
-      message: 'What authentication methods would you like to support?',
-      choices: [{
-      //   name: 'basic'
-      // }, {
-        name: 'local'
-      // }, {
-      //   name: 'google'
-      // }, {
-      //   name: 'facebook'
-      // }, {
-      //   name: 'twitter'
-      // }, {
-      //   name: 'github'
-      }]
-    }];
+    ];
 
     this.prompt(prompts, function (props) {
       this.props = _.extend(this.props, props);
-      this.config.set('database', this.props.database);
 
       done();
     }.bind(this));
@@ -112,23 +146,93 @@ module.exports = generators.Base.extend({
     this.props.secret = crypto.randomBytes(64).toString('base64');
     this.props.corsWhitelist = this.props.corsWhitelist && this.props.corsWhitelist.split(',');
     var dependencies = [
-      'feathers',
-      'feathers-hooks',
+      'feathers@2.0.0-pre.2',
+      'feathers-hooks@1.0.0-pre.1',
       'feathers-configuration',
       'babel-core',
       'babel-preset-es2015'
     ];
 
-    if(this.props.providers.indexOf('REST') !== -1) {
+    if (this.props.providers.indexOf('rest') !== -1) {
       dependencies.push('body-parser');
+      dependencies.push('feathers-rest');
     }
 
-    if(this.props.authentication.length) {
+    if (this.props.providers.indexOf('socket.io') !== -1) {
+      dependencies.push('feathers-socketio');
+    }
+
+    if (this.props.providers.indexOf('primus') !== -1) {
+      dependencies.push('feathers-primus');
+    }
+
+    if (this.props.authentication.length) {
       dependencies.push('feathers-authentication');
     }
     
-    if(this.props.cors) {
+    if (this.props.cors) {
       dependencies.push('cors');
+    }
+
+    switch(this.props.database) {
+      case 'Memory':
+        dependencies.push('feathers-memory');
+        break;
+      case 'MongoDB':
+        dependencies.push('mongoose');
+        dependencies.push('feathers-mongoose');
+        this.fs.copyTpl(
+          this.templatePath('models/mongoose-user.js'),
+          this.destinationPath('server/models', 'user.js'),
+          this.props
+        );
+        break;
+      case 'MySQL':
+      case 'MariaDB':
+        dependencies.push('mysql');
+        dependencies.push('sequelize');
+        dependencies.push('feathers-sequelize');
+        this.fs.copyTpl(
+          this.templatePath('models/sequelize-user.js'),
+          this.destinationPath('server/models', 'user.js'),
+          this.props
+        );
+        break;
+      case 'NeDB':
+        dependencies.push('nedb');
+        dependencies.push('feathers-nedb');
+        break;
+      case 'PostgreSQL':
+        dependencies.push('pg');
+        dependencies.push('pg-hstore');
+        dependencies.push('sequelize');
+        dependencies.push('feathers-sequelize');
+        this.fs.copyTpl(
+          this.templatePath('models/sequelize-user.js'),
+          this.destinationPath('server/models', 'user.js'),
+          this.props
+        );
+        break;
+      case 'SQLite':
+        dependencies.push('sqlite3');
+        dependencies.push('sequelize');
+        dependencies.push('feathers-sequelize');
+        this.fs.copyTpl(
+          this.templatePath('models/sequelize-user.js'),
+          this.destinationPath('server/models', 'user.js'),
+          this.props
+        );
+        break;
+      case 'SQL Server':
+        dependencies.push('tedious');
+        dependencies.push('sequelize');
+        dependencies.push('feathers-sequelize');
+        this.fs.copyTpl(
+          this.templatePath('models/sequelize-user.js'),
+          this.destinationPath('server/models', 'user.js'),
+          this.props
+        );
+        break;
     }
 
     this.fs.copy(this.templatePath('static'), this.destinationPath());
@@ -136,7 +240,13 @@ module.exports = generators.Base.extend({
 
     this.fs.copyTpl(
       this.templatePath('app.js'),
-      this.destinationPath('src', 'app.js'),
+      this.destinationPath('server', 'app.js'),
+      this.props
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('user-service.js'),
+      this.destinationPath('server/services', 'user.js'),
       this.props
     );
     
