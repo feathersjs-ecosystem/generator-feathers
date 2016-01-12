@@ -151,6 +151,7 @@ module.exports = generators.Base.extend({
       'feathers-configuration',
       'serve-favicon',
       'compression',
+      'winston',
       'babel-core',
       'babel-preset-es2015'
     ];
@@ -243,6 +244,12 @@ module.exports = generators.Base.extend({
     this.fs.copyTpl(
       this.templatePath('app.js'),
       this.destinationPath('server', 'app.js'),
+      this.props
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('middleware.js'),
+      this.destinationPath('server/middleware', 'index.js'),
       this.props
     );
 

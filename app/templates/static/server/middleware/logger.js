@@ -1,13 +1,22 @@
-export default function(error, req, res, next) {
-  let app = req.app;
+import winston from 'winston';
 
-  if (error) {
-    console.error(`${error.code ? `(${error.code}) ` : '' }Route: ${req.url} - ${error.message}`);
-    
-    if (app.settings.env !== 'production') {
-      console.trace(error.stack);
+export default function(app) {
+  // Add a logger to our app object for convenience
+  app.logger = winston;
+
+  return function(error, req, res, next) {
+    if (error) {
+      const message = `${error.code ? `(${error.code}) ` : '' }Route: ${req.url} - ${error.message}`;
+      
+      if (error.code === 404) {
+        winston.info(message);
+      }
+      else {
+        winston.error(message);
+        winston.info(error.stack);
+      }
     }
-  }
 
-  next(error);
+    next(error);
+  };
 };
