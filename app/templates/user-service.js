@@ -5,7 +5,7 @@ import service from 'feathers-memory';
 const User = {};
 <% } %>
 <% if (database === 'NeDB') { %>
-import NeDB from 'feathers-nedb';
+import NeDB from 'nedb';
 import service from 'feathers-nedb';
 let User = new NeDB({
   filename: './data/users.db',
