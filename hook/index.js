@@ -25,8 +25,7 @@ module.exports = generators.Base.extend({
           },
           {
             name: 'after hook',
-            value: 'after',
-            checked: true
+            value: 'after'
           }
         ]
       },
