@@ -32,14 +32,10 @@ export default function(app) {
       },
 
       'application/json': function () {
-        let output = {
-          code,
-          message: error.message,
-          name: error.name
-        };
+        let output = Object.assign({}, error.toJSON());
 
-        if (app.settings.env !== 'production') {
-          output.stack = error.stack;
+        if (app.settings.env === 'production') {
+          delete output.stack;
         }
 
         res.json(output);
