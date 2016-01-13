@@ -86,28 +86,36 @@ module.exports = generators.Base.extend({
             checked: true
           },
           {
-            name: 'Memory'
+            name: 'Memory',
+            value: 'memory'
           },
           {
-            name: 'MongoDB'
+            name: 'MongoDB',
+            value: 'mongodb'
           },
           {
-            name: 'MySQL'
+            name: 'MySQL',
+            value: 'mysql'
           },
           {
-            name: 'MariaDB'
+            name: 'MariaDB',
+            value: 'mariadb'
           },
           {
-            name: 'NeDB'
+            name: 'NeDB',
+            value: 'nedb'
           },
           {
-            name: 'PostgreSQL'
+            name: 'PostgreSQL',
+            value: 'postgres'
           },
           {
-            name: 'SQLite'
+            name: 'SQLite',
+            value: 'sqlite'
           },
           {
-           name: 'SQL Server'
+           name: 'SQL Server',
+           value: 'mssql'
           }
         ]
       },
@@ -178,10 +186,15 @@ module.exports = generators.Base.extend({
     }
 
     switch(this.props.database) {
-      case 'Memory':
+      case 'memory':
         dependencies.push('feathers-memory');
+        this.fs.copyTpl(
+          this.templatePath('services/memory-user.js'),
+          this.destinationPath('server/services', 'user.js'),
+          this.props
+        );
         break;
-      case 'MongoDB':
+      case 'mongodb':
         dependencies.push('mongoose');
         dependencies.push('feathers-mongoose');
         this.fs.copyTpl(
@@ -189,9 +202,14 @@ module.exports = generators.Base.extend({
           this.destinationPath('server/models', 'user.js'),
           this.props
         );
+        this.fs.copyTpl(
+          this.templatePath('services/mongoose-user.js'),
+          this.destinationPath('server/services', 'user.js'),
+          this.props
+        );
         break;
-      case 'MySQL':
-      case 'MariaDB':
+      case 'mysql':
+      case 'mariadb':
         dependencies.push('mysql');
         dependencies.push('sequelize');
         dependencies.push('feathers-sequelize');
@@ -200,12 +218,22 @@ module.exports = generators.Base.extend({
           this.destinationPath('server/models', 'user.js'),
           this.props
         );
+        this.fs.copyTpl(
+          this.templatePath('services/sequelize-user.js'),
+          this.destinationPath('server/services', 'user.js'),
+          this.props
+        );
         break;
-      case 'NeDB':
+      case 'nedb':
         dependencies.push('nedb');
         dependencies.push('feathers-nedb');
+        this.fs.copyTpl(
+          this.templatePath('services/nedb-user.js'),
+          this.destinationPath('server/services', 'user.js'),
+          this.props
+        );
         break;
-      case 'PostgreSQL':
+      case 'postgres':
         dependencies.push('pg');
         dependencies.push('pg-hstore');
         dependencies.push('sequelize');
@@ -215,8 +243,13 @@ module.exports = generators.Base.extend({
           this.destinationPath('server/models', 'user.js'),
           this.props
         );
+        this.fs.copyTpl(
+          this.templatePath('services/sequelize-user.js'),
+          this.destinationPath('server/services', 'user.js'),
+          this.props
+        );
         break;
-      case 'SQLite':
+      case 'sqlite':
         dependencies.push('sqlite3');
         dependencies.push('sequelize');
         dependencies.push('feathers-sequelize');
@@ -225,14 +258,24 @@ module.exports = generators.Base.extend({
           this.destinationPath('server/models', 'user.js'),
           this.props
         );
+        this.fs.copyTpl(
+          this.templatePath('services/sequelize-user.js'),
+          this.destinationPath('server/services', 'user.js'),
+          this.props
+        );
         break;
-      case 'SQL Server':
+      case 'mssql':
         dependencies.push('tedious');
         dependencies.push('sequelize');
         dependencies.push('feathers-sequelize');
         this.fs.copyTpl(
           this.templatePath('models/sequelize-user.js'),
           this.destinationPath('server/models', 'user.js'),
+          this.props
+        );
+        this.fs.copyTpl(
+          this.templatePath('services/sequelize-user.js'),
+          this.destinationPath('server/services', 'user.js'),
           this.props
         );
         break;
@@ -250,12 +293,6 @@ module.exports = generators.Base.extend({
     this.fs.copyTpl(
       this.templatePath('middleware.js'),
       this.destinationPath('server/middleware', 'index.js'),
-      this.props
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('user-service.js'),
-      this.destinationPath('server/services', 'user.js'),
       this.props
     );
     
