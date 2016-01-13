@@ -175,6 +175,7 @@ module.exports = generators.Base.extend({
 
     if (this.props.providers.indexOf('primus') !== -1) {
       dependencies.push('feathers-primus');
+      dependencies.push('sockjs');
     }
 
     if (this.props.authentication.length) {
