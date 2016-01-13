@@ -63,11 +63,17 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    // TODO (EK): Supporting generating the models and servces
-    // for certain database types
+    // TODO (EK): Supporting generating the models and services
+    // for certain database types.
     if (this.props.type === 'database') {
       this.props.type = 'mongoose';
     }
+
+    // TODO (EK): Automatically import the new service
+    // into services/index.js and initialize it.
+    
+    // TODO (EK): Automatically generate a new model
+    // based on the database type.
 
     this.fs.copyTpl(
       this.templatePath(this.props.type + '-service.js'),
