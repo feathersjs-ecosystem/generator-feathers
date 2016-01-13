@@ -155,7 +155,7 @@ module.exports = generators.Base.extend({
     this.props.corsWhitelist = this.props.corsWhitelist && this.props.corsWhitelist.split(',');
     var dependencies = [
       'feathers@2.0.0-pre.2',
-      'feathers-hooks@1.0.0-pre.1',
+      'feathers-hooks@1.0.0-pre.2',
       'feathers-configuration',
       'serve-favicon',
       'compression',
