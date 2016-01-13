@@ -46,7 +46,6 @@
     "lib": "lib"
   },
   "dependencies": {
-    "lodash": "^3.10.1",
     "yeoman-generator": "^0.21.1"
   },
   "devDependencies": {

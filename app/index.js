@@ -3,7 +3,6 @@
 var generators = require('yeoman-generator');
 var path = require('path');
 var crypto = require('crypto');
-var _ = require('lodash');
 
 module.exports = generators.Base.extend({
   initializing: function () {
@@ -144,7 +143,7 @@ module.exports = generators.Base.extend({
     ];
 
     this.prompt(prompts, function (props) {
-      this.props = _.extend(this.props, props);
+      this.props = Object.assign(this.props, props);
 
       done();
     }.bind(this));
