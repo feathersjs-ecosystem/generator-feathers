@@ -4,9 +4,9 @@ var generators = require('yeoman-generator');
 var path = require('path');
 
 module.exports = generators.Base.extend({
-  initializing: function () {
+  initializing: function (name) {
     this.props = {
-      name: process.cwd().split(path.sep).pop()
+      name: name
     };
   },
 
