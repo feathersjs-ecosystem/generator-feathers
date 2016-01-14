@@ -155,6 +155,7 @@ module.exports = generators.Base.extend({
     var dependencies = [
       'feathers@2.0.0-pre.2',
       'feathers-hooks@1.0.0-pre.2',
+      'feathers-errors',
       'feathers-configuration',
       'serve-favicon',
       'compression',

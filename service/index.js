@@ -68,6 +68,9 @@ module.exports = generators.Base.extend({
     if (this.props.type === 'database') {
       this.props.type = 'mongoose';
     }
+    else {
+      this.npmInstall(['feathers-errors'], { save: true });
+    }
 
     // TODO (EK): Automatically import the new service
     // into services/index.js and initialize it.
