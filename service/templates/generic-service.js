@@ -151,5 +151,5 @@ export default function(){
     }
   };
 
-  app.use(<% if (version) { %>'/<%= version %>/<%= name %>'<% } else { %>'/<%= name %>'<% } %>, new Service(options));
+  app.use(<% if (version) { %>'/<%= version %>/<%= pluralizedName %>'<% } else { %>'/<%= pluralizedName %>'<% } %>, service(options));
 }

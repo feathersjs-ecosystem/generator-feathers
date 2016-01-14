@@ -1,14 +1,9 @@
 import hooks from '../hooks';
-import mongoose from 'mongoose';
 import service from 'feathers-mongoose';
 import <%= name %> from '../models/<%= name %>';
 
-mongoose.Promise = global.Promise;
-
 export default function(){
   const app = this;
-  
-  mongoose.connect(app.get('mongodb'));
 
   let options = {
     Model: <%= name %>,
@@ -18,7 +13,7 @@ export default function(){
     }
   };
 
-  app.use(<% if (version) { %>'/<%= version %>/<%= name %>'<% } else { %>'/<%= name %>'<% } %>, service(options));
+  app.use(<% if (version) { %>'/<%= version %>/<%= pluralizedName %>'<% } else { %>'/<%= pluralizedName %>'<% } %>, service(options));
 
   // const service = this.service('v1/users');
 

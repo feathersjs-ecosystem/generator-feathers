@@ -8,17 +8,17 @@ export default function(){
   const app = this;
 
   const db = new NeDB({
-    filename: join(app.get('nedb'), '<%= name %>.db'),
+    filename: join(app.get('nedb'), '<%= pluralizedName %>.db'),
     autoload: true
   });
 
   let options = {
+    Model: db,
     paginate: {
-      Model: db,
       default: 5,
       max: 25
     }
   };
 
-  app.use(<% if (version) { %>'/<%= version %>/<%= name %>'<% } else { %>'/<%= name %>'<% } %>, service(options));
+  app.use(<% if (version) { %>'/<%= version %>/<%= pluralizedName %>'<% } else { %>'/<%= pluralizedName %>'<% } %>, service(options));
 }
