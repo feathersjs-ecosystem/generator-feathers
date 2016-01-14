@@ -1,4 +1,7 @@
 // jshint unused:false
+<% if (database === 'sqlite') { %>
+import path from 'path';
+import fs from 'fs-extra';<% } %>
 import userService from './user';
 <% if (database === 'mongodb') { %>import mongoose from 'mongoose';<% } %>
 <% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>import Sequelize from 'sequelize';<% } %>
@@ -6,6 +9,7 @@ import userService from './user';
 export default function() {
   const app = this;
   <% if (database === 'sqlite') { %>
+  fs.ensureDirSync( path.dirname(app.get('sqlite')) );
   const sequelize = new Sequelize('feathers', null, null, {
     dialect: 'sqlite',
     storage: app.get('sqlite'),
