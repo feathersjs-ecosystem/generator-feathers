@@ -8,8 +8,7 @@ export default function(hook) {
   // so that you can chain them.
   // See https://github.com/feathersjs/feathers-hooks#promises
   return new Promise(function(resolve, reject) {
-    // make sure Id's don't get set manually
-    delete hook.data.id;
+    hook.params.feathers = 'awesome';
     resolve(hook);
   });
 }
