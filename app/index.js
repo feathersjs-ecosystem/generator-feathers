@@ -296,6 +296,12 @@ module.exports = generators.Base.extend({
       this.destinationPath('server/middleware', 'index.js'),
       this.props
     );
+
+    this.fs.copyTpl(
+      this.templatePath('service.js'),
+      this.destinationPath('server/services', 'index.js'),
+      this.props
+    );
     
     this.fs.copyTpl(
       this.templatePath('config.default.json'),

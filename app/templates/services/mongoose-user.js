@@ -3,12 +3,8 @@ import mongoose from 'mongoose';
 import service from 'feathers-mongoose';
 import User from '../models/user';
 
-mongoose.Promise = global.Promise;
-
 export default function(){
   const app = this;
-  
-  mongoose.connect(app.get('mongodb'));
 
   let options = {
     Model: User,
