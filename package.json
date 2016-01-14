@@ -36,7 +36,7 @@
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
-    "jshint": "jshint src/. test/. --config",
+    "jshint": "jshint test/. --config",
     "mocha": "mocha test/ --compilers js:babel/register",
     "test": "npm run jshint && npm run mocha"
   },
@@ -49,7 +49,6 @@
   },
   "devDependencies": {
     "babel": "^5.8.29",
-    "feathers": "^1.1.1",
     "jshint": "^2.8.0",
     "mocha": "^2.3.3"
   }
