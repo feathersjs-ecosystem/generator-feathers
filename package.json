@@ -46,6 +46,7 @@
     "lib": "lib"
   },
   "dependencies": {
+    "i": "^0.3.3",
     "yeoman-generator": "^0.21.1"
   },
   "devDependencies": {
