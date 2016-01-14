@@ -1,33 +1,12 @@
 import hooks from '../hooks';
-import Sequelize from 'sequelize';
 import service from 'feathers-sequelize';
 import User from '../models/user';
 
 export default function(){
   const app = this;
-  <% if (database === 'sqlite') { %>
-  const sequelize = new Sequelize('feathers', null, null, {
-    dialect: 'sqlite',
-    storage: app.get('sqlite'),
-    logging: false
-  });<% } else if (database === 'mssql') { %>
-  const sequelize = new Sequelize('feathers', {
-    dialect: '<%= database %>',
-    host: 'localhost',
-    port: 1433,
-    logging: false,
-    dialectOptions: {
-      instanceName: 'feathers'
-    }
-  });<% } else if (database) { %>
-  const sequelize = new Sequelize(app.get('<%= database %>'), {
-    dialect: '<%= database %>',
-    logging: false
-  });
-  <% } %>
   
   let options = {
-    Model: User(sequelize),
+    Model: User(app.get('sequelize')),
     paginate: {
       default: 5,
       max: 25
