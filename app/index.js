@@ -57,7 +57,7 @@ module.exports = generators.Base.extend({
             value: 'primus',
           }
         ]
-      }, 
+      },
       {
         type: 'list',
         name: 'cors',
@@ -77,7 +77,7 @@ module.exports = generators.Base.extend({
             value: false
           }
         ]
-      }, 
+      },
       {
         type: 'input',
         name: 'corsWhitelist',
@@ -85,7 +85,7 @@ module.exports = generators.Base.extend({
         when: function(props){
           return props.cors === 'whitelisted';
         }
-      }, 
+      },
       {
         type: 'list',
         name: 'database',
@@ -140,7 +140,7 @@ module.exports = generators.Base.extend({
           }
         //   name: 'basic'
         // }, {
-          
+
         // }, {
         //   name: 'google'
         // }, {
@@ -238,9 +238,7 @@ module.exports = generators.Base.extend({
           options: {
             type: 'database',
             database: this.props.database,
-            name: 'user',
-            hazVersions: true,
-            version: 'v1'
+            name: 'user'
           }
         });
 
@@ -271,19 +269,19 @@ module.exports = generators.Base.extend({
       );
     },
 
-    config: function() {      
+    config: function() {
       this.fs.copyTpl(
         this.templatePath('config.default.json'),
         this.destinationPath('config', 'default.json'),
         this.props
       );
-      
+
       this.fs.copyTpl(
         this.templatePath('config.production.json'),
         this.destinationPath('config', 'production.json'),
         this.props
       );
-      
+
       this.fs.copyTpl(
         this.templatePath('package.json'),
         this.destinationPath('package.json'),
