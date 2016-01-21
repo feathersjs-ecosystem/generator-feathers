@@ -234,13 +234,15 @@ module.exports = generators.Base.extend({
 
     services: function() {
       if (this.props.database) {
-        this.composeWith('feathers:service', {
-          options: {
-            type: 'database',
-            database: this.props.database,
-            name: 'user'
-          }
-        });
+        if(this.props.authentication.length) {
+          this.composeWith('feathers:service', {
+            options: {
+              type: 'database',
+              database: this.props.database,
+              name: 'user'
+            }
+          });
+        }
 
         this.fs.copyTpl(
           this.templatePath('service.js'),
