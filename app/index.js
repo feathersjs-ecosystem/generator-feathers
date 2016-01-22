@@ -190,6 +190,11 @@ module.exports = generators.Base.extend({
 
       if (this.props.authentication.length) {
         this.dependencies.push('feathers-authentication');
+
+        this.fs.copy(
+          this.templatePath('hooks.auth.js'),
+          this.destinationPath('server/hooks', 'auth.js')
+        );
       }
     },
 
