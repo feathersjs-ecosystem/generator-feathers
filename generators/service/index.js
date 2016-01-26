@@ -117,6 +117,7 @@ module.exports = generators.Base.extend({
   writing: function () {
     // Generating the appropriate service
     // based on the database.
+    var model;
     if (this.props.type === 'database') {
       switch(this.props.database) {
         case 'sqlite':
@@ -128,7 +129,7 @@ module.exports = generators.Base.extend({
 
           // Automatically generate a new model
           // based on the database type.
-          this.composeWith('feathers:model', {
+          model = this.composeWith('feathers:model', {
             options: {
               type: this.props.type,
               name: this.props.name
@@ -140,7 +141,7 @@ module.exports = generators.Base.extend({
 
           // Automatically generate a new model
           // based on the database type.
-          this.composeWith('feathers:model', {
+          model = this.composeWith('feathers:model', {
             options: {
               type: this.props.type,
               name: this.props.name
@@ -172,5 +173,13 @@ module.exports = generators.Base.extend({
     );
 
     addServiceImport(serviceIndexPath, this.props.name, './' + this.props.name);
+
+    // NOTE(EK): A little hack to end when the sub generator ends
+    // for some reason it hangs the CLI.
+    // if (model) {
+    //   model.on('end', function(){
+    //     process.exit(0);
+    //   });
+    // }
   }
 });

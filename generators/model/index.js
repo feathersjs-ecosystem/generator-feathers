@@ -102,10 +102,7 @@ module.exports = generators.Base.extend({
     }.bind(this));
   },
 
-  writing: function () {
-    // TODO (EK): Automatically import the new model
-    // into models/index.js and initialize it.
-    
+  writing: function () {    
     // Generating the appropriate model
     // based on the orm type.
     this.fs.copyTpl(
@@ -113,5 +110,11 @@ module.exports = generators.Base.extend({
       this.destinationPath('src/models', this.props.name + '.js'),
       this.props
     );
+  },
+
+  end: function() {
+    // NOTE (EK): Added this as a hack to stop the CLI from
+    // hanging when generating a service with a model.
+    process.exit();
   }
 });
