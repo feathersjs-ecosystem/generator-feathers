@@ -1,4 +1,4 @@
-import missing from './not-found-handler';
+import notFound from './not-found-handler';
 import error from './error-handler';
 import logger from './logger';
 
@@ -8,7 +8,7 @@ export default function() {
   // Add your custom middleware here. Remember, that
   // just like Express the order matters, so error
   // handling middleware should go last.
-  app.use(missing())
+  app.use(notFound())
     .use(logger(app))
     .use(error(app));
 }

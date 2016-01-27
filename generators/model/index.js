@@ -26,6 +26,14 @@ module.exports = generators.Base.extend({
         },
       },
       {
+        name: 'service',
+        message: 'What service does this model belong to?',
+        default: this.props.service,
+        when: function(){
+          return options.service === undefined;
+        },
+      },
+      {
         type: 'list',
         name: 'type',
         message: 'What type of model do you need?',
@@ -103,11 +111,10 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {    
-    // Generating the appropriate model
-    // based on the orm type.
+    // Generating the appropriate model based on the orm type.
     this.fs.copyTpl(
       this.templatePath(this.props.type + '.js'),
-      this.destinationPath('src/models', this.props.name + '.js'),
+      this.destinationPath('src/services/', this.props.service, 'models/', this.props.name + '.js'),
       this.props
     );
   },

@@ -12,7 +12,6 @@ import bodyParser from 'body-parser';
 <% if (authentication.length) { %>import feathersAuth from 'feathers-authentication';<% } %>
 import middleware from './middleware';
 import services from './services';
-import myHooks from './hooks';
 <% if (cors === 'whitelisted') { %>
 let whitelist = app.get('corsWhitelist');
 let corsOptions = {
@@ -39,7 +38,6 @@ app.configure(configuration(join(__dirname, '..')))
   }))<% } %><% if (authentication.length) { %>
   .configure(feathersAuth(app.get('auth').local))<% } %>
   .configure(services)
-  .configure(myHooks)
   .configure(middleware);
 
 export default app;
