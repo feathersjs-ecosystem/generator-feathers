@@ -1,4 +1,4 @@
-// <%= name %>.js - A just a generic object literal model
+// <%= name %>-model.js - A just a generic object literal model
 
 let <%= name %>Model = {
   name: {type: String, required: true, index: true},
