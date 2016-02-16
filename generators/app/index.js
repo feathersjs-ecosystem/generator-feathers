@@ -90,11 +90,8 @@ module.exports = generators.Base.extend({
         type: 'list',
         name: 'database',
         message: 'What database do you primarily want to use?',
+        default: 'nedb',
         choices: [
-          {
-            name: 'I will choose my own',
-            value: 'generic'
-          },
           {
             name: 'Memory',
             value: 'memory'
@@ -113,8 +110,7 @@ module.exports = generators.Base.extend({
           },
           {
             name: 'NeDB',
-            value: 'nedb',
-            checked: true
+            value: 'nedb'
           },
           {
             name: 'PostgreSQL',
@@ -127,7 +123,11 @@ module.exports = generators.Base.extend({
           {
            name: 'SQL Server',
            value: 'mssql'
-          }
+          },
+          {
+            name: 'I will choose my own',
+            value: 'generic'
+          },
         ]
       },
       {
