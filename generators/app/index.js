@@ -274,6 +274,12 @@ module.exports = generators.Base.extend({
       this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
 
       this.fs.copyTpl(
+        this.templatePath('README.md'),
+        this.destinationPath('', 'README.md'),
+        this.props
+      );
+
+      this.fs.copyTpl(
         this.templatePath('app.js'),
         this.destinationPath('src', 'app.js'),
         this.props
