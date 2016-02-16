@@ -17,9 +17,7 @@ module.exports = generators.Base.extend({
       'feathers-configuration',
       'serve-favicon',
       'compression',
-      'winston',
-      'babel-core',
-      'babel-preset-es2015'
+      'winston'
     ];
   },
 

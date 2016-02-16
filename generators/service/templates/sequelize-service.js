@@ -1,11 +1,13 @@
-import service from 'feathers-sequelize';
-import <%= name %> from './<%= name %>-model';
-import hooks from './hooks';
+'use strict';
+
+const service = require('feathers-sequelize');
+const <%= name %> = require('./<%= name %>-model');
+const hooks = require('./hooks');
 
 export default function(){
   const app = this;
 
-  let options = {
+  const options = {
     Model: <%= name %>(app.get('sequelize')),
     paginate: {
       default: 5,
