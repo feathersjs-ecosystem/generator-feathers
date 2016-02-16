@@ -7,12 +7,12 @@ import Sequelize from 'sequelize';
 
 export default function(sequelize) {
   let <%= name %> = sequelize.define('<%= name %>', {
-    name: {
+    text: {
       type: Sequelize.STRING,
       allowNull: false,
       unique: true,
       validate: {
-        isAlpha: { msg: '`name` must only contain characters' }
+        isAlphaNumeric: { msg: '`text` must only contain alpha numeric characters' }
       }
     }
   }, {
