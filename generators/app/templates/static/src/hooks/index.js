@@ -6,10 +6,8 @@
 
 var myHook = function(options) {
   return function(hook) {
-    // Setting a custom property
-    hook.awesome = 'feathers';
-    console.log('My custom hook ran. Feathers is awesome!');
-  }
-}
+    console.log('My custom global hook ran. Feathers is awesome!');
+  };
+};
 
 export default { myHook };
