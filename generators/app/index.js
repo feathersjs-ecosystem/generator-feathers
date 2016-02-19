@@ -259,6 +259,7 @@ module.exports = generators.Base.extend({
     application: function() {
       this.fs.copy(this.templatePath('static'), this.destinationPath());
       this.fs.copy(this.templatePath('static/.*'), this.destinationPath());
+      this.fs.copy(this.templatePath('_gitignore'), this.destinationPath('', '.gitignore'));
 
       this.fs.copyTpl(
         this.templatePath('README.md'),
