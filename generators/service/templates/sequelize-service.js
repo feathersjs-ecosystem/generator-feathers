@@ -4,7 +4,7 @@ const service = require('feathers-sequelize');
 const <%= name %> = require('./<%= name %>-model');
 const hooks = require('./hooks');
 
-export default function(){
+module.exports = function(){
   const app = this;
 
   const options = {
@@ -26,4 +26,4 @@ export default function(){
 
   // Set up our after hooks
   <%= name %>Service.after(hooks.after);
-}
+};

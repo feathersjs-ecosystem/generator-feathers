@@ -34,4 +34,4 @@ module.exports = function() {
   app.set('sequelize', sequelize);<% } %>
   <% for (var i = 0; i < services.length; i++) { %>
   app.configure(<%= services[i] %>);<% } %>
-}
+};

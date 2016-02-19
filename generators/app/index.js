@@ -12,7 +12,7 @@ module.exports = generators.Base.extend({
     };
     this.dependencies = [
       'feathers@2.0.0-pre.4',
-      'feathers-hooks@1.0.0-pre.4',
+      'feathers-hooks',
       'feathers-errors',
       'feathers-configuration',
       'serve-favicon',
@@ -235,17 +235,6 @@ module.exports = generators.Base.extend({
       this.props.services = [];
 
       if (this.props.database) {
-        this.props.services.push('message');
-
-        // Create a dummy message service
-        this.composeWith('feathers:service', {
-          options: {
-            type: 'database',
-            database: this.props.database,
-            name: 'message'
-          }
-        });
-
         // If auth is enabled also create a user service
         if (this.props.authentication.length) {
           this.props.services.push('user');
