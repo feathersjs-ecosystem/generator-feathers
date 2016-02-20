@@ -19,7 +19,9 @@ exports.before = {
     auth.populateUser(),
     auth.requireAuth(),
   <% } %>],
-  create: [],
+  create: [<% if (authentication && name === 'user') { %>
+    auth.hashPassword(),
+  <% } %>],
   update: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
