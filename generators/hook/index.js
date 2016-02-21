@@ -4,21 +4,20 @@ var generators = require('yeoman-generator');
 var path = require('path');
 var fs = require('fs');
 var inflect = require('i')();
+var transform = require('../../lib/transform');
 
-function importHook(filename, name, module, type, method) {
+function importHook(filename, name, moduleName, type, methods) {
   // Lookup existing services/<service-name>/hooks/index.js file
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
-    var statement = 'const ' + name + ' = require(\'' + module + '\');';
-    var expression = new RegExp( '(' + type + '(.|\n)+?' + method + '(.|\n)+?)(\]{1})' );
-
-    // Also add if it is not already there
-    if (content.indexOf(statement) === -1) {
-      content = content.replace(/'use strict';\n\n/, '\'use strict;\'\n\n' + statement + '\n');
-      content = content.replace(expression, '$1$2$3' + name + '(),\n  $4');
-    }
+    var ast = transform.parse(content);
     
-    fs.writeFileSync(filename, content);
+    transform.addImport(ast, name, moduleName);
+    methods.forEach(function(method) {
+      transform.addToArrayInObject(ast, 'exports.' + type, method, name + '()');
+    });
+    
+    fs.writeFileSync(filename, transform.print(ast));
   }
 }
 

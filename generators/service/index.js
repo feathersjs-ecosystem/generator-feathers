@@ -1,21 +1,18 @@
 var generators = require('yeoman-generator');
 var fs = require('fs');
 var inflect = require('i')();
+var transform = require('../../lib/transform');
 
-function importService(filename, name, module) {
+function importService(filename, name, moduleName) {
   // Lookup existing service/index.js file
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
-    var statement = 'const ' + name + ' = require(\'' + module + '\');';
-    var configure = '  app.configure(' + name + ');\n}';
-
-    // Also add if it is not already there
-    if (content.indexOf(statement) === -1) {
-      content = statement + '\n' + content;
-      content = content.replace(/\}(?!.*?\})/, configure);
-    }
+    var ast = transform.parse(content);
     
-    fs.writeFileSync(filename, content);
+    transform.addImport(ast, name, moduleName);
+    transform.addLastInFunction(ast, 'module.exports', 'app.configure(' + name + ');');
+    
+    fs.writeFileSync(filename, transform.print(ast));
   }
 }
 
