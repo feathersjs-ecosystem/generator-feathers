@@ -1,7 +1,7 @@
 'use strict';
 
 const globalHooks = require('../../../hooks');
-const auth = require('feathers-authentication').hooks;
+<% if (authentication) { %>const auth = require('feathers-authentication').hooks;<% } %>
 
 exports.before = {
   all: [<% if (authentication && name !== 'user') { %>

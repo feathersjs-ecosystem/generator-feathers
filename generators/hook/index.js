@@ -32,6 +32,11 @@ module.exports = generators.Base.extend({
     var done = this.async();
     var prompts = [
       {
+        type: 'input',
+        name: 'name',
+        message: 'What do you want to call your hook?',
+      },
+      {
         type: 'list',
         name: 'type',
         message: 'What type of hook do you need?',
@@ -55,7 +60,7 @@ module.exports = generators.Base.extend({
         message: 'What service is this hook for?'
       },
       {
-        type: 'list',
+        type: 'checkbox',
         name: 'method',
         store: true,
         message: 'What method is this hook for?',
@@ -93,13 +98,7 @@ module.exports = generators.Base.extend({
             value: 'remove'
           }
         ]
-      },
-      {
-        type: 'input',
-        name: 'name',
-        message: 'What do you want to call your hook?',
-      },
-      
+      }
     ];
 
     this.prompt(prompts, function (props) {
@@ -110,8 +109,10 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    var hookIndexPath = path.join('src/services/', this.props.service, 'hooks/index.js');
-    this.props.hookPath = path.join('src/services/', this.props.service, 'hooks/', this.props.name + '.js');
+    var hookIndexPath = path.join('src', 'services', this.props.service, 'hooks', 'index.js');
+    this.props.hookPath = path.join('src', 'services', this.props.service, 'hooks', this.props.name + '.js');
+    this.props.hookTestPath = path.join('test', 'services', this.props.service, 'hooks', this.props.name + '.test.js');
+    
     // this.props.hookTestPath = path.join('test/services/', this.props.service, 'hooks/', this.props.name + '.test.js');
     this.props.codeName = inflect.camelize(inflect.underscore(this.props.name), false);
     
@@ -120,17 +121,17 @@ module.exports = generators.Base.extend({
     
     // copy the hook
     this.fs.copyTpl(
-      this.templatePath(this.props.type + '-hook.js'),
+      this.templatePath('hook.js'),
       this.destinationPath(this.props.hookPath),
       this.props
     );
 
     // copy the hook test
-    // this.fs.copyTpl(
-    //   this.templatePath(this.props.type + '-hook.test.js'),
-    //   this.destinationPath(this.props.hookTestPath),
-    //   this.props
-    // );
+    this.fs.copyTpl(
+      this.templatePath('hook.test.js'),
+      this.destinationPath(this.props.hookTestPath),
+      this.props
+    );
   }
 });
 

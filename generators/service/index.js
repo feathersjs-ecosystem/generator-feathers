@@ -28,6 +28,14 @@ module.exports = generators.Base.extend({
     var options = this.options;
     var prompts = [
       {
+        name: 'name',
+        message: 'What do you want to call your service?',
+        default: this.props.name,
+        when: function(){
+          return options.name === undefined;
+        }
+      },
+      {
         type: 'list',
         name: 'type',
         message: 'What type of service do you need?',
@@ -100,14 +108,6 @@ module.exports = generators.Base.extend({
         when: function(){
           return options.authentication === undefined;
         }
-      },
-      {
-        name: 'name',
-        message: 'What do you want to call your service?',
-        default: this.props.name,
-        when: function(){
-          return options.name === undefined;
-        },
       }
     ];
 
@@ -127,15 +127,19 @@ module.exports = generators.Base.extend({
         case 'mysql':
         case 'mariadb':
         case 'postgres':
+          this.npmInstall(['feathers-sequelize'], { save: true });
           this.props.type = 'sequelize';
           break;
         case 'mongodb':
+          this.npmInstall(['feathers-mongoose'], { save: true });
           this.props.type = 'mongoose';
           break;
         case 'memory':
+          this.npmInstall(['feathers-memory'], { save: true });
           this.props.type = 'memory';
           break;
         case 'nedb':
+          this.npmInstall(['feathers-nedb'], { save: true });
           this.props.type = 'nedb';
           break;
         default:
@@ -160,7 +164,13 @@ module.exports = generators.Base.extend({
     // Add a hooks folder for the service
     this.fs.copyTpl(
       this.templatePath('hooks.js'),
-      this.destinationPath('src/services', this.props.name, 'hooks/index.js'),
+      this.destinationPath('src', 'services', this.props.name, 'hooks', 'index.js'),
+      this.props
+    );
+    
+    this.fs.copyTpl(
+      this.templatePath('index.test.js'),
+      this.destinationPath('test', 'services', this.props.name, 'index.test.js'),
       this.props
     );
 

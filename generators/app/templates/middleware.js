@@ -10,7 +10,7 @@ module.exports = function() {
   // Add your custom middleware here. Remember, that
   // just like Express the order matters, so error
   // handling middleware should go last.
-  app.use(notFound())
-    .use(logger(app))
-    .use(errors.handler());
+  app.use(notFound());
+  app.use(logger(app));
+  app.use(errors.handler());
 };
