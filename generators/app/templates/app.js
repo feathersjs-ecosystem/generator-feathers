@@ -15,7 +15,10 @@ const bodyParser = require('body-parser');
 const middleware = require('./middleware');
 const services = require('./services');
 
-const app = feathers();<% if (cors === 'whitelisted') { %>
+const app = feathers();
+
+app.configure(configuration(path.join(__dirname, '..')));<% if (cors === 'whitelisted') { %>
+
 const whitelist = app.get('corsWhitelist');
 const corsOptions = {
   origin(origin, callback){
@@ -24,8 +27,7 @@ const corsOptions = {
   }
 };<% } %>
 
-app.configure(configuration(path.join(__dirname, '..')))
-  .use(compress())<% if (cors) { %>
+app.use(compress())<% if (cors) { %>
   .options('*', cors(<% if (cors === 'whitelisted') { %>corsOptions<% } %>))
   .use(cors(<% if (cors === 'whitelisted') { %>corsOptions<% } %>))<% } %>
   .use(favicon( path.join(app.get('public'), 'favicon.ico') ))
