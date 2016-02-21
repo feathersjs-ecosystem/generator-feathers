@@ -7,35 +7,35 @@ exports.before = {
   all: [<% if (authentication && name !== 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth(),
+    auth.requireAuth()
   <% } %>],
   find: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth(),
+    auth.requireAuth()
   <% } %>],
   get: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth(),
+    auth.requireAuth()
   <% } %>],
   create: [<% if (authentication && name === 'user') { %>
-    auth.hashPassword(),
+    auth.hashPassword()
   <% } %>],
   update: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth(),
+    auth.requireAuth()
   <% } %>],
   patch: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth(),
+    auth.requireAuth()
   <% } %>],
   remove: [<% if (authentication && name === 'user') { %>
     auth.verifyToken(),
     auth.populateUser(),
-    auth.requireAuth(),
+    auth.requireAuth()
   <% } %>]
 };
 
