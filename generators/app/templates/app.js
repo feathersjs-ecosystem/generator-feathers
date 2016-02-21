@@ -15,7 +15,7 @@ const bodyParser = require('body-parser');
 const middleware = require('./middleware');
 const services = require('./services');
 
-<% if (cors === 'whitelisted') { %>
+const app = feathers();<% if (cors === 'whitelisted') { %>
 const whitelist = app.get('corsWhitelist');
 const corsOptions = {
   origin(origin, callback){
@@ -23,7 +23,6 @@ const corsOptions = {
     callback(null, originIsWhitelisted);
   }
 };<% } %>
-const app = feathers();
 
 app.configure(configuration(path.join(__dirname, '..')))
   .use(compress())<% if (cors) { %>
