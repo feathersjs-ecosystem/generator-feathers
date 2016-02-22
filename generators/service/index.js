@@ -1,27 +1,24 @@
 var generators = require('yeoman-generator');
 var fs = require('fs');
 var inflect = require('i')();
+var transform = require('../../lib/transform');
 
-function importService(filename, name, module) {
+function importService(filename, name, moduleName) {
   // Lookup existing service/index.js file
   if (fs.existsSync(filename)) {
     var content = fs.readFileSync(filename).toString();
-    var statement = 'const ' + name + ' = require(\'' + module + '\');';
-    var configure = '  app.configure(' + name + ');\n}';
-
-    // Also add if it is not already there
-    if (content.indexOf(statement) === -1) {
-      content = statement + '\n' + content;
-      content = content.replace(/\}(?!.*?\})/, configure);
-    }
+    var ast = transform.parse(content);
     
-    fs.writeFileSync(filename, content);
+    transform.addImport(ast, name, moduleName);
+    transform.addLastInFunction(ast, 'module.exports', 'app.configure(' + name + ');');
+    
+    fs.writeFileSync(filename, transform.print(ast));
   }
 }
 
 module.exports = generators.Base.extend({
   initializing: function (name) {
-    this.props = { name: name };
+    this.props = { name: name, authentication: false };
 
     this.props = Object.assign(this.props, this.options);
   },
@@ -30,6 +27,14 @@ module.exports = generators.Base.extend({
     var done = this.async();
     var options = this.options;
     var prompts = [
+      {
+        name: 'name',
+        message: 'What do you want to call your service?',
+        default: this.props.name,
+        when: function(){
+          return options.name === undefined;
+        }
+      },
       {
         type: 'list',
         name: 'type',
@@ -96,12 +101,13 @@ module.exports = generators.Base.extend({
         ]
       },
       {
-        name: 'name',
-        message: 'What do you want to call your service?',
-        default: this.props.name,
+        type: 'confirm',
+        name: 'authentication',
+        default: this.props.authentication,
+        message: 'Does your service require users to be authenticated?',
         when: function(){
-          return options.name === undefined;
-        },
+          return options.authentication === undefined;
+        }
       }
     ];
 
@@ -121,15 +127,19 @@ module.exports = generators.Base.extend({
         case 'mysql':
         case 'mariadb':
         case 'postgres':
+          this.npmInstall(['feathers-sequelize'], { save: true });
           this.props.type = 'sequelize';
           break;
         case 'mongodb':
+          this.npmInstall(['feathers-mongoose'], { save: true });
           this.props.type = 'mongoose';
           break;
         case 'memory':
+          this.npmInstall(['feathers-memory'], { save: true });
           this.props.type = 'memory';
           break;
         case 'nedb':
+          this.npmInstall(['feathers-nedb'], { save: true });
           this.props.type = 'nedb';
           break;
         default:
@@ -152,7 +162,17 @@ module.exports = generators.Base.extend({
     importService(serviceIndexPath, this.props.name, './' + this.props.name);
 
     // Add a hooks folder for the service
-    this.fs.copy(this.templatePath('static'), this.destinationPath('src/services', this.props.name));
+    this.fs.copyTpl(
+      this.templatePath('hooks.js'),
+      this.destinationPath('src', 'services', this.props.name, 'hooks', 'index.js'),
+      this.props
+    );
+    
+    this.fs.copyTpl(
+      this.templatePath('index.test.js'),
+      this.destinationPath('test', 'services', this.props.name, 'index.test.js'),
+      this.props
+    );
 
     // If we are generating a service that requires a model, let's generate that model.
     if (this.props.type === 'mongoose' || this.props.type === 'sequelize') {

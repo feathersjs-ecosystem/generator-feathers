@@ -348,7 +348,8 @@ module.exports = generators.Base.extend({
             options: {
               type: 'database',
               database: this.props.database,
-              name: 'user'
+              name: 'user',
+              authentication: true
             }
           });
         }
