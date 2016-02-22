@@ -237,8 +237,6 @@ module.exports = generators.Base.extend({
           }
         });
 
-        console.log(this.props.authentication);
-
         this.fs.copyTpl(
           this.templatePath('authentication.js'),
           this.destinationPath('src/services/authentication', 'index.js'),
