@@ -3,79 +3,15 @@
 var generators = require('yeoman-generator');
 var path = require('path');
 var crypto = require('crypto');
-
-var AUTH_PROVIDERS = {
-  'bitbucket': {
-    strategy: 'BitbucketStrategy',
-    passport: 'passport-bitbucket-oauth2',
-    permissions: {
-      scope: ['account']
-    }
-  },
-  'dropbox': {
-    strategy: 'DropboxStrategy',
-    passport: 'passport-dropbox-oauth2',
-    permissions: {
-      scope: []
-    }
-  },
-  'facebook': {
-    strategy: 'FacebookStrategy',
-    passport: 'passport-facebook',
-    permissions: {
-      scope: ['public_profile', 'email']
-    }
-  },
-  'github': {
-    strategy: 'GithubStrategy',
-    passport: 'passport-github',
-    permissions: {
-      scope: []
-    }
-  },
-  'google': {
-    strategy: 'GoogleStrategy',
-    passport: 'passport-google-oauth20',
-    permissions: {
-      scope: ['profile']
-    }
-  },
-  'instagram': {
-    strategy: 'InstragramStrategy',
-    passport: 'passport-instagram',
-    permissions: {
-      scope: ['basic']
-    }
-  },
-  'linkedin': {
-    strategy: 'LinkedinStrategy',
-    passport: 'passport-linkedin-oauth2',
-    permissions: {
-      scope: ['r_emailaddress', 'r_basicprofile']
-    }
-  },
-  'local': {},
-  'paypal': {
-    strategy: 'PaypalStrategy',
-    passport: 'passport-paypal-oauth',
-    permissions: {
-      scope: ['https://identity.x.com/xidentity/resources/profile/me']
-    }
-  },
-  'spotify': {
-    strategy: 'SpotifyStrategy',
-    passport: 'passport-spotify',
-    permissions: {
-      scope: ['user-read-email', 'user-read-private']
-    }
-  }
-};
+var S = require('string');
+var AUTH_PROVIDERS = require('./auth-mapping.json');
 
 module.exports = generators.Base.extend({
   initializing: function () {
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.props = {
-      name: process.cwd().split(path.sep).pop()
+      name: process.cwd().split(path.sep).pop(),
+      S: S
     };
     this.dependencies = [
       'feathers@2.0.0-pre.4',
@@ -203,47 +139,43 @@ module.exports = generators.Base.extend({
           {
             name: 'local',
             checked: true,
-            value: JSON.stringify({'local': AUTH_PROVIDERS['local']}, null, '  ')
+            value: AUTH_PROVIDERS['local'],
           },
           {
             name: 'bitbucket',
-            value: JSON.stringify({'bitbucket': AUTH_PROVIDERS['bitbucket']}, null, '  ')
+            value: AUTH_PROVIDERS['bitbucket'],
           },
           {
             name: 'dropbox',
-            value: JSON.stringify({'dropbox': AUTH_PROVIDERS['dropbox']}, null, '  ')
+            value: AUTH_PROVIDERS['dropbox'],
           },
           {
             name: 'facebook',
-            value: JSON.stringify({'facebook': AUTH_PROVIDERS['facebook']}, null, '  ')
+            value: AUTH_PROVIDERS['facebook'],
           },
           {
             name: 'github',
-            value: JSON.stringify({'github': AUTH_PROVIDERS['github']}, null, '  ')
+            value: AUTH_PROVIDERS['github'],
           },
           {
             name: 'google',
-            value: JSON.stringify({'google': AUTH_PROVIDERS['google']}, null, '  ')
+            value: AUTH_PROVIDERS['google'],
           },
           {
             name: 'instagram',
-            value: JSON.stringify({'instagram': AUTH_PROVIDERS['instagram']}, null, '  ')
+            value: AUTH_PROVIDERS['instagram'],
           },
           {
             name: 'linkedin',
-            value: JSON.stringify({'linkedin': AUTH_PROVIDERS['linkedin']}, null, '  ')
+            value: AUTH_PROVIDERS['linkedin'],
           },
           {
             name: 'paypal',
-            value: {
-              'paypal': JSON.stringify(AUTH_PROVIDERS['paypal'], null, '  ')
-            }
+            value: AUTH_PROVIDERS['paypal'],
           },
           {
             name: 'spotify',
-            value: {
-              'spotify': JSON.stringify(AUTH_PROVIDERS['spotify'], null, '  ')
-            }
+            value: AUTH_PROVIDERS['spotify']
           }
         ]
       }
@@ -284,16 +216,34 @@ module.exports = generators.Base.extend({
     authentication: function() {
       this.props.secret = crypto.randomBytes(64).toString('base64');
 
-      console.log(this.props.authentication);
-
-      if (Object.keys(this.props.authentication).length) {
+      if (this.props.authentication.length) {
         this.dependencies.push('feathers-authentication');
         this.dependencies.push('passport');
 
-        // If we have more than just the 'local' strategy add passport
-        // if (Object.keys(this.props.authentication).length > 1 || !this.props.authentication.local) {
-          
-        // }
+        this.props.localAuth = false;
+
+        this.props.authentication = this.props.authentication.filter(provider => {
+          if (provider.name === 'local') {
+            this.props.localAuth = true;
+          }
+          else {
+            this.dependencies.push(provider.strategy);
+
+            if (provider.tokenStrategy) {
+              this.dependencies.push(provider.tokenStrategy);      
+            }
+
+            return provider;
+          }
+        });
+
+        console.log(this.props.authentication);
+
+        this.fs.copyTpl(
+          this.templatePath('authentication.js'),
+          this.destinationPath('src/services/authentication', 'index.js'),
+          this.props
+        );
       }
     },
 
