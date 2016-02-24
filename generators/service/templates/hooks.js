@@ -1,6 +1,7 @@
 'use strict';
 
 const globalHooks = require('../../../hooks');
+const hooks = require('feathers-hooks').hooks;
 <% if (authentication) { %>const auth = require('feathers-authentication').hooks;<% } %>
 
 exports.before = {
@@ -40,7 +41,7 @@ exports.before = {
 };
 
 exports.after = {
-  all: [],
+  all: [<% if (name === 'user') { %>hooks.remove('password')<% } %>],
   find: [],
   get: [],
   create: [],
