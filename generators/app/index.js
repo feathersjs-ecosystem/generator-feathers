@@ -14,9 +14,9 @@ module.exports = generators.Base.extend({
       S: S
     };
     this.dependencies = [
-      'feathers@2.0.0',
-      'feathers-hooks@1.0.0',
-      'feathers-errors@2.0.0',
+      'feathers@2.0',
+      'feathers-hooks@1.0',
+      'feathers-errors@2.0',
       'feathers-configuration@0.1.0',
       'serve-favicon',
       'compression',
