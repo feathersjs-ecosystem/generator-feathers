@@ -183,7 +183,7 @@ module.exports = generators.Base.extend({
 
     this.prompt(prompts, function (props) {
       this.props = Object.assign(this.props, props);
-
+      this.props.databaseName = S(this.props.name).camelize().s;
       done();
     }.bind(this));
   },
