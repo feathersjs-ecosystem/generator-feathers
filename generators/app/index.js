@@ -289,7 +289,7 @@ module.exports = generators.Base.extend({
 
       if (this.props.database) {
         // If auth is enabled also create a user service
-        if (this.props.authentication.length) {
+        if (localAuth || this.props.authentication.length) {
           this.props.services.push('user');
 
           this.composeWith('feathers:service', {
