@@ -13,12 +13,12 @@ module.exports = function() {
     storage: app.get('sqlite'),
     logging: false
   });<% } else if (database === 'mssql') { %>
-  const sequelize = new Sequelize('feathers', {
+  const sequelize = new Sequelize('feathers', 'username', 'password', {
     dialect: '<%= database %>',
     host: 'localhost',
-    port: 1433,
     logging: false,
     dialectOptions: {
+      port: 1433,
       instanceName: 'feathers'
     }
   });<% } else if (database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>
