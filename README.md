@@ -63,7 +63,7 @@ yo feathers:service
 
 ## Changelog
 
-__0.8.0__
+__0.8.1__
 
 - adding `disableNotifyUpdate` config option to generator
 
