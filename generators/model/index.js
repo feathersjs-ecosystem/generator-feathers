@@ -1,9 +1,9 @@
 'use strict';
 
-var generators = require('yeoman-generator');
-var assign = require('object.assign').getPolyfill();
-var inflect = require('i')();
-var updateMixin = require('../../lib/updateMixin');
+const generators = require('yeoman-generator');
+const assign = require('object.assign').getPolyfill();
+const inflect = require('i')();
+const updateMixin = require('../../lib/updateMixin');
 
 module.exports = generators.Base.extend({
   constructor: function() {
@@ -12,7 +12,7 @@ module.exports = generators.Base.extend({
   },
 
   initializing: function (name) {
-    var done = this.async();
+    const done = this.async();
     this.props = {
       name: name,
       type: 'generic'
@@ -23,9 +23,9 @@ module.exports = generators.Base.extend({
   },
 
   prompting: function () {
-    var done = this.async();
-    var options = this.options;
-    var prompts = [
+    const done = this.async();
+    const options = this.options;
+    const prompts = [
       {
         name: 'name',
         message: 'What do you want to call your model?',

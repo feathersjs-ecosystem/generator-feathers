@@ -1,18 +1,19 @@
 'use strict';
 
-var assert = require('assert');
-var path = require('path');
-var helpers = require('yeoman-test');
-var exec = require('child_process').exec;
+const assert = require('assert');
+const path = require('path');
+const helpers = require('yeoman-test');
+const exec = require('child_process').exec;
 
 
 describe('generator-feathers', function() {
-  var appDir;
+  let appDir;
 
   function runTest(expectedText, done) {
-    var child = exec('npm test', { cwd: appDir });
-    var buffer = '';
-    var addToBuffer = function(data) {
+    const child = exec('npm test', { cwd: appDir });
+    let buffer = '';
+
+    const addToBuffer = function(data) {
       buffer += data;
     };
 
@@ -23,7 +24,7 @@ describe('generator-feathers', function() {
       if(status !== 0) {
         return done(new Error(buffer));
       }
-      
+
       assert.ok(buffer.indexOf(expectedText) !== -1,
         'Ran test with text: ' + expectedText);
       done();

@@ -1,12 +1,12 @@
 'use strict';
 
-var generators = require('yeoman-generator');
-var path = require('path');
-var crypto = require('crypto');
-var updateMixin = require('../../lib/updateMixin');
-var S = require('string');
-var AUTH_PROVIDERS = require('./auth-mapping.json');
-var assign = require('object.assign').getPolyfill();
+const generators = require('yeoman-generator');
+const path = require('path');
+const crypto = require('crypto');
+const updateMixin = require('../../lib/updateMixin');
+const S = require('string');
+const AUTH_PROVIDERS = require('./auth-mapping.json');
+const assign = require('object.assign').getPolyfill();
 
 module.exports = generators.Base.extend({
   constructor: function() {
@@ -15,7 +15,7 @@ module.exports = generators.Base.extend({
   },
 
   initializing: function () {
-    var done = this.async();
+    const done = this.async();
     this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
     this.props = {
       name: this.pkg.name || process.cwd().split(path.sep).pop(),
@@ -36,8 +36,8 @@ module.exports = generators.Base.extend({
   },
 
   prompting: function () {
-    var done = this.async();
-    var prompts = [
+    const done = this.async();
+    const prompts = [
       {
         name: 'name',
         message: 'Project name',
@@ -303,7 +303,7 @@ module.exports = generators.Base.extend({
         if (this.props.localAuth || this.props.authentication.length) {
           this.props.services.push('user');
 
-          var providers = this.props.authentication.slice();
+          const providers = this.props.authentication.slice();
 
           if (this.props.localAuth) {
             providers.push('local');
@@ -383,7 +383,7 @@ module.exports = generators.Base.extend({
     },
 
     deps: function() {
-      var devDependencies = [
+      const devDependencies = [
         'jshint',
         'mocha',
         'request'
@@ -394,9 +394,9 @@ module.exports = generators.Base.extend({
       }
 
       this.dependencies.concat(devDependencies).forEach(function(dependency) {
-        var separatorIndex = dependency.indexOf('@');
-        var end = separatorIndex !== -1 ? separatorIndex : dependency.length;
-        var dependencyName = dependency.substring(0, end);
+        const separatorIndex = dependency.indexOf('@');
+        const end = separatorIndex !== -1 ? separatorIndex : dependency.length;
+        const dependencyName = dependency.substring(0, end);
 
         // Throw an error if the project name is the same as one of the dependencies
         if(dependencyName === this.props.name) {
@@ -405,7 +405,7 @@ module.exports = generators.Base.extend({
           process.exit(1);
         }
       }.bind(this));
-      
+
       this.npmInstall(this.dependencies, { save: true });
       this.npmInstall(devDependencies, { saveDev: true});
     }
