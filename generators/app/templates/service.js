@@ -23,4 +23,12 @@ module.exports = function() {
   <% if (localAuth || authentication.length) { %>
   app.configure(authentication);<% } %><% for (var i = 0; i < services.length; i++) { %>
   app.configure(<%= services[i] %>);<% } %>
+  <% if (database === 'sqlite' || database === 'mssql' || database === 'postgres' || database === 'mysql' || database === 'mariadb') { %>
+  const {models} = sequelize;
+  app.set('models', models);
+  Object.keys(models).forEach(name => {
+    if ('associate' in models[name]) {
+      models[name].associate(models, sequelize);
+    }
+  });<% } %>
 };

@@ -26,7 +26,12 @@ module.exports = function(sequelize) {
       allowNull: false
     }<% } %>
   }, {
-    freezeTableName: true
+    freezeTableName: true,
+    classMethods: {
+      associate(models, sequelize) {
+        // Define associations here
+      }
+    }
   });
 
   <%= name %>.sync();
