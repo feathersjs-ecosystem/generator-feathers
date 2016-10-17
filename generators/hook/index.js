@@ -1,18 +1,18 @@
 'use strict';
 
-const generators = require('yeoman-generator');
-const path = require('path');
-const fs = require('fs');
-const inflect = require('i')();
-const assign = require('object.assign').getPolyfill();
-const transform = require('../../lib/transform');
-const updateMixin = require('../../lib/updateMixin');
+var generators = require('yeoman-generator');
+var path = require('path');
+var fs = require('fs');
+var inflect = require('i')();
+var assign = require('object.assign').getPolyfill();
+var transform = require('../../lib/transform');
+var updateMixin = require('../../lib/updateMixin');
 
 function importHook(filename, name, moduleName, type, methods) {
   // Lookup existing services/<service-name>/hooks/index.js file
   if (fs.existsSync(filename)) {
-    const content = fs.readFileSync(filename).toString();
-    const ast = transform.parse(content);
+    var content = fs.readFileSync(filename).toString();
+    var ast = transform.parse(content);
 
     transform.addImport(ast, name, moduleName);
     methods.forEach(function(method) {
@@ -30,7 +30,7 @@ module.exports = generators.Base.extend({
   },
 
   initializing: function (name) {
-    const done = this.async();
+    var done = this.async();
     this.props = {
       name: name
     };
@@ -38,8 +38,8 @@ module.exports = generators.Base.extend({
   },
 
   prompting: function () {
-    const done = this.async();
-    const prompts = [
+    var done = this.async();
+    var prompts = [
       {
         type: 'input',
         name: 'name',
@@ -118,7 +118,7 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
-    const hookIndexPath = path.join('src', 'services', this.props.service, 'hooks', 'index.js');
+    var hookIndexPath = path.join('src', 'services', this.props.service, 'hooks', 'index.js');
     this.props.hookPath = path.join('src', 'services', this.props.service, 'hooks', this.props.name + '.js');
     this.props.hookTestPath = path.join('test', 'services', this.props.service, 'hooks', this.props.name + '.test.js');
 

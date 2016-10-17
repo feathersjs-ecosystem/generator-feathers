@@ -1,7 +1,7 @@
 'use strict';
 
-const assert = require('assert');
-const app = require('../../../src/app');
+var assert = require('assert');
+var app = require('../../../src/app');
 
 describe('<%= name %> service', function() {
   it('registered the <%= pluralizedName %> service', (done) => {

@@ -1,15 +1,15 @@
-const generators = require('yeoman-generator');
-const fs = require('fs');
-const assign = require('object.assign').getPolyfill();
-const inflect = require('i')();
-const updateMixin = require('../../lib/updateMixin');
-const transform = require('../../lib/transform');
+var generators = require('yeoman-generator');
+var fs = require('fs');
+var assign = require('object.assign').getPolyfill();
+var inflect = require('i')();
+var updateMixin = require('../../lib/updateMixin');
+var transform = require('../../lib/transform');
 
 function importMiddleware(filename, name, moduleName) {
   // Lookup existing service/index.js file
   if (fs.existsSync(filename)) {
-    const content = fs.readFileSync(filename).toString();
-    const ast = transform.parse(content);
+    var content = fs.readFileSync(filename).toString();
+    var ast = transform.parse(content);
 
     transform.addImport(ast, name, moduleName);
 
@@ -24,7 +24,7 @@ module.exports = generators.Base.extend({
   },
 
   initializing: function (name) {
-    const done = this.async();
+    var done = this.async();
     this.props = { name: name };
 
     this.props = assign(this.props, this.options);
@@ -32,9 +32,9 @@ module.exports = generators.Base.extend({
   },
 
   prompting: function () {
-    const done = this.async();
-    const options = this.options;
-    const prompts = [
+    var done = this.async();
+    var options = this.options;
+    var prompts = [
       {
         name: 'name',
         message: 'What do you want to call your middleware?',
@@ -55,7 +55,7 @@ module.exports = generators.Base.extend({
   writing: function () {
     this.props.codeName = inflect.camelize(inflect.underscore(this.props.name), false);
 
-    const middlewareIndexPath = this.destinationPath('src/middleware/index.js');
+    var middlewareIndexPath = this.destinationPath('src/middleware/index.js');
 
     this.fs.copyTpl(
       this.templatePath('middleware.js'),

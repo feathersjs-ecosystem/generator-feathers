@@ -1,19 +1,19 @@
 'use strict';
 
-const assert = require('assert');
-const path = require('path');
-const helpers = require('yeoman-test');
-const exec = require('child_process').exec;
+var assert = require('assert');
+var path = require('path');
+var helpers = require('yeoman-test');
+var exec = require('child_process').exec;
 
 
 describe('generator-feathers', function() {
   let appDir;
 
   function runTest(expectedText, done) {
-    const child = exec('npm test', { cwd: appDir });
+    var child = exec('npm test', { cwd: appDir });
     let buffer = '';
 
-    const addToBuffer = function(data) {
+    var addToBuffer = function(data) {
       buffer += data;
     };
 

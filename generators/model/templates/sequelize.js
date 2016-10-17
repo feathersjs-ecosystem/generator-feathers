@@ -8,7 +8,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = function(sequelize) {
-  const <%= name %> = sequelize.define('<%= pluralizedName %>', {<% if(name === 'user') { %><% for (let i = 0; i < providers.length; i++) { %>
+  const <%= name %> = sequelize.define('<%= pluralizedName %>', {<% if(name === 'user') { %><% for (var i = 0; i < providers.length; i++) { %>
     <% if (providers[i] === 'local') { %>email: {
       type: Sequelize.STRING,
       allowNull: false,
