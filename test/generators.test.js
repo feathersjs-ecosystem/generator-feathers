@@ -7,11 +7,12 @@ var exec = require('child_process').exec;
 
 
 describe('generator-feathers', function() {
-  var appDir;
+  let appDir;
 
   function runTest(expectedText, done) {
     var child = exec('npm test', { cwd: appDir });
-    var buffer = '';
+    let buffer = '';
+
     var addToBuffer = function(data) {
       buffer += data;
     };
@@ -23,7 +24,7 @@ describe('generator-feathers', function() {
       if(status !== 0) {
         return done(new Error(buffer));
       }
-      
+
       assert.ok(buffer.indexOf(expectedText) !== -1,
         'Ran test with text: ' + expectedText);
       done();
