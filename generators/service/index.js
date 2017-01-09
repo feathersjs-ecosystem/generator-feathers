@@ -1,199 +1,196 @@
-var generators = require('yeoman-generator');
-var fs = require('fs');
-var assign = require('object.assign').getPolyfill();
-var inflect = require('i')();
-var transform = require('../../lib/transform');
-var updateMixin = require('../../lib/updateMixin');
+'use strict';
 
-function importService(filename, name, moduleName) {
-  // Lookup existing service/index.js file
-  if (fs.existsSync(filename)) {
-    var content = fs.readFileSync(filename).toString();
-    var ast = transform.parse(content);
+const Generator = require('yeoman-generator');
+const _ = require('lodash');
+const j = require('../../lib/transform');
 
-    transform.addImport(ast, name, moduleName);
-    name = inflect.camelize(inflect.underscore(name), false);
-    transform.addLastInFunction(ast, 'module.exports', 'app.configure(' + name + ');');
+const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
+const createExpression = (object, property, args = []) =>
+      j.expressionStatement(j.callExpression(j.memberExpression(j.identifier(object), j.identifier(property)), args));
 
-    fs.writeFileSync(filename, transform.print(ast));
+module.exports = class DatabaseGenerator extends Generator {
+  constructor(args, opts) {
+    super(args, opts);
+
+    this.props = {};
+    this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
   }
-}
 
-module.exports = generators.Base.extend({
-  constructor: function() {
-    generators.Base.apply(this, arguments);
-    updateMixin.extend(this);
-  },
-
-  initializing: function (name) {
-    var done = this.async();
-    this.props = { name: name, authentication: false };
-
-    this.props = assign(this.props, this.options);
-    this.mixins.notifyUpdate(done);
-  },
-
-  prompting: function () {
-    var done = this.async();
-    var options = this.options;
-    var prompts = [
-      {
-        name: 'name',
-        message: 'What do you want to call your service?',
-        default: this.props.name,
-        when: function(){
-          return options.name === undefined;
-        }
-      },
+  prompting() {
+    const prompts = [
       {
         type: 'list',
         name: 'type',
-        message: 'What type of service do you need?',
-        default: this.props.type || 'database',
-        store: true,
-        when: function(){
-          return options.type === undefined;
-        },
+        message: 'What kind of service would you like to create?',
+        default: 'nedb',
         choices: [
           {
-            name: 'generic',
+            name: 'Service class',
             value: 'generic'
-          },
-          {
-            name: 'database',
-            value: 'database',
-            checked: true
-          }
-        ]
-      },
-      {
-        type: 'list',
-        name: 'database',
-        message: 'For which database?',
-        store: true,
-        default: this.props.database || 'nedb',
-        when: function(answers){
-          return options.database === undefined && answers.type === 'database';
-        },
-        choices: [
-          {
-            name: 'Memory',
+          }, {
+            name: 'In Memory',
             value: 'memory'
-          },
-          {
-            name: 'MongoDB',
-            value: 'mongodb'
-          },
-          {
-            name: 'MySQL',
-            value: 'mysql'
-          },
-          {
-            name: 'MariaDB',
-            value: 'mariadb'
-          },
-          {
+          }, {
             name: 'NeDB',
             value: 'nedb'
-          },
-          {
-            name: 'PostgreSQL',
-            value: 'postgres'
-          },
-          {
-            name: 'SQLite',
-            value: 'sqlite'
-          },
-          {
-           name: 'SQL Server',
-           value: 'mssql'
+          }, {
+            name: 'MongoDB',
+            value: 'mongodb'
+          }, {
+            name: 'Mongoose',
+            value: 'mongoose'
+          }, {
+            name: 'Sequelize',
+            value: 'sequelize'
+          }, {
+            name: 'KnexJS',
+            value: 'knex'
+          }, {
+            name: 'RethinkDB',
+            value: 'rethinkdb'
           }
         ]
-      },
-      {
-        type: 'confirm',
-        name: 'authentication',
-        default: this.props.authentication,
-        message: 'Does your service require users to be authenticated?',
-        when: function(){
-          return options.authentication === undefined;
+      }, {
+        name: 'name',
+        message: 'What is the name of the service?'
+      }, {
+        name: 'path',
+        message: 'Which path should the service be registered on?',
+        default(answers) {
+          return `/${_.kebabCase(answers.name)}`;
         }
       }
     ];
 
-    this.prompt(prompts).then(function (props) {
-      this.props = assign(this.props, props);
-      done();
-    }.bind(this));
-  },
+    return this.prompt(prompts).then(props => {
+      const { name } = props;
 
-  writing: function () {
-    // Generate the appropriate service based on the database.
-    if (this.props.type === 'database') {
-      switch(this.props.database) {
-        case 'sqlite':
-        case 'mssql':
-        case 'mysql':
-        case 'mariadb':
-        case 'postgres':
-          this.npmInstall(['feathers-sequelize'], { save: true });
-          this.props.type = 'sequelize';
-          break;
-        case 'mongodb':
-          this.npmInstall(['feathers-mongoose'], { save: true });
-          this.props.type = 'mongoose';
-          break;
-        case 'memory':
-          this.npmInstall(['feathers-memory'], { save: true });
-          this.props.type = 'memory';
-          break;
-        case 'nedb':
-          this.npmInstall(['feathers-nedb'], { save: true });
-          this.props.type = 'nedb';
-          break;
-        default:
-          this.props.type = 'generic';
-          break;
+      if(!name) {
+        throw new Error(`You have to provide a name for the service`);
       }
+
+      this.props = Object.assign(this.props, props, {
+        kebabName: _.kebabCase(name),
+        camelName: _.camelCase(name)
+      });
+    });
+  }
+
+  _transformCode(code) {
+    const { camelName, kebabName } = this.props;
+    const ast = j(code);
+
+    const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
+    const mainExpression = ast.find(j.FunctionExpression)
+      .closest(j.ExpressionStatement);
+
+    if(mainExpression.length !== 1) {
+      throw new Error(`src/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`);
     }
 
-    this.props.pluralizedName = inflect.pluralize(this.props.name);
+    // Add require('./service')
+    mainExpression.insertBefore(serviceRequire);
+    // Add app.configure(service) to service/index.js
+    mainExpression.find(j.BlockStatement)
+      .forEach((node) => {
+        const stmts = node.value.body;
+        const newStmt = createExpression('app', 'configure', [j.identifier(camelName)]);
+        stmts.push(newStmt);
+      });
 
-    var serviceIndexPath = this.destinationPath('src/services/index.js');
+    return ast.toSource();
+  }
+
+  _generic(context) {
+    const { kebabName } = this.props;
 
     this.fs.copyTpl(
-      this.templatePath(this.props.type + '-service.js'),
-      this.destinationPath('src/services', this.props.name, 'index.js'),
-      this.props
+      this.templatePath('class.js'),
+      this.destinationPath('src', 'services', kebabName, `${kebabName}.class.js`),
+      context
     );
 
-    // Automatically import the new service into services/index.js and initialize it.
-    importService(serviceIndexPath, this.props.name, './' + this.props.name);
+    this.fs.copyTpl(
+      this.templatePath('service.js'),
+      this.destinationPath('src', 'services', kebabName, `${kebabName}.service.js`),
+      context
+    );
+  }
 
-    // Add a hooks folder for the service
+  _nedb(context) {
+    const { kebabName } = this.props;
+
+    this.fs.copyTpl(
+      this.templatePath('types', 'nedb.js'),
+      this.destinationPath('src', 'services', kebabName, `${kebabName}.service.js`),
+      context
+    );
+  }
+
+  writing() {
+    const { type, kebabName } = this.props;
+    const moduleMappings = {
+      generic: `./${kebabName}.class.js`,
+      memory: 'feathers-memory',
+      nedb: 'feathers-nedb',
+      mongodb: 'feathers-mongodb',
+      mongoose: 'feathers-mongoose',
+      sequelize: 'feathers-sequelize',
+      knex: 'feathers-knex',
+      rethinkdb: 'feathers-sequelize'
+    };
+    const serviceModule = moduleMappings[type];
+    const mainFile = this.destinationPath('src', 'services', kebabName, `${kebabName}.service.js`);
+    const context = Object.assign({}, this.props, {
+      modelName: null,
+      path: stripSlashes(this.props.path),
+      serviceModule
+    });
+
+    // Do not run code transformations if the file already exists
+    let transformCode = !this.fs.exists(mainFile);
+
+    if(type !== 'generic' && type !== 'memory') {
+      this.composeWith(require.resolve('../connection'), { type });
+    }
+
     this.fs.copyTpl(
       this.templatePath('hooks.js'),
-      this.destinationPath('src', 'services', this.props.name, 'hooks', 'index.js'),
-      this.props
+      this.destinationPath('src', 'services', kebabName, `${kebabName}.hooks.js`),
+      context
     );
 
     this.fs.copyTpl(
-      this.templatePath('index.test.js'),
-      this.destinationPath('test', 'services', this.props.name, 'index.test.js'),
-      this.props
+      this.templatePath('filters.js'),
+      this.destinationPath('src', 'services', kebabName, `${kebabName}.filters.js`),
+      context
     );
 
-    // If we are generating a service that requires a model, let's generate that model.
-    if (this.props.type === 'mongoose' || this.props.type === 'sequelize') {
-      this.composeWith('feathers:model', {
-        options: {
-          type: this.props.type,
-          name: this.props.name,
-          service: this.props.name,
-          authentication: this.props.authentication, // this gets passed from the main generator
-          providers: this.props.providers // this gets passed from the main generator
-        }
-      });
+    // Special service type
+    if(this[`_${type}`]) {
+      this[`_${type}`](context);
+    } else {
+      // Standard service type
+      this.fs.copyTpl(
+        this.templatePath('service.js'),
+        mainFile,
+        context
+      );
+    }
+
+    if(serviceModule.charAt(0) !== '.') {
+      this.npmInstall([ serviceModule ], { save: true });
+    }
+
+    if(transformCode) {
+      this.log('Adding the new service to `src/services/index.js`. You will be prompted to confirm overwriting that file.');
+      
+      const servicejs = this.destinationPath('src', 'services', 'index.js');
+      const transformed = this._transformCode(
+        this.fs.read(servicejs).toString()
+      );
+
+      this.fs.write(servicejs, transformed);
     }
   }
-});
+};

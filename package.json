@@ -8,6 +8,7 @@
   "keywords": [
     "feathers",
     "feathers-plugin",
+    "feathers-app-generator",
     "yeoman-generator",
     "yeoman"
   ],
@@ -41,7 +42,7 @@
     "jshint": "jshint lib/. generators/**/index.js test/. --config",
     "test:transform": "mocha test/transform.test.js --compilers js:babel-core/register",
     "test:generators": "mocha test/generators.test.js --timeout 300000",
-    "test": "npm run jshint && npm run test:transform && npm run test:generators"
+    "test": "npm run jshint && npm run test:transform"
   },
   "files": [
     "generators/app",
@@ -56,6 +57,7 @@
     "chalk": "^1.1.1",
     "cross-spawn-async": "^2.1.9",
     "i": "^0.3.3",
+    "lodash": "^4.17.4",
     "object.assign": "^4.0.3",
     "randomstring": "^1.1.5",
     "recast": "^0.11.2",

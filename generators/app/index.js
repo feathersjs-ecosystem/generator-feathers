@@ -3,6 +3,7 @@
 const Generator = require('yeoman-generator');
 const path = require('path');
 const makeConfig = require('./configs');
+const PROVIDERS = ['rest', 'socketio', 'primus'];
 
 module.exports = class AppGenerator extends Generator {
   constructor(args, opts) {
@@ -22,7 +23,8 @@ module.exports = class AppGenerator extends Generator {
       'feathers-authentication',
       'serve-favicon',
       'compression',
-      'body-parser'
+      'body-parser',
+      'cors'
     ];
 
     this.devDependencies = [
@@ -30,14 +32,10 @@ module.exports = class AppGenerator extends Generator {
       'mocha',
       'request'
     ];
-
-    this.plugins = [
-      'hooks', 'configuration'
-    ];
   }
 
   prompting() {
-    var prompts = [{
+    const prompts = [{
       name: 'name',
       message: 'Project name',
       when: !this.pkg.name,
@@ -111,7 +109,7 @@ module.exports = class AppGenerator extends Generator {
 
   install() {
     // Install providers like `feathers-rest` or `feathers-socketio`
-    ['rest', 'socketio', 'primus'].forEach(provider => {
+    PROVIDERS.forEach(provider => {
       if(this.props.providers.indexOf(provider) !== -1) {
         this.dependencies.push(`feathers-${provider}`);
       }
