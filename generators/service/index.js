@@ -1,7 +1,7 @@
 'use strict';
 
-const Generator = require('yeoman-generator');
 const _ = require('lodash');
+const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
 
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -9,13 +9,6 @@ const createExpression = (object, property, args = []) =>
       j.expressionStatement(j.callExpression(j.memberExpression(j.identifier(object), j.identifier(property)), args));
 
 module.exports = class DatabaseGenerator extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-
-    this.props = {};
-    this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
-  }
-
   prompting() {
     const prompts = [
       {
@@ -85,7 +78,7 @@ module.exports = class DatabaseGenerator extends Generator {
       .closest(j.ExpressionStatement);
 
     if(mainExpression.length !== 1) {
-      throw new Error(`src/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`);
+      throw new Error(`${this.libDirectory}/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`);
     }
 
     // Add require('./service')
@@ -106,13 +99,13 @@ module.exports = class DatabaseGenerator extends Generator {
 
     this.fs.copyTpl(
       this.templatePath('class.js'),
-      this.destinationPath('src', 'services', kebabName, `${kebabName}.class.js`),
+      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.class.js`),
       context
     );
 
     this.fs.copyTpl(
       this.templatePath('service.js'),
-      this.destinationPath('src', 'services', kebabName, `${kebabName}.service.js`),
+      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`),
       context
     );
   }
@@ -122,7 +115,7 @@ module.exports = class DatabaseGenerator extends Generator {
 
     this.fs.copyTpl(
       this.templatePath('types', 'nedb.js'),
-      this.destinationPath('src', 'services', kebabName, `${kebabName}.service.js`),
+      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`),
       context
     );
   }
@@ -140,29 +133,41 @@ module.exports = class DatabaseGenerator extends Generator {
       rethinkdb: 'feathers-sequelize'
     };
     const serviceModule = moduleMappings[type];
-    const mainFile = this.destinationPath('src', 'services', kebabName, `${kebabName}.service.js`);
+    const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
     const context = Object.assign({}, this.props, {
       modelName: null,
       path: stripSlashes(this.props.path),
       serviceModule
     });
 
-    // Do not run code transformations if the file already exists
-    let transformCode = !this.fs.exists(mainFile);
+    // Do not run code transformations if the service file already exists
+    if(!this.fs.exists(mainFile)) {
+      const servicejs = this.destinationPath(this.libDirectory, 'services', 'index.js');
+      const transformed = this._transformCode(
+        this.fs.read(servicejs).toString()
+      );
 
+      this.conflicter.force = true;
+      this.fs.write(servicejs, transformed);
+    }
+
+    // Run the `connection` generator for the selected database
+    // It will not do anything if the db has been set up already
     if(type !== 'generic' && type !== 'memory') {
-      this.composeWith(require.resolve('../connection'), { type });
+      this.composeWith(require.resolve('../connection'), {
+        props: { type }
+      });
     }
 
     this.fs.copyTpl(
       this.templatePath('hooks.js'),
-      this.destinationPath('src', 'services', kebabName, `${kebabName}.hooks.js`),
+      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`),
       context
     );
 
     this.fs.copyTpl(
       this.templatePath('filters.js'),
-      this.destinationPath('src', 'services', kebabName, `${kebabName}.filters.js`),
+      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.filters.js`),
       context
     );
 
@@ -179,18 +184,7 @@ module.exports = class DatabaseGenerator extends Generator {
     }
 
     if(serviceModule.charAt(0) !== '.') {
-      this.npmInstall([ serviceModule ], { save: true });
-    }
-
-    if(transformCode) {
-      this.log('Adding the new service to `src/services/index.js`. You will be prompted to confirm overwriting that file.');
-      
-      const servicejs = this.destinationPath('src', 'services', 'index.js');
-      const transformed = this._transformCode(
-        this.fs.read(servicejs).toString()
-      );
-
-      this.fs.write(servicejs, transformed);
+      this._packagerInstall([ serviceModule ], { save: true });
     }
   }
 };

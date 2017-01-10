@@ -7,5 +7,5 @@ module.exports = function() {
   const config = app.get('rethinkdb');
   const r = rethinkdbdash(config);
 
-  app.set('rethinkdbClient', r);
+  app.set('rethinkdbdash', r);
 };

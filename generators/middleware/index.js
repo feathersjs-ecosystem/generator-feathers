@@ -1,6 +1,6 @@
 'use strict';
 
-const Generator = require('yeoman-generator');
+const Generator = require('../../lib/generator');
 // const { kebabCase } = require('lodash');
 // const j = require('../../lib/transform');
 

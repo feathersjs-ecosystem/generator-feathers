@@ -1,21 +1,14 @@
 'use strict';
 
-const Generator = require('yeoman-generator');
-const { kebabCase, isEqual } = require('lodash');
+const { kebabCase } = require('lodash');
+const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
 
 module.exports = class ConnectionGenerator extends Generator {
-  constructor(args, opts) {
-    super(args, opts);
-
-    this.props = { type: opts.type };
-    this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
-    this.defaultConfig = this.fs.readJSON(this.destinationPath('config', 'default.json'), {});
-  }
-
   prompting() {
     const databaseName = kebabCase(this.pkg.name);
     const { defaultConfig } = this;
+    const getProps = answers => Object.assign({}, this.props, answers);
     const prompts = [
       {
         type: 'list',
@@ -42,29 +35,36 @@ module.exports = class ConnectionGenerator extends Generator {
             name: 'RethinkDB',
             value: 'rethinkdb'
           }
-        ]
+        ],
+        when: !this.props.type
       }, {
         name: 'nedb',
         message: 'Where should NeDB store the database files?',
         default: '../data/',
-        when(answers) {
+        when(current) {
+          const answers = getProps(current);
           return answers.type === 'nedb' && !defaultConfig.nedb;
         }
-      }, {
-        name: 'mongodb',
-        message: 'What is the default MongoDB connection URL?',
-        default: `mongodb://localhost:27017/${databaseName}`,
-        when(answers) {
-          return (answers.type === 'mongodb' || answers.type === 'mongoose') && !defaultConfig.mongodb;
-        }
-      }, {
-        name: 'rethinkdb',
-        message: 'What is the RethinkDB database name?',
-        default: databaseName,
-        when(answers) {
-          return answers.type === 'rethinkdb' && !defaultConfig.rethinkdb;
-        }
       }
+      // , {
+      //   name: 'mongodb',
+      //   message: 'What is the default MongoDB connection URL?',
+      //   default: `mongodb://localhost:27017/${databaseName}`,
+      //   when(current) {
+      //     const answers = getProps(current);
+
+      //     return (answers.type === 'mongodb' || answers.type === 'mongoose') && !defaultConfig.mongodb;
+      //   }
+      // }, {
+      //   name: 'rethinkdb',
+      //   message: 'What is the RethinkDB database name?',
+      //   default: databaseName,
+      //   when(current) {
+      //     const answers = getProps(current);
+
+      //     return answers.type === 'rethinkdb' && !defaultConfig.rethinkdb;
+      //   }
+      // }
     ];
 
     return this.prompt(prompts).then(props => {
@@ -75,27 +75,29 @@ module.exports = class ConnectionGenerator extends Generator {
   writeConfiguration() {
     const { type } = this.props;
     const config = Object.assign({}, this.defaultConfig);
-      
-    if(type === 'mongoose') {
-      config.mongodb = this.props.mongodb;
-    } else if(type === 'knex') {
-      // TODO
-    } else if(type === 'sequelize') {
-      // TODO
-    } else if(type === 'rethinkdb') {
-      config.rethinkdb = {
-        db: this.props.rethinkdb
-      };
-    } else {
-      config[type] = this.props[type];
-    }
 
-    if(!isEqual(config, this.defaultConfig)) {
-      this.fs.writeJSON(
-        this.destinationPath('config', 'default.json'),
-        config
-      );
+    if(type === 'nedb') {
+      config.nedb = this.props.nedb || config.nedb;
     }
+    // if(type === 'mongoose') {
+    //   config.mongodb = this.props.mongodb;
+    // } else if(type === 'knex') {
+    //   // TODO
+    // } else if(type === 'sequelize') {
+    //   // TODO
+    // } else if(type === 'rethinkdb') {
+    //   config.rethinkdb = {
+    //     db: this.props.rethinkdb
+    //   };
+    // } else if(this.props[type]) {
+    //   config[type] = this.props[type];
+    // }
+
+    this.conflicter.force = true;
+    this.fs.writeJSON(
+      this.destinationPath('config', 'default.json'),
+      config
+    );
   }
 
   _transformCode(code) {
@@ -131,29 +133,26 @@ module.exports = class ConnectionGenerator extends Generator {
     const { type } = this.props;
     const dependencies = dependencyMappings[type];
 
-    let transformCode = false;
-
+    // NeDB does not need a separate db configuration file
     if(type !== 'nedb') {
       const dbFile = `${type}.js`;
 
-      transformCode = !this.fs.exists(this.destinationPath('src', dbFile));
-      this.fs.copy(this.templatePath(dbFile), this.destinationPath('src', dbFile));
+      // If the file doesn't exist yet, add it to the app.js
+      if(!this.fs.exists(this.destinationPath('src', dbFile))) {
+        const appjs = this.destinationPath(this.libDirectory, 'app.js');
+
+        this.conflicter.force = true;
+        this.fs.write(appjs, this._transformCode(
+          this.fs.read(appjs).toString()
+        ));
+      }
+
+      this.fs.copy(this.templatePath(dbFile), this.destinationPath(this.libDirectory, dbFile));
     }
 
     this.writeConfiguration();
 
-    if(transformCode) {
-      this.log('Adding database configuration to `src/app.js`. You will be prompted to confirm overwriting that file.');
-
-      const appjs = this.destinationPath('src', 'app.js');
-      const transformed = this._transformCode(
-        this.fs.read(appjs).toString()
-      );
-
-      this.fs.write(appjs, transformed);
-    }
-
-    this.npmInstall(dependencies, {
+    this._packagerInstall(dependencies, {
       save: true
     });
   }

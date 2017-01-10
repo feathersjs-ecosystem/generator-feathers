@@ -7,5 +7,5 @@ module.exports = function() {
   const { client, connection } = app.get('knex');
   const db = knex({ client, connection });
 
-  app.set('knexClient', db);
+  app.set('knexDb', db);
 };

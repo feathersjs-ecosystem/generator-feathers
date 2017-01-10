@@ -7,5 +7,5 @@ module.exports = function() {
   const config = app.get('mongodb');
   const promise = MongoClient.connect(config);
 
-  app.set('mongodbClient', promise);
+  app.set('mongoClient', promise);
 };

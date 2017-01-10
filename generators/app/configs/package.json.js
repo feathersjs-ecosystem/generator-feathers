@@ -2,12 +2,14 @@
 
 module.exports = function(generator) {
   const { props } = generator;
+  const lib = props.src;
+  const [ packager, version ] = props.packager.split('@');
   const pkg = {
     name: props.name,
     description: props.description,
     version: '0.0.0',
     homepage: '',
-    main: 'src/',
+    main: lib,
     keywords: [
       'feathers'
     ],
@@ -16,13 +18,17 @@ module.exports = function(generator) {
     author: {},
     contributors: [],
     bugs: {},
+    directories: {
+      lib
+    },
     engines: {
-      node: '>= 6.0.0'
+      node: '>= 6.0.0',
+      [packager]: version
     },
     'scripts': {
       test: 'npm run jshint && npm run mocha',
-      jshint: 'jshint src/. test/. --config',
-      start: 'node src/',
+      jshint: `jshint ${lib}/. test/. --config`,
+      start: `node ${lib}/`,
       mocha: 'mocha test/ --recursive'
     }
   };
