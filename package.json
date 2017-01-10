@@ -55,7 +55,7 @@
     "ast-traverse": "^0.1.1",
     "chalk": "^1.1.1",
     "cross-spawn-async": "^2.1.9",
-    "i": "^0.3.3",
+    "i": "^0.3.5",
     "object.assign": "^4.0.3",
     "recast": "^0.11.2",
     "repeating": "^2.0.0",
