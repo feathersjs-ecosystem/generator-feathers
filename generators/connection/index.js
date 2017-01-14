@@ -37,7 +37,33 @@ module.exports = class ConnectionGenerator extends Generator {
           }
         ],
         when: !this.props.type
-      }, {
+      }, 
+      // {
+      //   type: 'list',
+      //   name: 'sqlClient',
+      //   message: 'Which SQL database are you using with Sequelize?',
+      //   default: 'mysql',
+      //   choices: [
+      //     {
+      //       name: 'SQLite',
+      //       value: 'sqlite'
+      //     }, {
+      //       name: 'PostgreSQL',
+      //       value: 'pg'
+      //     }, {
+      //       name: 'MySQL or MariaDB',
+      //       value: 'mysql'
+      //     }, {
+      //       name: 'MSSQL',
+      //       value: 'mssql'
+      //     }
+      //   ],
+      //   when(current) {
+      //     const answers = getProps(current);
+      //     return answers.type === 'nedb' && !defaultConfig.nedb;
+      //   }
+      // },
+      {
         name: 'nedb',
         message: 'Where should NeDB store the database files?',
         default: '../data/',
@@ -45,26 +71,25 @@ module.exports = class ConnectionGenerator extends Generator {
           const answers = getProps(current);
           return answers.type === 'nedb' && !defaultConfig.nedb;
         }
+      }, {
+        name: 'mongodb',
+        message: 'What is the default MongoDB connection string?',
+        default: `mongodb://localhost:27017/${databaseName}`,
+        when(current) {
+          const answers = getProps(current);
+
+          return (answers.type === 'mongodb' || answers.type === 'mongoose') && !defaultConfig.mongodb;
+        }
+      }, {
+        name: 'rethinkdb',
+        message: 'What is the RethinkDB database name? Will use local database, see rethinkdbash documentation for additional options.',
+        default: databaseName,
+        when(current) {
+          const answers = getProps(current);
+
+          return answers.type === 'rethinkdb' && !defaultConfig.rethinkdb;
+        }
       }
-      // , {
-      //   name: 'mongodb',
-      //   message: 'What is the default MongoDB connection URL?',
-      //   default: `mongodb://localhost:27017/${databaseName}`,
-      //   when(current) {
-      //     const answers = getProps(current);
-
-      //     return (answers.type === 'mongodb' || answers.type === 'mongoose') && !defaultConfig.mongodb;
-      //   }
-      // }, {
-      //   name: 'rethinkdb',
-      //   message: 'What is the RethinkDB database name?',
-      //   default: databaseName,
-      //   when(current) {
-      //     const answers = getProps(current);
-
-      //     return answers.type === 'rethinkdb' && !defaultConfig.rethinkdb;
-      //   }
-      // }
     ];
 
     return this.prompt(prompts).then(props => {
@@ -72,7 +97,38 @@ module.exports = class ConnectionGenerator extends Generator {
     });
   }
 
-  writeConfiguration() {
+  _transformCode(code) {
+    const { type } = this.props;
+    const ast = j(code);
+    const appDeclaration = ast.findDeclaration('app');
+    const configureAuth = ast.findConfigure('authentication');
+    const requireCall = `const ${type} = require('./${type}');`;
+
+    if(appDeclaration.length === 0) {
+      throw new Error('Could not find \'app\' variable declaration in app.js to insert database configuration. Did you modify app.js?');
+    }
+
+    if(configureAuth.length === 0) {
+      throw new Error('Could not find .configure(authentication) call in app.js before which to insert database configuration. Did you modify app.js?');
+    }
+
+    appDeclaration.insertBefore(requireCall);
+    configureAuth.insertBefore(`app.configure(${type});`);
+
+    return ast.toSource();
+  }
+
+  // _getConfiguration() {
+  //   const { props } = this;
+  //   const config = Object.assign({}, this.defaultConfig);
+  //   const databases = {
+  //     nedb() {
+
+  //     }
+  //   }
+  // }
+  
+  _writeConfiguration() {
     const { type } = this.props;
     const config = Object.assign({}, this.defaultConfig);
 
@@ -100,38 +156,11 @@ module.exports = class ConnectionGenerator extends Generator {
     );
   }
 
-  _transformCode(code) {
-    const { type } = this.props;
-    const ast = j(code);
-    const appDeclaration = ast.findDeclaration('app');
-    const configureAuth = ast.findConfigure('authentication');
-    const requireCall = `const ${type} = require('./${type}');`;
-
-    if(appDeclaration.length === 0) {
-      throw new Error(`Could not find 'app' variable declaration in app.js to insert database configuration. Did you modify app.js?`);
-    }
-
-    if(configureAuth.length === 0) {
-      throw new Error(`Could not find .configure(authentication) call in app.js before which to insert database configuration. Did you modify app.js?`);
-    }
-
-    appDeclaration.insertBefore(requireCall);
-    configureAuth.insertBefore(`app.configure(${type});`);
-
-    return ast.toSource();
-  }
-
   writing() {
-    const dependencyMappings = {
-      nedb: [ 'nedb', 'feathers-nedb' ],
-      mongodb: [ 'mongodb', 'feathers-mongodb' ],
-      mongoose: [ 'mongoose', 'feathers-mongodb' ],
-      rethinkdb: [ 'rethinkdbdash', 'feathers-rethinkdb' ],
-      knex: [ 'knex', 'feathers-knex' ],
-      sequelize: [ 'sequelize', 'feathers-sequelize' ]
-    };
     const { type } = this.props;
-    const dependencies = dependencyMappings[type];
+    // The client npm package name is only different for RethinkDB
+    const dependencies = type === 'rethinkdb' ? 
+      [ 'rethinkdbdash' ] : [ type ];
 
     // NeDB does not need a separate db configuration file
     if(type !== 'nedb') {
@@ -150,7 +179,7 @@ module.exports = class ConnectionGenerator extends Generator {
       this.fs.copy(this.templatePath(dbFile), this.destinationPath(this.libDirectory, dbFile));
     }
 
-    this.writeConfiguration();
+    this._writeConfiguration();
 
     this._packagerInstall(dependencies, {
       save: true

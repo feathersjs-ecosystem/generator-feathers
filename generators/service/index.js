@@ -45,23 +45,33 @@ module.exports = class DatabaseGenerator extends Generator {
         ]
       }, {
         name: 'name',
-        message: 'What is the name of the service?'
+        message: 'What is the name of the service?',
+        validate(input) {
+          if(input.trim() === '') {
+            return 'Service name can not be empty';
+          }
+
+          return true;
+        }
       }, {
         name: 'path',
         message: 'Which path should the service be registered on?',
         default(answers) {
           return `/${_.kebabCase(answers.name)}`;
+        },
+        validate(input) {
+          if(input.trim() === '') {
+            return 'Service path can not be empty';
+          }
+
+          return true;
         }
       }
     ];
 
     return this.prompt(prompts).then(props => {
       const { name } = props;
-
-      if(!name) {
-        throw new Error(`You have to provide a name for the service`);
-      }
-
+      
       this.props = Object.assign(this.props, props, {
         kebabName: _.kebabCase(name),
         camelName: _.camelCase(name)

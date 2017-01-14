@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = function() {
-  const app = this;
+  const app = this; // eslint-disable-line no-unused-vars
 };

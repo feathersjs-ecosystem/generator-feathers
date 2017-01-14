@@ -5,5 +5,5 @@ const port = app.get('port');
 const server = app.listen(port);
 
 server.on('listening', () =>
-  console.log(`Feathers application started on ${app.get('host')}:${port}`)
+  console.log(`Feathers application started on ${app.get('host')}:${port}`) // eslint-disable-line no-console
 );
