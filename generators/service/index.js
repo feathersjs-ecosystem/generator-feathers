@@ -1,14 +1,17 @@
 'use strict';
 
 const _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
 const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
 
+const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 const createExpression = (object, property, args = []) =>
       j.expressionStatement(j.callExpression(j.memberExpression(j.identifier(object), j.identifier(property)), args));
 
-module.exports = class DatabaseGenerator extends Generator {
+module.exports = class ServiceGenerator extends Generator {
   prompting() {
     const prompts = [
       {
@@ -18,7 +21,7 @@ module.exports = class DatabaseGenerator extends Generator {
         default: 'nedb',
         choices: [
           {
-            name: 'Service class',
+            name: 'A custom service',
             value: 'generic'
           }, {
             name: 'In Memory',
@@ -104,32 +107,6 @@ module.exports = class DatabaseGenerator extends Generator {
     return ast.toSource();
   }
 
-  _generic(context) {
-    const { kebabName } = this.props;
-
-    this.fs.copyTpl(
-      this.templatePath('class.js'),
-      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.class.js`),
-      context
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('service.js'),
-      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`),
-      context
-    );
-  }
-
-  _nedb(context) {
-    const { kebabName } = this.props;
-
-    this.fs.copyTpl(
-      this.templatePath('types', 'nedb.js'),
-      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`),
-      context
-    );
-  }
-
   writing() {
     const { type, kebabName } = this.props;
     const moduleMappings = {
@@ -144,8 +121,9 @@ module.exports = class DatabaseGenerator extends Generator {
     };
     const serviceModule = moduleMappings[type];
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
+    const hasModel = fs.existsSync(path.join(templatePath, 'model', `${type}.js`));
     const context = Object.assign({}, this.props, {
-      modelName: null,
+      modelName: hasModel ? `./${kebabName}.model.js` : null,
       path: stripSlashes(this.props.path),
       serviceModule
     });
@@ -167,6 +145,22 @@ module.exports = class DatabaseGenerator extends Generator {
       this.composeWith(require.resolve('../connection'), {
         props: { type }
       });
+    } else if(type === 'generic') {
+      // Copy the generic service class
+      this.fs.copyTpl(
+        this.templatePath('class.js'),
+        this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.class.js`),
+        context
+      );
+    }
+
+    if(context.modelName) {
+      // Copy the model
+      this.fs.copyTpl(
+        this.templatePath('model', `${type}.js`),
+        this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.model.js`),
+        context
+      );
     }
 
     this.fs.copyTpl(
@@ -181,11 +175,13 @@ module.exports = class DatabaseGenerator extends Generator {
       context
     );
 
-    // Special service type
-    if(this[`_${type}`]) {
-      this[`_${type}`](context);
+    if(fs.existsSync(path.join(templatePath, 'types', `${type}.js`))) {
+      this.fs.copyTpl(
+        this.templatePath('types', `${type}.js`),
+        mainFile,
+        context
+      );
     } else {
-      // Standard service type
       this.fs.copyTpl(
         this.templatePath('service.js'),
         mainFile,

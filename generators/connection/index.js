@@ -151,8 +151,9 @@ module.exports = class ConnectionGenerator extends Generator {
         when: !this.props.type
       }, {
         name: 'connectionString',
-        message: 'What is the database connection string (allowed protocols are nedb, mongodb, rethinkdb, postgres, sqlite, mssql, oracle)?',
-        default(answers) {
+        message: 'What is the database connection string?',
+        default(current) {
+          const answers = getProps(current);
           const type = getConnectionType(answers.type);
           const defaultConnectionStrings = {
             nedb: 'nedb://../data',
@@ -160,7 +161,7 @@ module.exports = class ConnectionGenerator extends Generator {
             sqlite: 'sqlite://data.sqlite',
             rethinkdb: `rethinkdb://localhost:11078/${databaseName}`
           };
-
+          
           return defaultConnectionStrings[type];
         },
         when(current) {

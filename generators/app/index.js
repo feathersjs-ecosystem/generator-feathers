@@ -19,7 +19,7 @@ module.exports = class AppGenerator extends Generator {
       'feathers-hooks',
       'feathers-errors',
       'feathers-configuration',
-      'feathers-authentication',
+      'feathers-authentication@pre',
       'serve-favicon',
       'compression',
       'body-parser',

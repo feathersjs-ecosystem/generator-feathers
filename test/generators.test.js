@@ -12,7 +12,7 @@ describe('generator-feathers', function() {
     return new Promise((resolve, reject) => {
       let buffer = '';
     
-      const child = exec('npm test', { cwd: appDir });
+      const child = exec('yarn test', { cwd: appDir });
       const addToBuffer = data => {
         buffer += data;
       };

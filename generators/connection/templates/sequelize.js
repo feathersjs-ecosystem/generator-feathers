@@ -4,8 +4,8 @@ const Sequelize = require('sequelize');
 
 module.exports = function() {
   const app = this;
-  const { database, username, password, options } = app.get('sequelize');
-  const sequelize = new Sequelize(database, username, password, options);
+  const connectionString = app.get('sequelize');
+  const sequelize = new Sequelize(connectionString);
 
   app.set('sequelizeClient', sequelize);
 };

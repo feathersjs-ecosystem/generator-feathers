@@ -1,18 +1,18 @@
 'use strict';
 
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-const createService = require('<%= serviceModule %>');
-<% if(modelName) { %>const createModel = require('./<%= modelName %>');<% } %>
+const createService = require('feathers-rethinkdb');
 const hooks = require('./<%= kebabName %>.hooks');
 const filters = require('./<%= kebabName %>.filters');
 
 module.exports = function() {
-  const app = this;<% if(modelName) { %>
-  const Model = createModel(app);<% } %>
+  const app = this;
+  const Model = app.get('rethinkdbClient');
   const paginate = app.get('paginate');
 
-  const options = {<% if(modelName) { %>
-    Model,<% } %>
+  const options = {
+    name: '<%= kebabName %>',
+    Model,
     paginate
   };
 
