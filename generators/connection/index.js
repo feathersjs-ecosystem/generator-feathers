@@ -95,7 +95,9 @@ module.exports = class ConnectionGenerator extends Generator {
 
       return {
         client: sqlPackages[protocol],
-        connection: connectionString
+        connection: protocol === 'sqlite' ? {
+          filename: connectionString.substring(9, connectionString.length)
+        } : connectionString
       };
 
     default:

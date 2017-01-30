@@ -5,8 +5,8 @@
 const Sequelize = require('sequelize');
 
 module.exports = function(app) {
-  const sequelize = app.get('sequelizeClient');
-  const <%= camelName %> = sequelize.define('<%= kebabName %>', {
+  const sequelizeClient = app.get('sequelizeClient');
+  const <%= camelName %> = sequelizeClient.define('<%= kebabName %>', {
     text: {
       type: Sequelize.STRING,
       allowNull: false

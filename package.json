@@ -53,25 +53,17 @@
     "lib"
   ],
   "dependencies": {
-    "ast-traverse": "^0.1.1",
-    "chalk": "^1.1.1",
-    "cross-spawn-async": "^2.1.9",
-    "i": "^0.3.3",
     "jscodeshift": "^0.3.30",
     "lodash": "^4.17.4",
-    "object.assign": "^4.0.3",
     "randomstring": "^1.1.5",
-    "recast": "^0.11.2",
-    "repeating": "^2.0.0",
-    "string": "^3.3.1",
-    "string-length": "^1.0.1",
-    "update-notifier": "^1.0.1",
     "yeoman-generator": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^3.13.1",
     "jshint": "^2.9.2",
     "mocha": "^3.0.0",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
     "yeoman-assert": "^2.2.2",
     "yeoman-test": "^1.4.0"
   }

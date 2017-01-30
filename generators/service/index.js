@@ -117,13 +117,13 @@ module.exports = class ServiceGenerator extends Generator {
       mongoose: 'feathers-mongoose',
       sequelize: 'feathers-sequelize',
       knex: 'feathers-knex',
-      rethinkdb: 'feathers-sequelize'
+      rethinkdb: 'feathers-rethinkdb'
     };
     const serviceModule = moduleMappings[type];
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
     const hasModel = fs.existsSync(path.join(templatePath, 'model', `${type}.js`));
     const context = Object.assign({}, this.props, {
-      modelName: hasModel ? `./${kebabName}.model.js` : null,
+      modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
       serviceModule
     });
