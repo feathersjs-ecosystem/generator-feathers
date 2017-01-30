@@ -34,6 +34,12 @@ function startAndWait(cmd, options, text) {
   });
 }
 
+function delay(ms) {
+  return function(res) {
+    return new Promise(resolve => setTimeout(() => resolve(res), ms));
+  };
+}
+
 describe('generator-feathers', function() {
   let appDir;
 
@@ -204,6 +210,7 @@ describe('generator-feathers', function() {
         })
         .withOptions({ skipInstall: false })
         .then(() => startAndWait('node src/', { cwd: appDir }, 'Feathers application started'))
+        .then(delay(1000))
         .then(({ child }) => {
           const text = 'This is a test';
 
@@ -223,7 +230,7 @@ describe('generator-feathers', function() {
           .then(() => child.kill())
           .catch(e => {
             child.kill();
-
+            console.log(appDir); // eslint-disable-line no-console
             throw e;
           });
         });
@@ -235,8 +242,8 @@ describe('generator-feathers', function() {
     it('mongodb', () => testServiceGenerator('mongodb', '_id'));
     it('mongoose', () => testServiceGenerator('mongoose', '_id'));
     it('knex', () => testServiceGenerator('knex', 'id'));
+    it('sequelize', () => testServiceGenerator('sequelize', 'id'));
     
-    it.skip('sequelize', () => testServiceGenerator('sequelize', 'id'));
-    it('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
+    it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
   });
 });
