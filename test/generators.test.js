@@ -231,7 +231,7 @@ describe('generator-feathers', function() {
           .catch(e =>
             new Promise((resolve, reject) => {
               child.once('exit', () => reject(e));
-              child.kill();
+              child.kill('SIGKILL');
             })
           );
         });
