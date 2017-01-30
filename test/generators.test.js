@@ -228,11 +228,12 @@ describe('generator-feathers', function() {
             assert.equal(response.text, text);
           })
           .then(() => child.kill())
-          .catch(e => {
-            child.kill();
-            console.log(appDir); // eslint-disable-line no-console
-            throw e;
-          });
+          .catch(e =>
+            new Promise((resolve, reject) => {
+              child.once('exit', () => reject(e));
+              child.kill();
+            })
+          );
         });
     }
 
