@@ -3,16 +3,16 @@
 const path = require('path');
 const helpers = require('yeoman-test');
 const assert = require('yeoman-assert');
-const exec = require('child_process').exec;
+const cp = require('child_process');
 const rp = require('request-promise');
 
 // Start a process and wait either for it to exit
 // or to display a certain text
-function startAndWait(cmd, options, text) {
+function startAndWait(cmd, args, options, text) {
   return new Promise((resolve, reject) => {
     let buffer = '';
   
-    const child = exec(cmd, options);
+    const child = cp.spawn(cmd, args, options);
     const addToBuffer = data => {
       buffer += data;
 
@@ -44,7 +44,7 @@ describe('generator-feathers', function() {
   let appDir;
 
   function runTest(expectedText) {
-    return startAndWait('yarn test', { cwd: appDir })
+    return startAndWait('yarn', ['test'], { cwd: appDir })
       .then(({ buffer }) => {
         assert.ok(buffer.indexOf(expectedText) !== -1,
           'Ran test with text: ' + expectedText);
@@ -209,7 +209,7 @@ describe('generator-feathers', function() {
           path: type
         })
         .withOptions({ skipInstall: false })
-        .then(() => startAndWait('node src/', { cwd: appDir }, 'Feathers application started'))
+        .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
         .then(delay(1000))
         .then(({ child }) => {
           const text = 'This is a test';
