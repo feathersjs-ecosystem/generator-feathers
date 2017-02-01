@@ -6,6 +6,7 @@ var crypto = require('crypto');
 var updateMixin = require('../../lib/updateMixin');
 var S = require('string');
 var AUTH_PROVIDERS = require('./auth-mapping.json');
+var DB_PROVIDERS = require('./db-mapping.json');
 var assign = require('object.assign').getPolyfill();
 
 module.exports = generators.Base.extend({
@@ -106,39 +107,39 @@ module.exports = generators.Base.extend({
         choices: [
           {
             name: 'Memory',
-            value: 'memory'
+            value: DB_PROVIDERS.memory
           },
           {
             name: 'MongoDB',
-            value: 'mongodb'
+            value: DB_PROVIDERS.mongodb
           },
           {
             name: 'MySQL',
-            value: 'mysql'
+            value: DB_PROVIDERS.mysql
           },
           {
             name: 'MariaDB',
-            value: 'mariadb'
+            value: DB_PROVIDERS.mariadb
           },
           {
             name: 'NeDB',
-            value: 'nedb'
+            value: DB_PROVIDERS.nedb
           },
           {
             name: 'PostgreSQL',
-            value: 'postgres'
+            value: DB_PROVIDERS.postgres
           },
           {
             name: 'SQLite',
-            value: 'sqlite'
+            value: DB_PROVIDERS.sqlite
           },
           {
            name: 'SQL Server',
-           value: 'mssql'
+           value: DB_PROVIDERS.mssql
           },
           {
             name: 'I will choose my own',
-            value: 'generic'
+            value: DB_PROVIDERS.generic
           },
         ]
       },
@@ -257,7 +258,8 @@ module.exports = generators.Base.extend({
     },
 
     databases: function() {
-      switch(this.props.database) {
+      // TODO: move what we can to db-mapping
+      switch(this.props.database.name) {
         case 'memory':
           this.dependencies.push('feathers-memory@^0.6.0');
           break;
@@ -312,7 +314,7 @@ module.exports = generators.Base.extend({
           this.composeWith('feathers:service', {
             options: {
               type: 'database',
-              database: this.props.database,
+              database: this.props.database.name,
               name: 'user',
               authentication: true,
               providers: providers
@@ -323,6 +325,21 @@ module.exports = generators.Base.extend({
         this.fs.copyTpl(
           this.templatePath('service.js'),
           this.destinationPath('src/services', 'index.js'),
+          this.props
+        );
+      }
+    },
+
+    models: function() {
+      this.props.models = [];
+      if (this.props.database.modelType) {
+        // If auth is enabled also create a user model
+        if (this.props.localAuth || this.props.authentication.length) {
+          this.props.models.push('user');
+        }
+        this.fs.copyTpl(
+          this.templatePath('model.js'),
+          this.destinationPath('src/models', 'index.js'),
           this.props
         );
       }
@@ -414,13 +431,13 @@ module.exports = generators.Base.extend({
   end: function() {
     this.log('\nWoot! We\'ve created your "' + this.props.name + '" app!');
 
-    switch(this.props.database) {
+    switch(this.props.database.name) {
       case 'mongodb':
       case 'mssql':
       case 'mysql':
       case 'mariadb':
       case 'postgres':
-        this.log('Make sure that your ' + this.props.database +
+        this.log('Make sure that your ' + this.props.database.name +
           ' database is running. The username/role is correct and the database ' +
           this.props.databaseName + ' has been created. ' +
           'Default information can be found in the projects config folder.');

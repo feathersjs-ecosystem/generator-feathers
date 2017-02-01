@@ -1,0 +1,38 @@
+{
+	"generic": {
+		"name": "generic",
+		"modelType": ""
+	},
+	"memory": {
+		"name": "memory",
+		"modelType": ""
+	},
+	"nedb": {
+		"name": "nedb",
+		"modelType": ""
+	},
+	"mongodb": {
+		"name": "mongodb",
+		"modelType": "mongoose"
+	},
+	"mysql": {
+		"name": "mysql",
+		"modelType": "sequelize"
+	},
+	"mariadb": {
+		"name": "mariadb",
+		"modelType": "sequelize"
+	},
+	"postgres": {
+		"name": "postgres",
+		"modelType": "sequelize"
+	},
+	"sqlite": {
+		"name": "sqlite",
+		"modelType": "sequelize"
+	},
+	"mssql": {
+		"name": "mssql",
+		"modelType": "sequelize"
+	}
+}

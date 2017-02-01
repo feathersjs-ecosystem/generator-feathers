@@ -7,7 +7,10 @@
 
 const Sequelize = require('sequelize');
 
-module.exports = function(sequelize) {
+module.exports = function() {
+  const app = this;
+  const sequelize = app.get('sequelize');
+  
   const <%= name %> = sequelize.define('<%= pluralizedName %>', {<% if(name === 'user') { %><% for (var i = 0; i < providers.length; i++) { %>
     <% if (providers[i] === 'local') { %>email: {
       type: Sequelize.STRING,
@@ -25,9 +28,15 @@ module.exports = function(sequelize) {
       type: Sequelize.STRING,
       allowNull: false
     }<% } %>
+  }, {
+    classMethods: {
+      associate() {
+        // Define associations here
+        // See http://docs.sequelizejs.com/en/latest/docs/associations/
+        // const models = app.get('models');
+      }
+    }
   });
-
-  <%= name %>.sync();
 
   return <%= name %>;
 };
