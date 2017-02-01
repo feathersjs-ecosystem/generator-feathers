@@ -1,8 +1,8 @@
 'use strict';
 
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-const createService = require('<%= serviceModule %>');
-<% if(modelName) { %>const createModel = require('./<%= modelName %>');<% } %>
+const createService = require('<%= serviceModule %>');<% if(modelName) { %>
+const createModel = require('../../models/<%= modelName %>');<% } %>
 const hooks = require('./<%= kebabName %>.hooks');
 const filters = require('./<%= kebabName %>.filters');
 
@@ -11,7 +11,8 @@ module.exports = function() {
   const Model = createModel(app);<% } %>
   const paginate = app.get('paginate');
 
-  const options = {<% if(modelName) { %>
+  const options = {
+    name: '<%= kebabName %>',<% if(modelName) { %>
     Model,<% } %>
     paginate
   };
