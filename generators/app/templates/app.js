@@ -11,7 +11,8 @@ const hooks = require('feathers-hooks');<% if (providers.indexOf('rest') !== -1)
 const rest = require('feathers-rest');
 const bodyParser = require('body-parser');
 <% } %><% if (providers.indexOf('socket.io') !== -1) { %>const socketio = require('feathers-socketio');<% } %><% if (providers.indexOf('primus') !== -1) { %>const primus = require('feathers-primus');<% } %>
-const middleware = require('./middleware');
+const middleware = require('./middleware');<% if (database.modelType) { %>
+const models = require('./models');<% } %>
 const services = require('./services');
 
 const app = feathers();
@@ -36,7 +37,8 @@ app.use(compress())<% if (cors) { %>
   .configure(hooks())<% if (providers.indexOf('rest') !== -1) { %>
   .configure(rest())<% } %><% if (providers.indexOf('socket.io') !== -1) { %>
   .configure(socketio())<% } %><% if(providers.indexOf('primus') !== -1) { %>
-  .configure(primus({ transformer: 'websockets' }))<% } %>
+  .configure(primus({ transformer: 'websockets' }))<% } %><% if (database.name !== 'memory') { %>
+  .configure(models)<% } %>
   .configure(services)
   .configure(middleware);
 

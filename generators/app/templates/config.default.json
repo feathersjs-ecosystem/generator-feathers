@@ -1,15 +1,15 @@
 {
   "host": "localhost",
-  "port": 3030,<% if(database === 'mongodb'){ %>
-  "mongodb": "mongodb://localhost:27017/<%= databaseName %>",<% } else if(database === 'mariadb'){ %>
-  "mariadb": "mariadb://root:@localhost:3306/<%= databaseName %>",<% } else if(database === 'mssql'){ %>
-  "mssql": "mssql://root:@localhost:1433/<%= databaseName %>",<% } else if(database === 'mysql'){ %>
-  "mysql": "mysql://root:@localhost:3306/<%= databaseName %>",<% } else if(database === 'postgres'){ %>
-  "postgres": "postgres://postgres:@localhost:5432/<%= databaseName %>",<% } else if(database === 'nedb'){ %>
-  "nedb": "../data/",<% } else if(database === 'sqlite'){ %>
+  "port": 3030,<% if(database.name === 'mongodb'){ %>
+  "mongodb": "mongodb://localhost:27017/<%= databaseName %>",<% } else if(database.name === 'mariadb'){ %>
+  "mariadb": "mariadb://root:@localhost:3306/<%= databaseName %>",<% } else if(database.name === 'mssql'){ %>
+  "mssql": "mssql://root:@localhost:1433/<%= databaseName %>",<% } else if(database.name === 'mysql'){ %>
+  "mysql": "mysql://root:@localhost:3306/<%= databaseName %>",<% } else if(database.name === 'postgres'){ %>
+  "postgres": "postgres://postgres:@localhost:5432/<%= databaseName %>",<% } else if(database.name === 'nedb'){ %>
+  "nedb": "../data/",<% } else if(database.name === 'sqlite'){ %>
   "sqlite": "../data/<%= databaseName %>.sqlite",<% } %>
   "public": "../public/"<% if (localAuth || authentication.length) { %>,
-  "auth": {<% if (database !== 'nedb' && database !== 'mongodb') { %>
+  "auth": {<% if (database.name !== 'nedb' && database.name !== 'mongodb') { %>
     "idField": "id",<% } %>
     "token": {
       "secret": "<%= secret %>"

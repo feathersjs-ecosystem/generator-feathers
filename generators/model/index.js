@@ -1,9 +1,25 @@
 'use strict';
 
 var generators = require('yeoman-generator');
+var fs = require('fs');
 var assign = require('object.assign').getPolyfill();
 var inflect = require('i')();
+var transform = require('../../lib/transform');
 var updateMixin = require('../../lib/updateMixin');
+
+function importModel(filename, name, moduleName) {
+  // Lookup existing service/index.js file
+  if (fs.existsSync(filename)) {
+    var content = fs.readFileSync(filename).toString();
+    var ast = transform.parse(content);
+
+    transform.addImport(ast, name, moduleName);
+    name = inflect.camelize(inflect.underscore(name), false);
+    transform.addInsideFunction(ast, 'module.exports', 'app.set(\'sequelize\'', 'app.configure(' + name + ');');
+
+    fs.writeFileSync(filename, transform.print(ast));
+  }
+}
 
 module.exports = generators.Base.extend({
   constructor: function() {
@@ -77,10 +93,15 @@ module.exports = generators.Base.extend({
   },
 
   writing: function () {
+    var modelIndexPath = this.destinationPath('src/models/index.js');
+
+    // Automatically import the new service into services/index.js and initialize it.
+    importModel(modelIndexPath, this.props.name, './' + this.props.name);
+
     // Generating the appropriate model based on the orm type.
     this.fs.copyTpl(
       this.templatePath(this.props.type + '.js'),
-      this.destinationPath('src/services/', this.props.service, this.props.name + '-model.js'),
+      this.destinationPath('src/models/', this.props.name + '.js'),
       this.props
     );
   },

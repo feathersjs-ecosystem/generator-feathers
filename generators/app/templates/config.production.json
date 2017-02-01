@@ -1,15 +1,15 @@
 {
   "host": "<%=name%>-app.feathersjs.com",
-  "port": 80,<% if(database === 'mongodb'){ %>
-  "mongodb": "DATABASE_URL",<% } else if(database === 'mariadb'){ %>
-  "mariadb": "DATABASE_URL",<% } else if(database === 'mssql'){ %>
-  "mssql": "DATABASE_URL",<% } else if(database === 'mysql'){ %>
-  "mysql": "DATABASE_URL",<% } else if(database === 'postgres'){ %>
-  "postgres": "DATABASE_URL",<% } else if(database === 'nedb'){ %>
-  "nedb": "NEDB_BASE_PATH",<% } else if(database === 'sqlite'){ %>
+  "port": 80,<% if(database.name === 'mongodb'){ %>
+  "mongodb": "DATABASE_URL",<% } else if(database.name === 'mariadb'){ %>
+  "mariadb": "DATABASE_URL",<% } else if(database.name === 'mssql'){ %>
+  "mssql": "DATABASE_URL",<% } else if(database.name === 'mysql'){ %>
+  "mysql": "DATABASE_URL",<% } else if(database.name === 'postgres'){ %>
+  "postgres": "DATABASE_URL",<% } else if(database.name === 'nedb'){ %>
+  "nedb": "NEDB_BASE_PATH",<% } else if(database.name === 'sqlite'){ %>
   "sqlite": "SQLITE_DB",<% } %>
   "public": "../public/"<% if (localAuth || authentication.length) { %>,
-  "auth": {<% if (database !== 'nedb' && database !== 'mongodb') { %>
+  "auth": {<% if (database.name !== 'nedb' && database.name !== 'mongodb') { %>
     "idField": "id",<% } %>
     "token": {
       "secret": "FEATHERS_AUTH_SECRET"
