@@ -11,9 +11,14 @@ module.exports = function(app) {
       type: Sequelize.STRING,
       allowNull: false
     }
+  }, {
+    classMethods: {
+      associate (models) {
+      	// Define associations here
+        // See http://docs.sequelizejs.com/en/latest/docs/associations/
+      }
+    }
   });
-
-  <%= camelName %>.sync();
 
   return <%= camelName %>;
 };
