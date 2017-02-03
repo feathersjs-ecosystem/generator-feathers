@@ -1,7 +1,5 @@
 'use strict';
 
-const randomstring = require('randomstring');
-
 module.exports = function() {
   const config = {
     host: 'localhost',
@@ -10,10 +8,6 @@ module.exports = function() {
     paginate: {
       default: 10,
       max: 50
-    },
-    authentication: {
-      secret: randomstring.generate(),
-      strategies: []
     }
   };
 

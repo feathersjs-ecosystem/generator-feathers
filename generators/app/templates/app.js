@@ -12,7 +12,6 @@ const hooks = require('feathers-hooks');
 <% if (hasProvider('rest')) { %>const rest = require('feathers-rest');<% } %>
 <% if (hasProvider('socket.io')) { %>const socketio = require('feathers-socketio');<% } %>
 <% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
-const authentication = require('./authentication');
 const middleware = require('./middleware');
 const services = require('./services');
 
@@ -34,8 +33,6 @@ app.configure(hooks());
 <% if (hasProvider('rest')) { %>app.configure(rest());<% } %>
 <% if (hasProvider('socket.io')) { %>app.configure(socketio());<% } %>
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
-// This configures our authentication setup (see `authentication.js`)
-app.configure(authentication);
 // Set up our services (see `services/index.js`)
 app.configure(services);
 // Configure middleware (see `middleware/index.js`) - always has to be last

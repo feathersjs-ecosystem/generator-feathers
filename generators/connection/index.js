@@ -30,19 +30,19 @@ module.exports = class ConnectionGenerator extends Generator {
     const { type } = this.props;
     const ast = j(code);
     const appDeclaration = ast.findDeclaration('app');
-    const configureAuth = ast.findConfigure('authentication');
+    const configureHooks = ast.findConfigure('hooks');
     const requireCall = `const ${type} = require('./${type}');`;
 
     if(appDeclaration.length === 0) {
       throw new Error('Could not find \'app\' variable declaration in app.js to insert database configuration. Did you modify app.js?');
     }
 
-    if(configureAuth.length === 0) {
-      throw new Error('Could not find .configure(authentication) call in app.js before which to insert database configuration. Did you modify app.js?');
+    if(configureHooks.length === 0) {
+      throw new Error('Could not find .configure(hooks()) call in app.js after which to insert database configuration. Did you modify app.js?');
     }
 
     appDeclaration.insertBefore(requireCall);
-    configureAuth.insertBefore(`app.configure(${type});`);
+    configureHooks.insertAfter(`app.configure(${type});`);
 
     return ast.toSource();
   }
@@ -187,7 +187,7 @@ module.exports = class ConnectionGenerator extends Generator {
       const dbFile = `${type}.js`;
 
       // If the file doesn't exist yet, add it to the app.js
-      if(!this.fs.exists(this.destinationPath('src', dbFile))) {
+      if(!this.fs.exists(this.destinationPath(this.libDirectory, dbFile))) {
         const appjs = this.destinationPath(this.libDirectory, 'app.js');
 
         this.conflicter.force = true;
