@@ -41,7 +41,7 @@ module.exports = class AuthGenerator extends Generator {
     const ast = j(code);
     const appDeclaration = ast.findDeclaration('app');
     const configureHooks = ast.findConfigure('hooks');
-    const requireCall = `const authentication = require('./authentication');`;
+    const requireCall = 'const authentication = require(\'./authentication\');';
 
     if (appDeclaration.length === 0) {
       throw new Error('Could not find \'app\' variable declaration in app.js to insert database configuration. Did you modify app.js?');
@@ -52,7 +52,7 @@ module.exports = class AuthGenerator extends Generator {
     }
 
     appDeclaration.insertBefore(requireCall);
-    configureHooks.insertAfter(`app.configure(authentication());`);
+    configureHooks.insertAfter('app.configure(authentication());');
 
     return ast.toSource();
   }
