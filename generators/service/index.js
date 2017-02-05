@@ -13,6 +13,7 @@ const createExpression = (object, property, args = []) =>
 
 module.exports = class ServiceGenerator extends Generator {
   prompting() {
+    const { props } = this;
     const prompts = [
       {
         type: 'list',
@@ -54,13 +55,19 @@ module.exports = class ServiceGenerator extends Generator {
             return 'Service name can not be empty';
           }
 
+          if(input.trim() === 'authentication') {
+            return '`authentication` is a reserved service name.';
+          }
+
           return true;
-        }
+        },
+        when: !props.name
       }, {
         name: 'path',
         message: 'Which path should the service be registered on?',
+        when: !props.path,
         default(answers) {
-          return `/${_.kebabCase(answers.name)}`;
+          return `/${_.kebabCase(answers.name || props.name)}`;
         },
         validate(input) {
           if(input.trim() === '') {
@@ -72,10 +79,10 @@ module.exports = class ServiceGenerator extends Generator {
       }
     ];
 
-    return this.prompt(prompts).then(props => {
-      const { name } = props;
-      
-      this.props = Object.assign(this.props, props, {
+    return this.prompt(prompts).then(answers => {
+      const name = answers.name || props.name;
+
+      this.props = Object.assign({}, props, answers, {
         kebabName: _.kebabCase(name),
         camelName: _.camelCase(name)
       });
@@ -121,7 +128,8 @@ module.exports = class ServiceGenerator extends Generator {
     };
     const serviceModule = moduleMappings[type];
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
-    const hasModel = fs.existsSync(path.join(templatePath, 'model', `${type}.js`));
+    const modelTpl = `${type}${this.props.userAuth ? '-user' : ''}.js`;
+    const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
@@ -157,7 +165,7 @@ module.exports = class ServiceGenerator extends Generator {
     if(context.modelName) {
       // Copy the model
       this.fs.copyTpl(
-        this.templatePath('model', `${type}.js`),
+        this.templatePath('model', modelTpl),
         this.destinationPath(this.libDirectory, 'models', `${context.modelName}.js`),
         context
       );
