@@ -258,9 +258,9 @@ describe('generator-feathers', function() {
       })
       .withOptions({ skipInstall: false })
       .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
-      .then(delay(1000))
-      .then(({ child }) => {
-      });
+      .then(delay(1000));
+      // .then(({ child }) => {
+      // });
     });
   });
 });
