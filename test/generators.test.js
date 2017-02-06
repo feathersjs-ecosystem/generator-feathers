@@ -51,7 +51,7 @@ describe('generator-feathers', function() {
       });
   }
 
-  before(() => helpers.run(path.join(__dirname, '../generators/app'))
+  before(() => helpers.run(path.join(__dirname, '..', 'generators', 'app'))
     .inTmpDir(dir => (appDir = dir))
     .withPrompts({
       name: 'myapp',
@@ -84,7 +84,7 @@ describe('generator-feathers', function() {
 
   describe('feathers:connection', () => {
     function runConnectionGenerator(prompts) {
-      return helpers.run(path.join(__dirname, '../generators/connection'))
+      return helpers.run(path.join(__dirname, '..', 'generators', 'connection'))
         .inTmpDir(() => process.chdir(appDir))
         .withPrompts(prompts)
         .withOptions({ skipInstall: false });
@@ -201,7 +201,7 @@ describe('generator-feathers', function() {
 
   describe('feathers:service', () => {
     function testServiceGenerator(type, id = null) {
-      return helpers.run(path.join(__dirname, '../generators/service'))
+      return helpers.run(path.join(__dirname, '..', 'generators', 'service'))
         .inTmpDir(() => process.chdir(appDir))
         .withPrompts({
           type,
@@ -246,5 +246,21 @@ describe('generator-feathers', function() {
     it('sequelize', () => testServiceGenerator('sequelize', 'id'));
     
     it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
+  });
+
+  describe('feathers:authentication', () => {
+    it.skip('runs and initializes working local strategy', () => {
+      return helpers.run(path.join(__dirname, '../generators/authentication'))
+      .withPrompts({
+        strategies: ['local'],
+        entity: 'users',
+        type: 'memory'
+      })
+      .withOptions({ skipInstall: false })
+      .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
+      .then(delay(1000))
+      .then(({ child }) => {
+      });
+    });
   });
 });

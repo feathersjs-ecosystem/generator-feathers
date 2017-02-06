@@ -76,13 +76,21 @@ module.exports = class ServiceGenerator extends Generator {
 
           return true;
         }
+      }, {
+        name: 'requiresAuth',
+        message: 'Does the service require authentication?',
+        type: 'confirm',
+        default: false,
+        when: !!(this.defaultConfig.authentication && !props.authentication)
       }
     ];
 
     return this.prompt(prompts).then(answers => {
       const name = answers.name || props.name;
 
-      this.props = Object.assign({}, props, answers, {
+      this.props = Object.assign({
+        requiresAuth: false
+      }, props, answers, {
         kebabName: _.kebabCase(name),
         camelName: _.camelCase(name)
       });
@@ -128,7 +136,7 @@ module.exports = class ServiceGenerator extends Generator {
     };
     const serviceModule = moduleMappings[type];
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
-    const modelTpl = `${type}${this.props.userAuth ? '-user' : ''}.js`;
+    const modelTpl = `${type}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
       modelName: hasModel ? `${kebabName}.model` : null,
@@ -172,7 +180,7 @@ module.exports = class ServiceGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath('hooks.js'),
+      this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
       this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`),
       context
     );

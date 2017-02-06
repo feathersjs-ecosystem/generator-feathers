@@ -1,6 +1,7 @@
 'use strict';
 
 const authentication = require('feathers-authentication');
+const jwt = require('feathers-authentication-jwt');
 <% if(strategies.indexOf('local') !== -1) { %>const local = require('feathers-authentication-local');<% } %>
 <% if(oauthProviders.length){ %>const oauth2 = require('feathers-authentication-oauth2');<% } %>
 <% oauthProviders.forEach(provider => { %>
@@ -10,10 +11,10 @@ const <%= provider.strategyName %> = require('<%= provider.module %>');
 module.exports = function() {
   const app = this;
   const config = app.get('authentication');
-  const { secret, strategies } = config;
 
   // Set up authentication with the secret
-  app.configure(authentication({ secret }));
+  app.configure(authentication(config));
+  app.configure(jwt());
   <% if(strategies.indexOf('local') !== -1) { %>
   app.configure(local());
   <% } %>
@@ -30,7 +31,7 @@ module.exports = function() {
   app.service('authentication').hooks({
     before: {
       create: [
-        authentication.hooks.authenticate(strategies)
+        authentication.hooks.authenticate(config.strategies)
       ],
       remove: [
         authentication.hooks.authenticate('jwt')

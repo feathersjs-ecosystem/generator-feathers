@@ -9,13 +9,13 @@ module.exports = function(app) {
 
   db.schema.createTableIfNotExists('<%= kebabName %>', table => {
     table.increments('id');
-    <% if(userAuth.strategies.indexOf('local') !== -1) { %>
+  <% if(authentication.strategies.indexOf('local') !== -1) { %>
     table.string('email').unique();
     table.string('password');
-    <% } %>
-    <% userAuth.oauthProviders.forEach(provider => { %>
+  <% } %>
+  <% authentication.oauthProviders.forEach(provider => { %>
     table.string('<%= provider.name %>Id');
-    <% }); %>
+  <% }); %>
   })
   .then(() => console.log('Updated <%= kebabName %> table'))
   .catch(e => console.error('Error updating <%= kebabName %> table', e));

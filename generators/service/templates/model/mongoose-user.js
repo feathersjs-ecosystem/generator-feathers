@@ -7,13 +7,13 @@
 module.exports = function(app) {
   const mongooseClient = app.get('mongooseClient');
   const <%= camelName %> = new mongooseClient.Schema({
-    <% if(userAuth.strategies.indexOf('local') !== -1) { %>
+  <% if(authentication.strategies.indexOf('local') !== -1) { %>
     email: {type: String, required: true, unique: true},
     password: { type: String, required: true },
-    <% } %>
-    <% userAuth.oauthProviders.forEach(provider => { %>
+  <% } %>
+  <% authentication.oauthProviders.forEach(provider => { %>
     <%= provider.name %>Id: { type: String },
-    <% }); %>
+  <% }); %>
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
   });

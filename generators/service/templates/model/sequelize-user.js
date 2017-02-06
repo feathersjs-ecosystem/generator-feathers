@@ -7,7 +7,7 @@ const Sequelize = require('sequelize');
 module.exports = function(app) {
   const sequelizeClient = app.get('sequelizeClient');
   const <%= camelName %> = sequelizeClient.define('<%= kebabName %>', {
-    <% if(userAuth.strategies.indexOf('local') !== -1) { %>
+  <% if(authentication.strategies.indexOf('local') !== -1) { %>
     email: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -17,10 +17,10 @@ module.exports = function(app) {
       type: Sequelize.STRING,
       allowNull: false
     },
-    <% } %>
-    <% userAuth.oauthProviders.forEach(provider => { %>
+  <% } %>
+  <% authentication.oauthProviders.forEach(provider => { %>
     <%= provider.name %>Id: { type: Sequelize.STRING },
-    <% }); %>
+  <% }); %>
   }, {
     classMethods: {
       associate (models) {

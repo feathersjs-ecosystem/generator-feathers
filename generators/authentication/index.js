@@ -62,19 +62,21 @@ module.exports = class AuthGenerator extends Generator {
     return ast.toSource();
   }
 
-  _writeConfiguration() {
+  _writeConfiguration(context) {
     const config = Object.assign({}, this.defaultConfig);
     
     config.authentication = {
       secret: randomstring.generate(),
-      strategies: [ 'jwt' ]
+      strategies: [ 'jwt' ],
+      path: '/authentication',
+      service: context.kebabEntity
     };
 
-    if(this.props.strategies.indexOf('local') !== -1) {
+    if(context.strategies.indexOf('local') !== -1) {
       config.authentication.strategies.push('local');
     }
 
-    this.props.strategies.forEach(strategy => {
+    context.strategies.forEach(strategy => {
       if(OAUTH2_STRATEGY_MAPPINGS[strategy]) {
         const strategyConfig = {
           clientID: `your ${strategy} client id`,
@@ -97,8 +99,10 @@ module.exports = class AuthGenerator extends Generator {
   }
 
   writing() {
-    const dependencies = [ 'feathers-authentication@pre' ];
+    const dependencies = [ 'feathers-authentication@pre', 'feathers-authentication-jwt' ];
     const context = Object.assign({
+      kebabEntity: _.kebabCase(this.props.entity),
+      camelEntity: _.camelCase(this.props.entity),
       oauthProviders: []
     }, this.props);
 
@@ -122,9 +126,9 @@ module.exports = class AuthGenerator extends Generator {
     // Create the users service
     this.composeWith(require.resolve('../service'), {
       props: {
-        name: this.props.entity,
-        path: `/${_.kebabCase(this.props.entity)}`,
-        userAuth: context
+        name: context.entity,
+        path: `/${context.kebabEntity}`,
+        authentication: context
       }
     });
 
@@ -144,7 +148,7 @@ module.exports = class AuthGenerator extends Generator {
       context
     );
 
-    this._writeConfiguration();
+    this._writeConfiguration(context);
     this._packagerInstall(dependencies, {
       save: true
     });
