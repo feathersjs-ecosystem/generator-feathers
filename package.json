@@ -1,7 +1,7 @@
 {
   "name": "generator-feathers",
   "description": "A Yeoman generator for a Feathers application",
-  "version": "0.8.8",
+  "version": "1.0.0-pre.0",
   "homepage": "https://github.com/feathersjs/generator-feathers",
   "main": "generators/app/index.js",
   "license": "MIT",
@@ -36,6 +36,7 @@
   },
   "scripts": {
     "publish": "git push origin && git push origin --tags",
+    "release:prerelease": "npm version prerelease && npm publish --tag pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
