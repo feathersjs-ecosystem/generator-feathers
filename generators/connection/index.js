@@ -5,8 +5,6 @@ const url = require('url');
 const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
 
-const getProtocol = p => p[p.length - 1] === ':' ? p.substring(0, p.length - 1) : p;
-
 module.exports = class ConnectionGenerator extends Generator {
   constructor(args, opts) {
     super(args, opts);
@@ -47,7 +45,6 @@ module.exports = class ConnectionGenerator extends Generator {
     };
     const { connectionString, database, adapter } = this.props;
     const parsed = url.parse(connectionString);
-    // const protocol = getProtocol(parsed.protocol);
 
     switch(database) {
     case 'nedb':
@@ -77,7 +74,7 @@ module.exports = class ConnectionGenerator extends Generator {
     case 'mysql':
     case 'mssql':
     // case oracle:
-    case 'postgres':
+    case 'postgres': // eslint-disable-line no-fallthrough
     case 'sqlite':
       this.dependencies.push(adapter);
       
@@ -105,7 +102,7 @@ module.exports = class ConnectionGenerator extends Generator {
     const { database } = this.props;
     const config = Object.assign({}, this.defaultConfig);
 
-    config[database] = config[database] || this._getConfiguration();
+    config[database] = this._getConfiguration();
 
     this.conflicter.force = true;
     this.fs.writeJSON(
@@ -138,7 +135,21 @@ module.exports = class ConnectionGenerator extends Generator {
           { name: 'SQLite', value: 'sqlite' },
           { name: 'SQL Server', value: 'mssql' }
         ],
-        when: !this.props.database
+        when(current) {
+          const answers = getProps(current);
+          const { database, adapter } = answers;
+          
+          if (database) {
+            return false;
+          }
+
+          if (adapter === 'nedb' || adapter === 'rethinkdb' || adapter === 'memory') {
+            current.database = adapter;
+            return false;
+          }
+
+          return true;
+        }
       },
       {
         type: 'list',
@@ -181,11 +192,11 @@ module.exports = class ConnectionGenerator extends Generator {
             return false;
           }
 
-          console.log('database', database);
-          console.log('adapter', adapter);
-          console.log('should run', adapter || database !== 'nedb' || database !== 'rethinkdb' || database !== 'memory');
+          if (database === 'nedb' || database === 'rethinkdb' || database === 'memory') {
+            return false;
+          }
 
-          return database !== 'nedb' || database !== 'rethinkdb' || database !== 'memory';
+          return true;
         }
       },
       {
@@ -211,8 +222,10 @@ module.exports = class ConnectionGenerator extends Generator {
         when(current) {
           const answers = getProps(current);
           const { database } = answers;
-
-          if (defaultConfig[database]) {
+          const connectionString = defaultConfig[database];
+          
+          if (typeof connectionString === 'string') {
+            current.connectionString = connectionString;
             return false;
           }
 
@@ -234,7 +247,7 @@ module.exports = class ConnectionGenerator extends Generator {
     if (database === 'rethinkdb') {
       template = 'rethinkdb.js';
     }
-    else if (adapter) {
+    else if (adapter && adapter !== 'nedb') {
       template = database === 'mssql' ? `${adapter}-mssql.js` : `${adapter}.js`;
     }
 
@@ -276,15 +289,16 @@ module.exports = class ConnectionGenerator extends Generator {
       this.log(`Woot! We've set up your ${database} database connection!`);
 
       switch(database) {
-        case 'mariadb':
-        case 'mongodb':
-        case 'mssql':
-        case 'mysql':
-        // case 'oracle':
-        case 'postgres':
-          this.log(`Make sure that your ${database} database is running, the username/role is correct, and the database "${databaseName}" has been created.`);
-          this.log('Your configuration can be found in the projects config/ folder.');
-          break;
+      case 'mariadb':
+      case 'mongodb':
+      case 'mssql':
+      case 'mysql':
+      // case 'oracle':
+      case 'postgres': // eslint-disable-line no-fallthrough
+      case 'rethinkdb':
+        this.log(`Make sure that your ${database} database is running, the username/role is correct, and the database "${databaseName}" has been created.`);
+        this.log('Your configuration can be found in the projects config/ folder.');
+        break;
       }
     }
   }
