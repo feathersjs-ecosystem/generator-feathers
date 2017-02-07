@@ -1,5 +1,12 @@
-console.log('You are using the default filter for the <%= name %> service.');
+'use strict';
 
-module.exports = function() {
-  return true;
+module.exports = {
+  // enable all events for this service by returning true
+  all: [() => false],
+  find: [],
+  get: [],
+  create: [],
+  update: [],
+  patch: [],
+  remove: []
 };

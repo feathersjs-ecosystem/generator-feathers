@@ -7,12 +7,12 @@ const hooks = require('./<%= kebabName %>.hooks');
 const filters = require('./<%= kebabName %>.filters');
 
 module.exports = function() {
-  const app = this;<% if(modelName) { %>
+  const app = this;<% if (modelName) { %>
   const Model = createModel(app);<% } %>
   const paginate = app.get('paginate');
 
   const options = {
-    name: '<%= kebabName %>',<% if(modelName) { %>
+    name: '<%= kebabName %>',<% if (modelName) { %>
     Model,<% } %>
     paginate
   };
@@ -25,7 +25,7 @@ module.exports = function() {
 
   service.hooks(hooks);
 
-  if(service.filter) {
+  if (service.filter) {
     service.filter(filters);
   }
 };

@@ -5,18 +5,6 @@ const url = require('url');
 const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
 
-const getConnectionType = type => {
-  if(type === 'mongoose') {
-    return 'mongodb';
-  }
-
-  if(type === 'knex' || type === 'sequelize') {
-    return 'sqlite';
-  }
-
-  return type;
-};
-
 const getProtocol = p => p[p.length - 1] === ':' ? p.substring(0, p.length - 1) : p;
 
 module.exports = class ConnectionGenerator extends Generator {
@@ -49,15 +37,16 @@ module.exports = class ConnectionGenerator extends Generator {
 
   _getConfiguration() {
     const sqlPackages = {
-      postgres: 'pg',
-      sqlite: 'sqlite3',
+      mariadb: 'mysql',
       mysql: 'mysql',
       mssql: 'tedious',
-      oracle: 'oracle'
+      postgres: 'pg',
+      sqlite: 'sqlite3'
+      // oracle: 'oracle'
     };
-    const { connectionString, type } = this.props;
+    const { connectionString, type, adapter } = this.props;
     const parsed = url.parse(connectionString);
-    const protocol = getProtocol(parsed.protocol);
+    // const protocol = getProtocol(parsed.protocol);
 
     switch(type) {
     case 'nedb':
@@ -75,27 +64,34 @@ module.exports = class ConnectionGenerator extends Generator {
           }
         ]
       };
+    
+    case 'memory':
+      this.dependencies.push('memory');
+      return null;
 
-    case 'mongoose':
     case 'mongodb':
-      this.dependencies.push(type);
+      this.dependencies.push(adapter);
       return connectionString;
     
-    case 'sequelize':
-      this.dependencies.push('sequelize');
-      if(sqlPackages[protocol]) {
-        this.dependencies.push(sqlPackages[protocol]);
+    case 'mariadb':
+    case 'mysql':
+    case 'mssql':
+    // case oracle:
+    case 'postgres':
+    case 'sqlite':
+      this.dependencies.push(adapter);
+      
+      if (sqlPackages[type]) {
+        this.dependencies.push(sqlPackages[type]);
       }
-      return connectionString;
-    case 'knex':
-      this.dependencies.push('knex');
-      if(sqlPackages[protocol]) {
-        this.dependencies.push(sqlPackages[protocol]);
+      
+      if (adapter === 'sequelize') {
+        return connectionString;
       }
 
       return {
-        client: sqlPackages[protocol],
-        connection: protocol === 'sqlite' ? {
+        client: sqlPackages[type],
+        connection: type === 'sqlite' ? {
           filename: connectionString.substring(9, connectionString.length)
         } : connectionString
       };
@@ -121,6 +117,8 @@ module.exports = class ConnectionGenerator extends Generator {
   prompting() {
     const databaseName = kebabCase(this.pkg.name);
     const { defaultConfig } = this;
+
+    console.log('CONFIG', defaultConfig);
     const getProps = answers => Object.assign({}, this.props, answers);
     
     const prompts = [
@@ -130,46 +128,92 @@ module.exports = class ConnectionGenerator extends Generator {
         message: 'Which database are you connecting to?',
         default: 'nedb',
         choices: [
-          {
-            name: 'NeDB',
-            value: 'nedb'
-          }, {
-            name: 'MongoDB',
-            value: 'mongodb'
-          }, {
-            name: 'Mongoose',
-            value: 'mongoose'
-          }, {
-            name: 'Sequelize',
-            value: 'sequelize'
-          }, {
-            name: 'KnexJS',
-            value: 'knex'
-          }, {
-            name: 'RethinkDB',
-            value: 'rethinkdb'
-          }
+          { name: 'MariaDB', value: 'mariadb' },
+          { name: 'Memory', value: 'memory' },
+          { name: 'MongoDB', value: 'mongodb' },
+          { name: 'MySQL', value: 'mysql' },
+          { name: 'NeDB', value: 'nedb' },
+          // { name: 'Oracle', value: 'oracle' },
+          { name: 'PostgreSQL', value: 'postgres' },
+          { name: 'RethinkDB', value: 'rethinkdb' },
+          { name: 'SQLite', value: 'sqlite' },
+          { name: 'SQL Server', value: 'mssql' }
         ],
         when: !this.props.type
-      }, {
+      },
+      {
+        type: 'list',
+        name: 'adapter',
+        message: 'Which database adapter would you like to use?',
+        default(current) {
+          const answers = getProps(current);
+          const { type } = answers;
+
+          if (type === 'mongodb') {
+            return 'mongoose';
+          }
+
+          return 'sequelize';
+        },
+        choices(current) {
+          const answers = getProps(current);
+          const { type } = answers;
+          const mongoOptions = [
+            { name: 'MongoDB Native', value: 'mongodb' },
+            { name: 'Mongoose', value: 'mongoose' }
+          ];
+          const sqlOptions = [
+            { name: 'Sequelize', value: 'sequelize' },
+            { name: 'KnexJS', value: 'knex' }
+          ];
+
+          if (type === 'mongodb') {
+            return mongoOptions;
+          }
+
+          // It's an SQL DB
+          return sqlOptions;
+        },
+        when(current) {
+          const answers = getProps(current);
+          const { type } = answers;
+
+          if (defaultConfig[type]) {
+            return true;
+          }
+
+          return type !== 'nedb' || type !== 'rethinkdb' || type !== 'memory';
+        }
+      },
+      {
         name: 'connectionString',
         message: 'What is the database connection string?',
         default(current) {
           const answers = getProps(current);
-          const type = getConnectionType(answers.type);
+          const { type } = answers;
           const defaultConnectionStrings = {
-            nedb: 'nedb://../data',
+            mariadb: `mariadb://root:@localhost:3306/${databaseName}`,
             mongodb: `mongodb://localhost:27017/${databaseName}`,
-            sqlite: 'sqlite://data.sqlite',
-            rethinkdb: `rethinkdb://localhost:11078/${databaseName}`
+            mysql: `mysql://root:@localhost:3306/${databaseName}`,
+            nedb: 'nedb://../data',
+            // oracle: `oracle://root:password@localhost:1521/${databaseName}`,
+            postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
+            rethinkdb: `rethinkdb://localhost:11078/${databaseName}`,
+            sqlite: `sqlite://${databaseName}.sqlite`,
+            mssql: `mssql://root:password@localhost:1433/${databaseName}`
           };
           
           return defaultConnectionStrings[type];
         },
         when(current) {
           const answers = getProps(current);
+          const { type } = answers;
 
-          return !defaultConfig[answers.type];
+          if (defaultConfig[type]) {
+            return true;
+          }
+
+          return type !== 'memory';
         }
       }
     ];
@@ -180,14 +224,19 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   writing() {
-    const { type } = this.props;
+    const { type, adapter } = this.props;
+    let template;
 
-    // NeDB does not need a separate db configuration file
-    if(type !== 'nedb') {
-      const dbFile = `${type}.js`;
+    if (type === 'rethinkdb') {
+      template = 'rethinkdb.js';
+    }
+    else if (adapter) {
+      template = type === 'mssql' ? `${adapter}-mssql.js` : `${adapter}.js`;
+    }
 
+    if (template) {
       // If the file doesn't exist yet, add it to the app.js
-      if(!this.fs.exists(this.destinationPath(this.libDirectory, dbFile))) {
+      if (!this.fs.exists(this.destinationPath(this.libDirectory, template))) {
         const appjs = this.destinationPath(this.libDirectory, 'app.js');
 
         this.conflicter.force = true;
@@ -196,7 +245,7 @@ module.exports = class ConnectionGenerator extends Generator {
         ));
       }
 
-      this.fs.copy(this.templatePath(dbFile), this.destinationPath(this.libDirectory, dbFile));
+      this.fs.copy(this.templatePath(template), this.destinationPath(this.libDirectory, `${type}.js`));
     }
 
     this._writeConfiguration();
@@ -204,5 +253,24 @@ module.exports = class ConnectionGenerator extends Generator {
     this._packagerInstall(this.dependencies, {
       save: true
     });
+  }
+
+  end() {
+    const { type } = this.props;
+    const databaseName = kebabCase(this.pkg.name);
+    this.log();
+    this.log(`Woot! We've set up your ${type} database connection!`);
+
+    switch(type) {
+      case 'mariadb':
+      case 'mongodb':
+      case 'mssql':
+      case 'mysql':
+      // case 'oracle':
+      case 'postgres':
+        this.log(`Make sure that your ${type} database is running, the username/role is correct, and the database "${databaseName}" has been created.`);
+        this.log('Your configuration can be found in the projects config/ folder.');
+        break;
+    }
   }
 };
