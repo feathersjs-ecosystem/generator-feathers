@@ -18,7 +18,7 @@ module.exports = class ServiceGenerator extends Generator {
       {
         type: 'list',
         name: 'adapter',
-        message: 'What kind of service would you like to create?',
+        message: 'What kind of service is it?',
         default: 'nedb',
         choices: [
           {

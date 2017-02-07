@@ -5,7 +5,13 @@ const Sequelize = require('sequelize');
 module.exports = function() {
   const app = this;
   const connectionString = app.get('<%= database %>');
-  const sequelize = new Sequelize(connectionString);
+  const sequelize = new Sequelize(connectionString, {
+    dialect: '<%= database %>',
+    logging: false,
+    define: {
+      freezeTableName: true
+    }
+  });
   const oldSetup = app.setup;
 
   app.set('sequelizeClient', sequelize);

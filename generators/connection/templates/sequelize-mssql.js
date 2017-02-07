@@ -12,6 +12,10 @@ module.exports = function() {
   const sequelize = new Sequelize(database, username, password, {
     dialect: 'mssql',
     host: hostname,
+    logging: false,
+    define: {
+      freezeTableName: true
+    },
     dialectOptions: {
       port,
       instanceName: 'NameOfTheMSSQLInstance'

@@ -16,7 +16,7 @@ module.exports = class AuthGenerator extends Generator {
     const prompts = [{
       type: 'checkbox',
       name: 'strategies',
-      message: 'What authentication providers do you want to use (other PassportJS strategies not in this list can still be configured manually)?',
+      message: 'What authentication providers do you want to use? Other PassportJS strategies not in this list can still be configured manually.',
       default: 'providers',
       choices: [{
         name: 'Username + Password (Local)',

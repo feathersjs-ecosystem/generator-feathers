@@ -17,12 +17,9 @@ module.exports = class ConnectionGenerator extends Generator {
   _transformCode(code) {
     const { database } = this.props;
 
-    console.log(code);
-
     const ast = j(code);
     const appDeclaration = ast.findDeclaration('app');
     const configureHooks = ast.findConfigure('hooks');
-    const dbRequire = ast.findRequire(database);
     const requireCall = `const ${database} = require('./${database}');`;
 
     if (appDeclaration.length === 0) {
@@ -33,10 +30,8 @@ module.exports = class ConnectionGenerator extends Generator {
       throw new Error('Could not find .configure(hooks()) call in app.js after which to insert database configuration. Did you modify app.js?');
     }
 
-    if (dbRequire.length === 0) {
-      appDeclaration.insertBefore(requireCall);
-      configureHooks.insertAfter(`app.configure(${database});`);
-    }
+    appDeclaration.insertBefore(requireCall);
+    configureHooks.insertAfter(`app.configure(${database});`);
 
     return ast.toSource();
   }
@@ -244,8 +239,10 @@ module.exports = class ConnectionGenerator extends Generator {
     }
 
     if (template) {
+      const dbFile = `${database}.js`;
+
       // If the file doesn't exist yet, add it to the app.js
-      if (!this.fs.exists(this.destinationPath(this.libDirectory, template))) {
+      if (!this.fs.exists(this.destinationPath(this.libDirectory, dbFile))) {
         const appjs = this.destinationPath(this.libDirectory, 'app.js');
 
         this.conflicter.force = true;
@@ -256,7 +253,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
       this.fs.copyTpl(
         this.templatePath(template),
-        this.destinationPath(this.libDirectory, `${database}.js`),
+        this.destinationPath(this.libDirectory, dbFile),
         context
       );
     }
