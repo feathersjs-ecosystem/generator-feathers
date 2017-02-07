@@ -17,7 +17,7 @@ module.exports = class ServiceGenerator extends Generator {
     const prompts = [
       {
         type: 'list',
-        name: 'type',
+        name: 'adapter',
         message: 'What kind of service would you like to create?',
         default: 'nedb',
         choices: [
@@ -123,7 +123,7 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing() {
-    const { type, kebabName } = this.props;
+    const { adapter, kebabName } = this.props;
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
       memory: 'feathers-memory',
@@ -134,9 +134,9 @@ module.exports = class ServiceGenerator extends Generator {
       knex: 'feathers-knex',
       rethinkdb: 'feathers-rethinkdb'
     };
-    const serviceModule = moduleMappings[type];
+    const serviceModule = moduleMappings[adapter];
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
-    const modelTpl = `${type}${this.props.authentication ? '-user' : ''}.js`;
+    const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
       modelName: hasModel ? `${kebabName}.model` : null,
@@ -145,7 +145,7 @@ module.exports = class ServiceGenerator extends Generator {
     });
 
     // Do not run code transformations if the service file already exists
-    if(!this.fs.exists(mainFile)) {
+    if (!this.fs.exists(mainFile)) {
       const servicejs = this.destinationPath(this.libDirectory, 'services', 'index.js');
       const transformed = this._transformCode(
         this.fs.read(servicejs).toString()
@@ -157,11 +157,11 @@ module.exports = class ServiceGenerator extends Generator {
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
-    if(type !== 'generic' && type !== 'memory') {
+    if (adapter !== 'generic' && adapter !== 'memory') {
       this.composeWith(require.resolve('../connection'), {
-        props: { type }
+        props: { adapter }
       });
-    } else if(type === 'generic') {
+    } else if(adapter === 'generic') {
       // Copy the generic service class
       this.fs.copyTpl(
         this.templatePath('class.js'),
@@ -170,7 +170,7 @@ module.exports = class ServiceGenerator extends Generator {
       );
     }
 
-    if(context.modelName) {
+    if (context.modelName) {
       // Copy the model
       this.fs.copyTpl(
         this.templatePath('model', modelTpl),
@@ -191,9 +191,9 @@ module.exports = class ServiceGenerator extends Generator {
       context
     );
 
-    if(fs.existsSync(path.join(templatePath, 'types', `${type}.js`))) {
+    if (fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`))) {
       this.fs.copyTpl(
-        this.templatePath('types', `${type}.js`),
+        this.templatePath('types', `${adapter}.js`),
         mainFile,
         context
       );
@@ -205,7 +205,7 @@ module.exports = class ServiceGenerator extends Generator {
       );
     }
 
-    if(serviceModule.charAt(0) !== '.') {
+    if (serviceModule.charAt(0) !== '.') {
       this._packagerInstall([ serviceModule ], { save: true });
     }
   }

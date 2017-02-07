@@ -4,11 +4,11 @@ const Sequelize = require('sequelize');
 
 module.exports = function() {
   const app = this;
-  const connectionString = app.get('<%= type %>');
+  const connectionString = app.get('<%= database %>');
   const sequelize = new Sequelize(connectionString);
   const oldSetup = app.setup;
 
-  app.set('<%= type %>Client', sequelize);
+  app.set('sequelizeClient', sequelize);
 
   app.setup = function(...args) {
     const result = oldSetup.apply(this, args);

@@ -66,24 +66,24 @@ module.exports = class AuthGenerator extends Generator {
     const config = Object.assign({}, this.defaultConfig);
     
     config.authentication = {
-      secret: randomstring.generate(),
+      secret: randomstring.generate(64),
       strategies: [ 'jwt' ],
       path: '/authentication',
       service: context.kebabEntity
     };
 
-    if(context.strategies.indexOf('local') !== -1) {
+    if (context.strategies.indexOf('local') !== -1) {
       config.authentication.strategies.push('local');
     }
 
     context.strategies.forEach(strategy => {
-      if(OAUTH2_STRATEGY_MAPPINGS[strategy]) {
+      if (OAUTH2_STRATEGY_MAPPINGS[strategy]) {
         const strategyConfig = {
           clientID: `your ${strategy} client id`,
           clientSecret: `your ${strategy} client secret`
         };
 
-        if(strategy === 'facebook') {
+        if (strategy === 'facebook') {
           strategyConfig.scope = ['public_profile', 'email'];
         }
 
@@ -110,7 +110,7 @@ module.exports = class AuthGenerator extends Generator {
     this.props.strategies.forEach(strategy => {
       const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
 
-      if(oauthProvider) {
+      if (oauthProvider) {
         dependencies.push('feathers-authentication-oauth2');
         dependencies.push(oauthProvider);
         context.oauthProviders.push({
