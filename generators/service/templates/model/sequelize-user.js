@@ -10,12 +10,12 @@ module.exports = function(app) {
   <% if(authentication.strategies.indexOf('local') !== -1) { %>
     email: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true
     },
     password: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: true
     },
   <% } %>
   <% authentication.oauthProviders.forEach(provider => { %>
