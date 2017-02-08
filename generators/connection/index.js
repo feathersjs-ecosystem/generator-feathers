@@ -43,6 +43,7 @@ module.exports = class ConnectionGenerator extends Generator {
       sqlite: 'sqlite3'
       // oracle: 'oracle'
     };
+
     const { connectionString, database, adapter } = this.props;
     const parsed = url.parse(connectionString);
 
@@ -94,7 +95,7 @@ module.exports = class ConnectionGenerator extends Generator {
       };
 
     default:
-      throw new Error('Invalid database connection type to assemble configuration');
+      throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
     }
   }
   
@@ -116,6 +117,7 @@ module.exports = class ConnectionGenerator extends Generator {
     const { defaultConfig } = this;
 
     const getProps = answers => Object.assign({}, this.props, answers);
+    const setProps = props => Object.assign(this.props, props);
     
     const prompts = [
       {
@@ -143,8 +145,15 @@ module.exports = class ConnectionGenerator extends Generator {
             return false;
           }
 
-          if (adapter === 'nedb' || adapter === 'rethinkdb' || adapter === 'memory') {
-            current.database = adapter;
+          switch(adapter) {
+          case 'nedb':
+          case 'rethinkdb':
+          case 'memory':
+          case 'mongodb':
+            setProps({ database: adapter });
+            return false;
+          case 'mongoose':
+            setProps({ database: 'mongodb' });
             return false;
           }
 
@@ -192,7 +201,10 @@ module.exports = class ConnectionGenerator extends Generator {
             return false;
           }
 
-          if (database === 'nedb' || database === 'rethinkdb' || database === 'memory') {
+          switch(database) {
+          case 'nedb':
+          case 'rethinkdb':
+          case 'memory':
             return false;
           }
 
@@ -225,7 +237,7 @@ module.exports = class ConnectionGenerator extends Generator {
           const connectionString = defaultConfig[database];
           
           if (typeof connectionString === 'string') {
-            current.connectionString = connectionString;
+            setProps({ connectionString });
             return false;
           }
 
