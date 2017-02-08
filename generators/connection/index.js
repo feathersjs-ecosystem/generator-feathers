@@ -143,8 +143,15 @@ module.exports = class ConnectionGenerator extends Generator {
             return false;
           }
 
-          if (adapter === 'nedb' || adapter === 'rethinkdb' || adapter === 'memory') {
+          switch(adapter) {
+          case 'nedb':
+          case 'rethinkdb':
+          case 'memory':
+          case 'mongodb':
             current.database = adapter;
+            return false;
+          case 'mongoose':
+            current.database = 'mongodb';
             return false;
           }
 
