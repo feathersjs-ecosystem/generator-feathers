@@ -15,6 +15,7 @@ const hooks = require('feathers-hooks');
 <% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
 const middleware = require('./middleware');
 const services = require('./services');
+const appHooks = require('./hooks');
 
 const app = feathers();
 
@@ -39,5 +40,6 @@ app.configure(hooks());
 app.configure(services);
 // Configure middleware (see `middleware/index.js`) - always has to be last
 app.configure(middleware);
+app.hooks(appHooks);
 
 module.exports = app;
