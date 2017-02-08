@@ -4,6 +4,7 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const compress = require('compression');
 const cors = require('cors');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 
 const feathers = require('feathers');
@@ -19,8 +20,9 @@ const app = feathers();
 
 // Load app configuration
 app.configure(configuration(path.join(__dirname, '..')));
-// Enable CORS, compression, favicon and body parsing
+// Enable CORS, security, compression, favicon and body parsing
 app.use(cors());
+app.use(helmet());
 app.use(compress());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
