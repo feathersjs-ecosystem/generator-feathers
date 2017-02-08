@@ -24,6 +24,7 @@ module.exports = class AppGenerator extends Generator {
       'compression',
       'body-parser',
       'helmet',
+      'winston',
       'cors'
     ];
 
