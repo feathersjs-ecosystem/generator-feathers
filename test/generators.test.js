@@ -51,7 +51,7 @@ describe('generator-feathers', function() {
       });
   }
 
-  before(() => helpers.run(path.join(__dirname, '..', 'generators', 'app'))
+  beforeEach(() => helpers.run(path.join(__dirname, '..', 'generators', 'app'))
     .inTmpDir(dir => (appDir = dir))
     .withPrompts({
       name: 'myapp',
@@ -92,7 +92,7 @@ describe('generator-feathers', function() {
 
     it('nedb', () => {
       return runConnectionGenerator({
-        type: 'nedb',
+        database: 'nedb',
         connectionString: 'nedb://../mytest'
       })
       .then(() => 
@@ -104,80 +104,104 @@ describe('generator-feathers', function() {
       .then(() => runTest('starts and shows the index page'));
     });
 
-    it('mongodb', () => {
-      const connectionString = 'mongodb://localhost:27017/testing';
+    describe('mongodb', () => {
+      it('mongodb', () => {
+        const connectionString = 'mongodb://localhost:27017/testing';
 
-      return runConnectionGenerator({
-        type: 'mongodb',
-        connectionString
-      })
-      .then(() => 
-        assert.jsonFileContent(
-          path.join(appDir, 'config', 'default.json'),
-          { mongodb: connectionString }
+        return runConnectionGenerator({
+          database: 'mongodb',
+          adapter: 'mongodb',
+          connectionString
+        })
+        .then(() => 
+          assert.jsonFileContent(
+            path.join(appDir, 'config', 'default.json'),
+            { mongodb: connectionString }
+          )
         )
-      )
-      .then(() => runTest('starts and shows the index page'));
+        .then(() => runTest('starts and shows the index page'));
+      });
+
+      it('mongoose', () => {
+        const connectionString = 'mongodb://localhost:27017/testing';
+
+        return runConnectionGenerator({
+          database: 'mongodb',
+          adapter: 'mongoose',
+          connectionString
+        })
+        .then(() => 
+          assert.jsonFileContent(
+            path.join(appDir, 'config', 'default.json'),
+            { mongodb: connectionString }
+          )
+        )
+        .then(() => runTest('starts and shows the index page'));
+      });
     });
 
-    it('mongoose', () => {
-      const connectionString = 'mongodb://localhost:27017/testing';
+    describe.skip('postgres', () => {
 
-      return runConnectionGenerator({
-        type: 'mongoose',
-        connectionString
-      })
-      .then(() => 
-        assert.jsonFileContent(
-          path.join(appDir, 'config', 'default.json'),
-          { mongodb: connectionString }
-        )
-      )
-      .then(() => runTest('starts and shows the index page'));
     });
 
-    it('knex', () => {
-      const connectionString = 'sqlite://data.sqlite';
+    describe.skip('mysql', () => {
 
-      return runConnectionGenerator({
-        type: 'knex',
-        connectionString
-      })
-      .then(() => 
-        assert.jsonFileContent(
-          path.join(appDir, 'config', 'default.json'), {
-            knex: {
-              connection: {
-                filename: 'data.sqlite'
-              },
-              client: 'sqlite3'
+    });
+
+    describe.skip('mariadb', () => {
+
+    });
+
+    describe.skip('mssql', () => {
+
+    });
+
+    describe('sqlite', () => {
+      it('knex', () => {
+        const connectionString = 'sqlite://data.sqlite';
+
+        return runConnectionGenerator({
+          database: 'sqlite',
+          adapter: 'knex',
+          connectionString
+        })
+        .then(() => 
+          assert.jsonFileContent(
+            path.join(appDir, 'config', 'default.json'), {
+              sqlite: {
+                connection: {
+                  filename: 'data.sqlite'
+                },
+                client: 'sqlite3'
+              }
             }
-          }
+          )
         )
-      )
-      .then(() => runTest('starts and shows the index page'));
-    });
+        .then(() => runTest('starts and shows the index page'));
+      });
 
-    it('sequelize', () => {
-      const connectionString = 'sqlite://data.sqlite';
+      it('sequelize', () => {
+        const connectionString = 'sqlite://data.sqlite';
 
-      return runConnectionGenerator({
-        type: 'sequelize',
-        connectionString
-      })
-      .then(() => 
-        assert.jsonFileContent(
-          path.join(appDir, 'config', 'default.json'), {
-            sequelize: connectionString
-          }
+        return runConnectionGenerator({
+          database: 'sqlite',
+          adapter: 'sequelize',
+          connectionString
+        })
+        .then(() => 
+          assert.jsonFileContent(
+            path.join(appDir, 'config', 'default.json'), {
+              sqlite: connectionString
+            }
+          )
         )
-      )
-      .then(() => runTest('starts and shows the index page'));
+        .then(() => runTest('starts and shows the index page'));
+      });
     });
 
     it('rethinkdb', () => {
       return runConnectionGenerator({
-        type: 'rethinkdb',
+        database: 'rethinkdb',
         connectionString: 'rethinkdb://localhost:11078/testing'
       })
       .then(() => 
@@ -200,13 +224,14 @@ describe('generator-feathers', function() {
   });
 
   describe('feathers:service', () => {
-    function testServiceGenerator(type, id = null) {
+    function testServiceGenerator(adapter, database, id = null) {
       return helpers.run(path.join(__dirname, '..', 'generators', 'service'))
         .inTmpDir(() => process.chdir(appDir))
         .withPrompts({
-          type,
-          name: type,
-          path: type
+          adapter,
+          database,
+          name: adapter,
+          path: adapter
         })
         .withOptions({ skipInstall: false })
         .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
@@ -215,7 +240,7 @@ describe('generator-feathers', function() {
           const text = 'This is a test';
 
           return rp({
-            url: `http://localhost:3030/${type}`,
+            url: `http://localhost:3030/${adapter}`,
             method: 'post',
             json: true,
             body: { text }
@@ -238,12 +263,12 @@ describe('generator-feathers', function() {
     }
 
     it('generic', () => testServiceGenerator('generic'));
-    it('memory', () => testServiceGenerator('memory', 'id'));
-    it('nedb', () => testServiceGenerator('nedb', '_id'));
-    it('mongodb', () => testServiceGenerator('mongodb', '_id'));
-    it('mongoose', () => testServiceGenerator('mongoose', '_id'));
-    it('knex', () => testServiceGenerator('knex', 'id'));
-    it('sequelize', () => testServiceGenerator('sequelize', 'id'));
+    it('memory', () => testServiceGenerator('memory', null, 'id'));
+    it('nedb', () => testServiceGenerator('nedb', null, '_id'));
+    it('mongodb', () => testServiceGenerator('mongodb', 'mongodb', '_id'));
+    it('mongoose', () => testServiceGenerator('mongoose', 'mongodb', '_id'));
+    it('knex', () => testServiceGenerator('knex', 'sqlite', 'id'));
+    it('sequelize', () => testServiceGenerator('sequelize', 'sqlite', 'id'));
     
     it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
   });
@@ -254,7 +279,7 @@ describe('generator-feathers', function() {
       .withPrompts({
         strategies: ['local'],
         entity: 'users',
-        type: 'memory'
+        database: 'memory'
       })
       .withOptions({ skipInstall: false })
       .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))

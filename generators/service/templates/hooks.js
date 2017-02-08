@@ -1,10 +1,10 @@
 'use strict';
 
-<% if(requiresAuth) { %>const { authenticate } = require('feathers-authentication').hooks;<% } %>
+<% if (requiresAuth) { %>const { authenticate } = require('feathers-authentication').hooks;<% } %>
 
 module.exports = {
   before: {
-    all: [<% if(requiresAuth) { %> authenticate('jwt') <% } %>],
+    all: [<% if (requiresAuth) { %> authenticate('jwt') <% } %>],
     find: [],
     get: [],
     create: [],

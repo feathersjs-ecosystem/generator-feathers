@@ -10,7 +10,7 @@ const feathers = require('feathers');
 const configuration = require('feathers-configuration');
 const hooks = require('feathers-hooks');
 <% if (hasProvider('rest')) { %>const rest = require('feathers-rest');<% } %>
-<% if (hasProvider('socket.io')) { %>const socketio = require('feathers-socketio');<% } %>
+<% if (hasProvider('socketio')) { %>const socketio = require('feathers-socketio');<% } %>
 <% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
 const middleware = require('./middleware');
 const services = require('./services');
@@ -31,7 +31,7 @@ app.use('/', feathers.static(app.get('public')));
 // Set up Plugins and providers
 app.configure(hooks());
 <% if (hasProvider('rest')) { %>app.configure(rest());<% } %>
-<% if (hasProvider('socket.io')) { %>app.configure(socketio());<% } %>
+<% if (hasProvider('socketio')) { %>app.configure(socketio());<% } %>
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
 // Set up our services (see `services/index.js`)
 app.configure(services);

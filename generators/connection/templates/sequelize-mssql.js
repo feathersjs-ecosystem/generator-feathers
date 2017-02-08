@@ -1,20 +1,30 @@
 'use strict';
 
+const url = require('url');
 const Sequelize = require('sequelize');
 
 module.exports = function() {
   const app = this;
-  const connectionString = app.get('<%= database %>');
-  const sequelize = new Sequelize(connectionString, {
-    dialect: '<%= database %>',
+  const connectionString = app.get('mssql');
+  const connection = url.parse(connectionString);
+  const database = connection.path.substring(1, connection.path.length);
+  const { port, hostname, username, password } = connection; 
+  const sequelize = new Sequelize(database, username, password, {
+    dialect: 'mssql',
+    host: hostname,
     logging: false,
     define: {
       freezeTableName: true
+    },
+    dialectOptions: {
+      port,
+      instanceName: 'NameOfTheMSSQLInstance'
     }
   });
+
   const oldSetup = app.setup;
 
-  app.set('sequelizeClient', sequelize);
+  app.set('mssqlClient', sequelize);
 
   app.setup = function(...args) {
     const result = oldSetup.apply(this, args);
