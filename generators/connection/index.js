@@ -224,7 +224,7 @@ module.exports = class ConnectionGenerator extends Generator {
             nedb: 'nedb://../data',
             // oracle: `oracle://root:password@localhost:1521/${databaseName}`,
             postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
-            rethinkdb: `rethinkdb://localhost:11078/${databaseName}`,
+            rethinkdb: `rethinkdb://localhost:28015/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`
           };
