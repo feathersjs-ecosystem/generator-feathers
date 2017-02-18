@@ -55,7 +55,7 @@ module.exports = class ConnectionGenerator extends Generator {
     case 'rethinkdb':
       this.dependencies.push('rethinkdbdash');
       return {
-        database: parsed.path.substring(1, parsed.path.length),
+        db: parsed.path.substring(1, parsed.path.length),
         servers: [
           {
             host: parsed.hostname,
