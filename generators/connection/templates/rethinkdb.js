@@ -25,6 +25,10 @@ module.exports = function() {
       }
     });
 
+    // Access the initialization if you want to run queries
+    // right away that depend on the database and tables being created
+    this.set('rethinkInit', promise);
+
     return result;
   };
 };
