@@ -11,8 +11,6 @@ module.exports = function() {
   app.set('rethinkdbClient', r);
 
   app.setup = function(...args) {
-    const result = oldSetup.apply(this, args);
-    
     let promise = Promise.resolve();
 
     // Go through all services and call the RethinkDB `init`
@@ -29,6 +27,8 @@ module.exports = function() {
     // right away that depend on the database and tables being created
     this.set('rethinkInit', promise);
 
-    return result;
+    promise.then(() => oldSetup.apply(this, args));
+
+    return this;
   };
 };
