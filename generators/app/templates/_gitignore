@@ -27,5 +27,8 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
+# data folders of various IDEs
+.idea/
+
 lib/
 data/
