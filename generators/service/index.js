@@ -45,6 +45,9 @@ module.exports = class ServiceGenerator extends Generator {
           }, {
             name: 'RethinkDB',
             value: 'rethinkdb'
+          }, {
+            name: 'CouchDB',
+            value: 'couchdb'
           }
         ]
       }, {
@@ -132,7 +135,8 @@ module.exports = class ServiceGenerator extends Generator {
       mongoose: 'feathers-mongoose',
       sequelize: 'feathers-sequelize',
       knex: 'feathers-knex',
-      rethinkdb: 'feathers-rethinkdb'
+      rethinkdb: 'feathers-rethinkdb',
+      couchdb: 'feathers-couchdb'
     };
     const serviceModule = moduleMappings[adapter];
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
