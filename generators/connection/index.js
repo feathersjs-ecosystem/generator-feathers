@@ -233,7 +233,7 @@ module.exports = class ConnectionGenerator extends Generator {
             rethinkdb: `rethinkdb://localhost:11078/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`,
-            couchdb: `http://127.0.0.1:5984/${databaseName}`
+            couchdb: `http://127.0.0.1:5984`
           };
           
           return defaultConnectionStrings[database];
