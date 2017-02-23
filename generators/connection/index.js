@@ -1,6 +1,6 @@
 'use strict';
 
-const { kebabCase } = require('lodash');
+const { snakeCase } = require('lodash');
 const url = require('url');
 const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
@@ -48,54 +48,54 @@ module.exports = class ConnectionGenerator extends Generator {
     const parsed = url.parse(connectionString);
 
     switch(database) {
-    case 'nedb':
-      this.dependencies.push('nedb');
-      return connectionString.substring(7, connectionString.length);
+      case 'nedb':
+        this.dependencies.push('nedb');
+        return connectionString.substring(7, connectionString.length);
 
-    case 'rethinkdb':
-      this.dependencies.push('rethinkdbdash');
-      return {
-        db: parsed.path.substring(1, parsed.path.length),
-        servers: [
-          {
-            host: parsed.hostname,
-            port: parsed.port
-          }
-        ]
-      };
-    
-    case 'memory':
-      return null;
+      case 'rethinkdb':
+        this.dependencies.push('rethinkdbdash');
+        return {
+          db: parsed.path.substring(1, parsed.path.length),
+          servers: [
+            {
+              host: parsed.hostname,
+              port: parsed.port
+            }
+          ]
+        };
+      
+      case 'memory':
+        return null;
 
-    case 'mongodb':
-      this.dependencies.push(adapter);
-      return connectionString;
-    
-    case 'mariadb':
-    case 'mysql':
-    case 'mssql':
-    // case oracle:
-    case 'postgres': // eslint-disable-line no-fallthrough
-    case 'sqlite':
-      this.dependencies.push(adapter);
-      
-      if (sqlPackages[database]) {
-        this.dependencies.push(sqlPackages[database]);
-      }
-      
-      if (adapter === 'sequelize') {
+      case 'mongodb':
+        this.dependencies.push(adapter);
         return connectionString;
-      }
+      
+      case 'mariadb':
+      case 'mysql':
+      case 'mssql':
+      // case oracle:
+      case 'postgres': // eslint-disable-line no-fallthrough
+      case 'sqlite':
+        this.dependencies.push(adapter);
+        
+        if (sqlPackages[database]) {
+          this.dependencies.push(sqlPackages[database]);
+        }
+        
+        if (adapter === 'sequelize') {
+          return connectionString;
+        }
 
-      return {
-        client: sqlPackages[database],
-        connection: database === 'sqlite' ? {
-          filename: connectionString.substring(9, connectionString.length)
-        } : connectionString
-      };
+        return {
+          client: sqlPackages[database],
+          connection: database === 'sqlite' ? {
+            filename: connectionString.substring(9, connectionString.length)
+          } : connectionString
+        };
 
-    default:
-      throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
+      default:
+        throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
     }
   }
   
@@ -103,19 +103,21 @@ module.exports = class ConnectionGenerator extends Generator {
     const { database } = this.props;
     const config = Object.assign({}, this.defaultConfig);
 
-    config[database] = this._getConfiguration();
+    if(!config[database]) {
+      config[database] = this._getConfiguration();
 
-    this.conflicter.force = true;
-    this.fs.writeJSON(
-      this.destinationPath('config', 'default.json'),
-      config
-    );
+      this.conflicter.force = true;
+      this.fs.writeJSON(
+        this.destinationPath('config', 'default.json'),
+        config
+      );
+    }
   }
 
   prompting() {
     this.checkPackage();
     
-    const databaseName = kebabCase(this.pkg.name);
+    const databaseName = snakeCase(this.pkg.name);
     const { defaultConfig } = this;
 
     const getProps = answers => Object.assign({}, this.props, answers);
@@ -148,15 +150,15 @@ module.exports = class ConnectionGenerator extends Generator {
           }
 
           switch(adapter) {
-          case 'nedb':
-          case 'rethinkdb':
-          case 'memory':
-          case 'mongodb':
-            setProps({ database: adapter });
-            return false;
-          case 'mongoose':
-            setProps({ database: 'mongodb' });
-            return false;
+            case 'nedb':
+            case 'rethinkdb':
+            case 'memory':
+            case 'mongodb':
+              setProps({ database: adapter });
+              return false;
+            case 'mongoose':
+              setProps({ database: 'mongodb' });
+              return false;
           }
 
           return true;
@@ -238,7 +240,7 @@ module.exports = class ConnectionGenerator extends Generator {
           const { database } = answers;
           const connectionString = defaultConfig[database];
           
-          if (typeof connectionString === 'string') {
+          if (connectionString) {
             setProps({ connectionString });
             return false;
           }
@@ -297,8 +299,8 @@ module.exports = class ConnectionGenerator extends Generator {
 
     // NOTE (EK): If this is the first time we set this up
     // show this nice message.
-    if (connectionString) {
-      const databaseName = kebabCase(this.pkg.name);
+    if (connectionString && !this.defaultConfig[database]) {
+      const databaseName = snakeCase(this.pkg.name);
       this.log();
       this.log(`Woot! We've set up your ${database} database connection!`);
 
