@@ -138,6 +138,7 @@ module.exports = class ConnectionGenerator extends Generator {
           // { name: 'Oracle', value: 'oracle' },
           { name: 'PostgreSQL', value: 'postgres' },
           { name: 'RethinkDB', value: 'rethinkdb' },
+          { name: 'CouchDB', value: 'couchdb' },
           { name: 'SQLite', value: 'sqlite' },
           { name: 'SQL Server', value: 'mssql' }
         ],
@@ -208,6 +209,7 @@ module.exports = class ConnectionGenerator extends Generator {
           switch(database) {
           case 'nedb':
           case 'rethinkdb':
+          case 'couchdb':
           case 'memory':
             return false;
           }
