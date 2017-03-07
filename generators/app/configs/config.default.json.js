@@ -8,6 +8,10 @@ module.exports = function() {
     paginate: {
       default: 10,
       max: 50
+    },
+    couchdb : {
+      username: 'admin',
+      password: 'admin'
     }
   };
 

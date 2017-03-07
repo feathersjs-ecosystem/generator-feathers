@@ -11,11 +11,11 @@ module.exports = function() {
 //var Connection = new(cradle.Connection)('http://192.168.1.79:5984')
 const Connection = new(cradle.Connection)(config,
     {
-        secure: true,
-        // auth: {
-        //     username: '',
-        //     password: ''
-        // },
+        secure: false,
+         auth: {
+             username: config.dbUsername,
+             password: config.dbPassword
+        },
         cache: true
     }
 );
