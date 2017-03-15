@@ -10,9 +10,7 @@ module.exports = function(app) {
   db.schema.createTableIfNotExists('<%= kebabName %>', table => {
     table.increments('id');
     table.string('text');
-  })
-  .then(() => console.log('Updated <%= kebabName %> table'))
-  .catch(e => console.error('Error updating <%= kebabName %> table', e));
+  });
 
   return db;
 };
