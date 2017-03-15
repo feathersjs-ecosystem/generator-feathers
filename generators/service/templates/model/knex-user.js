@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use strict';
 
 // <%= name %>-model.js - A KnexJS
@@ -16,7 +17,9 @@ module.exports = function(app) {
   <% authentication.oauthProviders.forEach(provider => { %>
     table.string('<%= provider.name %>Id');
   <% }); %>
-  });
+  })
+  .then(() => console.log('Updated <%= kebabName %> table'))
+  .catch(e => console.error('Error updating <%= kebabName %> table', e));
 
   return db;
 };
