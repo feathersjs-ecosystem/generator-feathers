@@ -9,7 +9,7 @@ module.exports = function() {
       default: 10,
       max: 50
     },
-    couchdb : {
+    couchdb_auth : {
       username: 'admin',
       password: 'admin'
     }
