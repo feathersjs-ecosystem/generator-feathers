@@ -64,6 +64,9 @@ module.exports = class ConnectionGenerator extends Generator {
         ]
       };
 
+    case 'couchdb':
+      this.dependencies.push('cradle');
+      return connectionString
     case 'memory':
       return null;
 
@@ -138,6 +141,7 @@ module.exports = class ConnectionGenerator extends Generator {
           // { name: 'Oracle', value: 'oracle' },
           { name: 'PostgreSQL', value: 'postgres' },
           { name: 'RethinkDB', value: 'rethinkdb' },
+          { name: 'CouchDB', value: 'couchdb' },
           { name: 'SQLite', value: 'sqlite' },
           { name: 'SQL Server', value: 'mssql' }
         ],
@@ -208,6 +212,7 @@ module.exports = class ConnectionGenerator extends Generator {
           switch(database) {
           case 'nedb':
           case 'rethinkdb':
+          case 'couchdb':
           case 'memory':
             return false;
           }
@@ -230,7 +235,8 @@ module.exports = class ConnectionGenerator extends Generator {
             postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
             rethinkdb: `rethinkdb://localhost:28015/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
-            mssql: `mssql://root:password@localhost:1433/${databaseName}`
+            mssql: `mssql://root:password@localhost:1433/${databaseName}`,
+            couchdb: `http://127.0.0.1:5984`
           };
 
           return defaultConnectionStrings[database];

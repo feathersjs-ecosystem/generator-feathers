@@ -47,6 +47,7 @@
     "test": "npm run eslint && npm run test:transform && npm run test:generators"
   },
   "dependencies": {
+    "generator-feathers": "^0.8.8",
     "jscodeshift": "^0.3.30",
     "lodash": "^4.17.4",
     "randomstring": "^1.1.5",
