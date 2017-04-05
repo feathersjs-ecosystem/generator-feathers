@@ -1,6 +1,6 @@
 'use strict';
 
-const { kebabCase } = require('lodash');
+const { snakeCase } = require('lodash');
 const url = require('url');
 const Generator = require('../../lib/generator');
 const j = require('../../lib/transform');
@@ -55,7 +55,7 @@ module.exports = class ConnectionGenerator extends Generator {
     case 'rethinkdb':
       this.dependencies.push('rethinkdbdash');
       return {
-        database: parsed.path.substring(1, parsed.path.length),
+        db: parsed.path.substring(1, parsed.path.length),
         servers: [
           {
             host: parsed.hostname,
@@ -67,14 +67,13 @@ module.exports = class ConnectionGenerator extends Generator {
     case 'couchdb':
       this.dependencies.push('cradle');
       return connectionString
-    
     case 'memory':
       return null;
 
     case 'mongodb':
       this.dependencies.push(adapter);
       return connectionString;
-    
+
     case 'mariadb':
     case 'mysql':
     case 'mssql':
@@ -82,11 +81,11 @@ module.exports = class ConnectionGenerator extends Generator {
     case 'postgres': // eslint-disable-line no-fallthrough
     case 'sqlite':
       this.dependencies.push(adapter);
-      
+
       if (sqlPackages[database]) {
         this.dependencies.push(sqlPackages[database]);
       }
-      
+
       if (adapter === 'sequelize') {
         return connectionString;
       }
@@ -102,27 +101,31 @@ module.exports = class ConnectionGenerator extends Generator {
       throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
     }
   }
-  
+
   _writeConfiguration() {
     const { database } = this.props;
     const config = Object.assign({}, this.defaultConfig);
 
-    config[database] = this._getConfiguration();
+    if(!config[database]) {
+      config[database] = this._getConfiguration();
 
-    this.conflicter.force = true;
-    this.fs.writeJSON(
-      this.destinationPath('config', 'default.json'),
-      config
-    );
+      this.conflicter.force = true;
+      this.fs.writeJSON(
+        this.destinationPath('config', 'default.json'),
+        config
+      );
+    }
   }
 
   prompting() {
-    const databaseName = kebabCase(this.pkg.name);
+    this.checkPackage();
+
+    const databaseName = snakeCase(this.pkg.name);
     const { defaultConfig } = this;
 
     const getProps = answers => Object.assign({}, this.props, answers);
     const setProps = props => Object.assign(this.props, props);
-    
+
     const prompts = [
       {
         type: 'list',
@@ -145,7 +148,7 @@ module.exports = class ConnectionGenerator extends Generator {
         when(current) {
           const answers = getProps(current);
           const { database, adapter } = answers;
-          
+
           if (database) {
             return false;
           }
@@ -230,20 +233,20 @@ module.exports = class ConnectionGenerator extends Generator {
             nedb: 'nedb://../data',
             // oracle: `oracle://root:password@localhost:1521/${databaseName}`,
             postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
-            rethinkdb: `rethinkdb://localhost:11078/${databaseName}`,
+            rethinkdb: `rethinkdb://localhost:28015/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`,
             couchdb: `http://127.0.0.1:5984`
           };
-          
+
           return defaultConnectionStrings[database];
         },
         when(current) {
           const answers = getProps(current);
           const { database } = answers;
           const connectionString = defaultConfig[database];
-          
-          if (typeof connectionString === 'string') {
+
+          if (connectionString) {
             setProps({ connectionString });
             return false;
           }
@@ -302,8 +305,8 @@ module.exports = class ConnectionGenerator extends Generator {
 
     // NOTE (EK): If this is the first time we set this up
     // show this nice message.
-    if (connectionString) {
-      const databaseName = kebabCase(this.pkg.name);
+    if (connectionString && !this.defaultConfig[database]) {
+      const databaseName = snakeCase(this.pkg.name);
       this.log();
       this.log(`Woot! We've set up your ${database} database connection!`);
 

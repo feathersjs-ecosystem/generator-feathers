@@ -37,8 +37,14 @@ module.exports = class HookGenerator extends Generator {
     return ast.toSource();
   }
 
-  _addToService(serviceName, moduleName) {
-    const hooksFile = this.destinationPath(this.libDirectory, 'services', serviceName, `${serviceName}.hooks.js`);
+  _addToService(serviceName, hookName) {
+    let hooksFile = this.destinationPath(this.libDirectory, 'services', serviceName, `${serviceName}.hooks.js`);
+    let moduleName = `../../${hookName}`;
+
+    if(serviceName === '__app') {
+      hooksFile = this.destinationPath(this.libDirectory, 'app.hooks.js');
+      moduleName = `./${hookName}`;
+    }
 
     if(!this.fs.exists(hooksFile)) {
       throw new Error(`Can not add hook to the ${serviceName} hooks file ${hooksFile}. It does not exist.`);
@@ -51,6 +57,8 @@ module.exports = class HookGenerator extends Generator {
   }
 
   prompting() {
+    this.checkPackage();
+
     const services = this._listDirectories(this.libDirectory, 'services');
     const prompts = [
       {
@@ -77,7 +85,10 @@ module.exports = class HookGenerator extends Generator {
         name: 'services',
         message: 'What service(s) should this hook be for (select none to add it yourself)?\n',
         choices() {
-          return services.map(value => ({ value }));
+          return [{
+            name: 'Application wide (all services)',
+            value: '__app'
+          }].concat(services.map(value => ({ value })));
         },
         when(answers) {
           return answers.type !== null;
@@ -125,18 +136,26 @@ module.exports = class HookGenerator extends Generator {
   }
 
   writing() {
-    const context = this.props;
+    const context = Object.assign({
+      libDirectory: this.libDirectory
+    }, this.props);
     const mainFile = this.destinationPath(this.libDirectory, 'hooks', `${context.kebabName}.js`);
 
     if(!this.fs.exists(mainFile) && context.type) {
       this.props.services.forEach(serviceName =>
-        this._addToService(serviceName, path.join('..', '..', 'hooks', context.kebabName))
+        this._addToService(serviceName, `hooks/${context.kebabName}`)
       );
     }
 
     this.fs.copyTpl(
       this.templatePath('hook.js'),
       mainFile, context
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('test.js'),
+      this.destinationPath('test', 'hooks', `${context.kebabName}.test.js`),
+      context
     );
   }
 };

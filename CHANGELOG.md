@@ -1,5 +1,52 @@
 # Change Log
 
+## [v1.0.0-pre.6](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.6) (2017-03-16)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.5...v1.0.0-pre.6)
+
+**Closed issues:**
+
+- Integration with GraphQL [\#188](https://github.com/feathersjs/generator-feathers/issues/188)
+- Trailing whitespace in some generators [\#186](https://github.com/feathersjs/generator-feathers/issues/186)
+- Add more junk management to gitignore [\#184](https://github.com/feathersjs/generator-feathers/issues/184)
+- Set package.json author and license according to npm/git  [\#183](https://github.com/feathersjs/generator-feathers/issues/183)
+- Rethink db option is 'database' instead of 'db' and db config gets overwritten [\#181](https://github.com/feathersjs/generator-feathers/issues/181)
+
+**Merged pull requests:**
+
+- Generate tests for hooks and services [\#191](https://github.com/feathersjs/generator-feathers/pull/191) ([daffl](https://github.com/daffl))
+- Add email unique index to NeDB user model [\#190](https://github.com/feathersjs/generator-feathers/pull/190) ([daffl](https://github.com/daffl))
+- Set name based on npm [\#189](https://github.com/feathersjs/generator-feathers/pull/189) ([daffl](https://github.com/daffl))
+- Trailing whitespace cleanup \(\#186\) [\#187](https://github.com/feathersjs/generator-feathers/pull/187) ([bitsoflogic](https://github.com/bitsoflogic))
+- ignore junk files [\#185](https://github.com/feathersjs/generator-feathers/pull/185) ([OmgImAlexis](https://github.com/OmgImAlexis))
+- Add support for selecting application hooks and old event filter [\#182](https://github.com/feathersjs/generator-feathers/pull/182) ([daffl](https://github.com/daffl))
+
+## [v1.0.0-pre.5](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.5) (2017-02-23)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.4...v1.0.0-pre.5)
+
+**Fixed bugs:**
+
+- Add profileFields to config for Facebook auth [\#138](https://github.com/feathersjs/generator-feathers/issues/138)
+
+**Closed issues:**
+
+- RethinkDB console printed database name is incorrect. [\#176](https://github.com/feathersjs/generator-feathers/issues/176)
+- RethinkDB configuration values overwritten when generating new service [\#174](https://github.com/feathersjs/generator-feathers/issues/174)
+- RethinkDB does not support kebab-case database names [\#173](https://github.com/feathersjs/generator-feathers/issues/173)
+- Generate Service - RethinkDB Issues [\#170](https://github.com/feathersjs/generator-feathers/issues/170)
+- Generate Service - RethinkDB incorrect config [\#168](https://github.com/feathersjs/generator-feathers/issues/168)
+- npm install feathers-cli@pre -g / feathers generate service  Unhandled 'error' event [\#165](https://github.com/feathersjs/generator-feathers/issues/165)
+
+**Merged pull requests:**
+
+- Rethinkdb finalization [\#180](https://github.com/feathersjs/generator-feathers/pull/180) ([daffl](https://github.com/daffl))
+- Add .idea/ [\#178](https://github.com/feathersjs/generator-feathers/pull/178) ([j2L4e](https://github.com/j2L4e))
+- Suggest valid RethinkDB database name and prevent overwriting configuration settings [\#175](https://github.com/feathersjs/generator-feathers/pull/175) ([luke3butler](https://github.com/luke3butler))
+- Run generator tests for RethinkDB [\#172](https://github.com/feathersjs/generator-feathers/pull/172) ([daffl](https://github.com/daffl))
+- Improved checks and error messages if the generator can run properly [\#171](https://github.com/feathersjs/generator-feathers/pull/171) ([daffl](https://github.com/daffl))
+- Fix RethinkDB generation [\#169](https://github.com/feathersjs/generator-feathers/pull/169) ([luke3butler](https://github.com/luke3butler))
+- Update yeoman-assert to version 3.0.0 🚀 [\#167](https://github.com/feathersjs/generator-feathers/pull/167) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Add profileFields for Facebook authentication [\#155](https://github.com/feathersjs/generator-feathers/pull/155) ([supasate](https://github.com/supasate))
+
 ## [v1.0.0-pre.4](https://github.com/feathersjs/generator-feathers/tree/v1.0.0-pre.4) (2017-02-08)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.0.0-pre.3...v1.0.0-pre.4)
 
