@@ -78,12 +78,15 @@ module.exports = class AuthGenerator extends Generator {
       config.authentication.strategies.push('local');
     }
 
+    let includesOAuth = false;
+
     context.strategies.forEach(strategy => {
       if (OAUTH2_STRATEGY_MAPPINGS[strategy]) {
         const strategyConfig = {
           clientID: `your ${strategy} client id`,
           clientSecret: `your ${strategy} client secret`
         };
+        includesOAuth = true;
 
         if (strategy === 'facebook') {
           strategyConfig.scope = ['public_profile', 'email'];
@@ -93,6 +96,15 @@ module.exports = class AuthGenerator extends Generator {
         config.authentication[strategy] = strategyConfig;
       }
     });
+
+    if (includesOAuth) {
+      config.authentication.cookie = {
+        enabled: true,
+        name: 'feathers-jwt',
+        httpOnly: false,
+        secure: false
+      };
+    }
 
     this.conflicter.force = true;
     this.fs.writeJSON(
