@@ -84,6 +84,12 @@ module.exports = class AuthGenerator extends Generator {
 
     if (context.strategies.indexOf('local') !== -1) {
       config.authentication.strategies.push('local');
+      config.authentication.local = {
+        entity: 'user',
+        service: 'users',
+        usernameField: 'email',
+        passwordField: 'password'
+      };
     }
 
     let includesOAuth = false;
@@ -92,7 +98,8 @@ module.exports = class AuthGenerator extends Generator {
       if (OAUTH2_STRATEGY_MAPPINGS[strategy]) {
         const strategyConfig = {
           clientID: `your ${strategy} client id`,
-          clientSecret: `your ${strategy} client secret`
+          clientSecret: `your ${strategy} client secret`,
+          successRedirect: '/'
         };
         includesOAuth = true;
 
