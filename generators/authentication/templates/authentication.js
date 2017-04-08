@@ -6,7 +6,6 @@ const jwt = require('feathers-authentication-jwt');
 <% if(oauthProviders.length){ %>const oauth2 = require('feathers-authentication-oauth2');<% } %>
 <% oauthProviders.forEach(provider => { %>const <%= provider.strategyName %> = require('<%= provider.module %>');
 <% }); %>
-
 module.exports = function () {
   const app = this;
   const config = app.get('authentication');
