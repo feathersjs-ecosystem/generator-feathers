@@ -17,7 +17,7 @@ module.exports = class AppGenerator extends Generator {
     this.dependencies = [
       'feathers',
       'feathers-hooks',
-      'feathers-hooks-common',
+      'feathers-hooks-common@pre',
       'feathers-errors',
       'feathers-configuration',
       'serve-favicon',
