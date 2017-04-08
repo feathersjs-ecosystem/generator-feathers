@@ -71,7 +71,15 @@ module.exports = class AuthGenerator extends Generator {
       secret: randomstring.generate(64),
       strategies: [ 'jwt' ],
       path: '/authentication',
-      service: context.kebabEntity
+      service: context.kebabEntity,
+      jwt: {
+        header: { type: 'access' },
+        audience: 'https://yourdomain.com',
+        subject: 'anonymous',
+        issuer: 'feathers',
+        algorithm: 'HS256',
+        expiresIn: '1d'
+      }
     };
 
     if (context.strategies.indexOf('local') !== -1) {
