@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 const j = require('../../lib/transform');
-const randomstring = require('randomstring');
+const crypto = require('crypto');
 
 const Generator = require('../../lib/generator');
 const OAUTH2_STRATEGY_MAPPINGS = {
@@ -68,7 +68,7 @@ module.exports = class AuthGenerator extends Generator {
     const config = Object.assign({}, this.defaultConfig);
 
     config.authentication = {
-      secret: randomstring.generate(64),
+      secret: crypto.randomBytes(256).toString('hex'),
       strategies: [ 'jwt' ],
       path: '/authentication',
       service: context.kebabEntity,
