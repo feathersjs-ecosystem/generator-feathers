@@ -48,55 +48,55 @@ module.exports = class ConnectionGenerator extends Generator {
     const parsed = url.parse(connectionString);
 
     switch (database) {
-      case 'nedb':
-        this.dependencies.push('nedb');
-        return connectionString.substring(7, connectionString.length);
+    case 'nedb':
+      this.dependencies.push('nedb');
+      return connectionString.substring(7, connectionString.length);
 
-      case 'rethinkdb':
-        this.dependencies.push('rethinkdbdash');
-        return {
-          db: parsed.path.substring(1, parsed.path.length),
-          servers: [
-            {
-              host: parsed.hostname,
-              port: parsed.port
-            }
-          ]
-        };
+    case 'rethinkdb':
+      this.dependencies.push('rethinkdbdash');
+      return {
+        db: parsed.path.substring(1, parsed.path.length),
+        servers: [
+          {
+            host: parsed.hostname,
+            port: parsed.port
+          }
+        ]
+      };
 
-      case 'memory':
-        return null;
+    case 'memory':
+      return null;
 
-      case 'mongodb':
-        this.dependencies.push(adapter);
-        return connectionString;
+    case 'mongodb':
+      this.dependencies.push(adapter);
+      return connectionString;
 
-      case 'mariadb':
-      case 'mysql':
-      case 'mssql':
-      // case oracle:
-      case 'postgres': // eslint-disable-line no-fallthrough
-      case 'sqlite':
-        this.dependencies.push(adapter);
+    case 'mariadb':
+    case 'mysql':
+    case 'mssql':
+    // case oracle:
+    case 'postgres': // eslint-disable-line no-fallthrough
+    case 'sqlite':
+      this.dependencies.push(adapter);
 
-        if (sqlPackages[database]) {
-          this.dependencies.push(sqlPackages[database]);
-        }
-
-        if (adapter === 'sequelize') {
-          return connectionString;
-        }
-
-        return {
-          client: sqlPackages[database],
-          connection: database === 'sqlite' ? {
-            filename: connectionString.substring(9, connectionString.length)
-          } : connectionString
-        };
-
-      default:
-        throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
+      if (sqlPackages[database]) {
+        this.dependencies.push(sqlPackages[database]);
       }
+
+      if (adapter === 'sequelize') {
+        return connectionString;
+      }
+
+      return {
+        client: sqlPackages[database],
+        connection: database === 'sqlite' ? {
+          filename: connectionString.substring(9, connectionString.length)
+        } : connectionString
+      };
+
+    default:
+      throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
+    }
   }
 
   _writeConfiguration () {
@@ -150,16 +150,16 @@ module.exports = class ConnectionGenerator extends Generator {
           }
 
           switch (adapter) {
-            case 'nedb':
-            case 'rethinkdb':
-            case 'memory':
-            case 'mongodb':
-              setProps({ database: adapter });
-              return false;
-            case 'mongoose':
-              setProps({ database: 'mongodb' });
-              return false;
-            }
+          case 'nedb':
+          case 'rethinkdb':
+          case 'memory':
+          case 'mongodb':
+            setProps({ database: adapter });
+            return false;
+          case 'mongoose':
+            setProps({ database: 'mongodb' });
+            return false;
+          }
 
           return true;
         }
@@ -206,11 +206,11 @@ module.exports = class ConnectionGenerator extends Generator {
           }
 
           switch (database) {
-            case 'nedb':
-            case 'rethinkdb':
-            case 'memory':
-              return false;
-            }
+          case 'nedb':
+          case 'rethinkdb':
+          case 'memory':
+            return false;
+          }
 
           return true;
         }
@@ -262,8 +262,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
     if (database === 'rethinkdb') {
       template = 'rethinkdb.js';
-    }
-    else if (adapter && adapter !== 'nedb') {
+    } else if (adapter && adapter !== 'nedb') {
       template = database === 'mssql' ? `${adapter}-mssql.js` : `${adapter}.js`;
     }
 
@@ -305,17 +304,17 @@ module.exports = class ConnectionGenerator extends Generator {
       this.log(`Woot! We've set up your ${database} database connection!`);
 
       switch (database) {
-        case 'mariadb':
-        case 'mongodb':
-        case 'mssql':
-        case 'mysql':
-        // case 'oracle':
-        case 'postgres': // eslint-disable-line no-fallthrough
-        case 'rethinkdb':
-          this.log(`Make sure that your ${database} database is running, the username/role is correct, and the database "${databaseName}" has been created.`);
-          this.log('Your configuration can be found in the projects config/ folder.');
-          break;
-        }
+      case 'mariadb':
+      case 'mongodb':
+      case 'mssql':
+      case 'mysql':
+      // case 'oracle':
+      case 'postgres': // eslint-disable-line no-fallthrough
+      case 'rethinkdb':
+        this.log(`Make sure that your ${database} database is running, the username/role is correct, and the database "${databaseName}" has been created.`);
+        this.log('Your configuration can be found in the projects config/ folder.');
+        break;
+      }
     }
   }
 };
