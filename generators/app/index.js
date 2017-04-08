@@ -3,6 +3,15 @@
 const Generator = require('../../lib/generator');
 const path = require('path');
 const makeConfig = require('./configs');
+const cmd = require('child_process').execSync;
+
+var yarnInstalled;
+try {
+  cmd('yarn bin').toString();
+  yarnInstalled = true;
+} catch (err) {
+  yarnInstalled = false;
+}
 
 module.exports = class AppGenerator extends Generator {
   constructor(args, opts) {
@@ -74,7 +83,7 @@ module.exports = class AppGenerator extends Generator {
       name: 'packager',
       type: 'list',
       message: 'Which package manager are you using (has to be installed globally)?',
-      default: 'npm@>= 3.0.0',
+      default: yarnInstalled ? 'yarn@>= 0.18.0' : 'npm@>= 3.0.0',
       choices: [{
         name: 'npm',
         value: 'npm@>= 3.0.0'
