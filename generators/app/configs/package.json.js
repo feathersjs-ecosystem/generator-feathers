@@ -18,7 +18,7 @@ module.exports = function(generator) {
     contributors: [],
     bugs: {},
     directories: {
-      lib
+      lib, testLib: ''
     },
     engines: {
       node: '>= 6.0.0',
