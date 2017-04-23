@@ -53,7 +53,7 @@
     "yeoman-generator": "^1.0.1"
   },
   "devDependencies": {
-    "eslint": "^3.13.1",
+    "eslint": "^3.16.0",
     "jshint": "^2.9.2",
     "mocha": "^3.0.0",
     "request": "^2.79.0",
