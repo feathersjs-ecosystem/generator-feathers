@@ -150,7 +150,7 @@ module.exports = class AppGenerator extends Generator {
 
     this.fs.copyTpl(
       this.templatePath('app.test.js'),
-      this.destinationPath('test', 'app.test.js'),
+      this.destinationPath('test', this.libTestDirectory, 'app.test.js'),
       context
     );
 
