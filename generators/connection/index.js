@@ -46,54 +46,54 @@ module.exports = class ConnectionGenerator extends Generator {
     const parsed = url.parse(connectionString);
 
     switch (database) {
-      case 'nedb':
-        this.dependencies.push('nedb');
-        return connectionString.substring(7, connectionString.length);
+    case 'nedb':
+      this.dependencies.push('nedb');
+      return connectionString.substring(7, connectionString.length);
 
-      case 'rethinkdb':
-        this.dependencies.push('rethinkdbdash');
-        return {
-          db: parsed.path.substring(1, parsed.path.length),
-          servers: [
-            {
-              host: parsed.hostname,
-              port: parsed.port
-            }
-          ]
-        };
+    case 'rethinkdb':
+      this.dependencies.push('rethinkdbdash');
+      return {
+        db: parsed.path.substring(1, parsed.path.length),
+        servers: [
+          {
+            host: parsed.hostname,
+            port: parsed.port
+          }
+        ]
+      };
 
-      case 'memory':
-        return null;
+    case 'memory':
+      return null;
 
-      case 'mongodb':
-        this.dependencies.push(adapter);
+    case 'mongodb':
+      this.dependencies.push(adapter);
+      return connectionString;
+
+    case 'mariadb':
+    case 'mysql':
+    case 'mssql':
+    // case oracle:
+    case 'postgres': // eslint-disable-line no-fallthrough
+    case 'sqlite':
+      this.dependencies.push(adapter);
+
+      if (sqlPackages[database]) {
+        this.dependencies.push(sqlPackages[database]);
+      }
+
+      if (adapter === 'sequelize') {
         return connectionString;
+      }
 
-      case 'mariadb':
-      case 'mysql':
-      case 'mssql':
-      // case oracle:
-      case 'postgres': // eslint-disable-line no-fallthrough
-      case 'sqlite':
-        this.dependencies.push(adapter);
+      return {
+        client: sqlPackages[database],
+        connection: database === 'sqlite' ? {
+          filename: connectionString.substring(9, connectionString.length)
+        } : connectionString
+      };
 
-        if (sqlPackages[database]) {
-          this.dependencies.push(sqlPackages[database]);
-        }
-
-        if (adapter === 'sequelize') {
-          return connectionString;
-        }
-
-        return {
-          client: sqlPackages[database],
-          connection: database === 'sqlite' ? {
-            filename: connectionString.substring(9, connectionString.length)
-          } : connectionString
-        };
-
-      default:
-        throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
+    default:
+      throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
     }
   }
 
