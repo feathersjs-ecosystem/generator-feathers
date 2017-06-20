@@ -11,12 +11,12 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   _transformCode (code) {
-    const { database } = this.props;
+    const { adapter } = this.props;
 
     const ast = j(code);
     const appDeclaration = ast.findDeclaration('app');
     const configureHooks = ast.findConfigure('hooks');
-    const requireCall = `const ${database} = require('./${database}');`;
+    const requireCall = `const ${adapter} = require('./${adapter}');`;
 
     if (appDeclaration.length === 0) {
       throw new Error('Could not find \'app\' variable declaration in app.js to insert database configuration. Did you modify app.js?');
@@ -27,7 +27,7 @@ module.exports = class ConnectionGenerator extends Generator {
     }
 
     appDeclaration.insertBefore(requireCall);
-    configureHooks.insertAfter(`app.configure(${database});`);
+    configureHooks.insertAfter(`app.configure(${adapter});`);
 
     return ast.toSource();
   }
@@ -46,63 +46,64 @@ module.exports = class ConnectionGenerator extends Generator {
     const parsed = url.parse(connectionString);
 
     switch (database) {
-    case 'nedb':
-      this.dependencies.push('nedb');
-      return connectionString.substring(7, connectionString.length);
+      case 'nedb':
+        this.dependencies.push('nedb');
+        return connectionString.substring(7, connectionString.length);
 
-    case 'rethinkdb':
-      this.dependencies.push('rethinkdbdash');
-      return {
-        db: parsed.path.substring(1, parsed.path.length),
-        servers: [
-          {
-            host: parsed.hostname,
-            port: parsed.port
-          }
-        ]
-      };
+      case 'rethinkdb':
+        this.dependencies.push('rethinkdbdash');
+        return {
+          db: parsed.path.substring(1, parsed.path.length),
+          servers: [
+            {
+              host: parsed.hostname,
+              port: parsed.port
+            }
+          ]
+        };
 
-    case 'memory':
-      return null;
+      case 'memory':
+        return null;
 
-    case 'mongodb':
-      this.dependencies.push(adapter);
-      return connectionString;
-
-    case 'mariadb':
-    case 'mysql':
-    case 'mssql':
-    // case oracle:
-    case 'postgres': // eslint-disable-line no-fallthrough
-    case 'sqlite':
-      this.dependencies.push(adapter);
-
-      if (sqlPackages[database]) {
-        this.dependencies.push(sqlPackages[database]);
-      }
-
-      if (adapter === 'sequelize') {
+      case 'mongodb':
+        this.dependencies.push(adapter);
         return connectionString;
-      }
 
-      return {
-        client: sqlPackages[database],
-        connection: database === 'sqlite' ? {
-          filename: connectionString.substring(9, connectionString.length)
-        } : connectionString
-      };
+      case 'mariadb':
+      case 'mysql':
+      case 'mssql':
+      // case oracle:
+      case 'postgres': // eslint-disable-line no-fallthrough
+      case 'sqlite':
+        this.dependencies.push(adapter);
 
-    default:
-      throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
+        if (sqlPackages[database]) {
+          this.dependencies.push(sqlPackages[database]);
+        }
+
+        if (adapter === 'sequelize') {
+          return connectionString;
+        }
+
+        return {
+          client: sqlPackages[database],
+          connection: database === 'sqlite' ? {
+            filename: connectionString.substring(9, connectionString.length)
+          } : connectionString
+        };
+
+      default:
+        throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
     }
   }
 
   _writeConfiguration () {
     const { database } = this.props;
     const config = Object.assign({}, this.defaultConfig);
+    const configuration = this._getConfiguration();
 
     if (!config[database]) {
-      config[database] = this._getConfiguration();
+      config[database] = configuration;
 
       this.conflicter.force = true;
       this.fs.writeJSON(
@@ -265,7 +266,7 @@ module.exports = class ConnectionGenerator extends Generator {
     }
 
     if (template) {
-      const dbFile = `${database}.js`;
+      const dbFile = `${adapter}.js`;
       const templateExists = this.fs.exists(this.destinationPath(this.libDirectory, dbFile));
 
       // If the file doesn't exist yet, add it to the app.js
