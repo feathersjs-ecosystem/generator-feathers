@@ -43,7 +43,7 @@ module.exports = class ConnectionGenerator extends Generator {
     };
 
     const { connectionString, database, adapter } = this.props;
-    const parsed = url.parse(connectionString);
+    const parsed = url.parse(connectionString.connection);
 
     switch (database) {
     case 'nedb':
