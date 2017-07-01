@@ -43,7 +43,7 @@ module.exports = class ConnectionGenerator extends Generator {
     };
 
     const { connectionString, database, adapter } = this.props;
-    const parsed = url.parse(connectionString.connection);
+    const parsed = url.parse(connectionString);
 
     switch (database) {
     case 'nedb':
@@ -237,10 +237,14 @@ module.exports = class ConnectionGenerator extends Generator {
         when (current) {
           const answers = getProps(current);
           const { database } = answers;
-          const connectionString = defaultConfig[database];
+          const connection = defaultConfig[database];
 
-          if (connectionString) {
-            setProps({ connectionString });
+          if (connection) {
+            if(connection.connection){
+              setProps({ connectionString:connection.connection });
+            }else{
+              setProps({ connectionString:connection });
+            }
             return false;
           }
 
