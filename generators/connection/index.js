@@ -35,7 +35,7 @@ module.exports = class ConnectionGenerator extends Generator {
   _getConfiguration () {
     const sqlPackages = {
       mariadb: 'mysql',
-      mysql: 'mysql',
+      mysql: 'mysql2',
       mssql: 'tedious',
       postgres: 'pg@6',
       sqlite: 'sqlite3'
