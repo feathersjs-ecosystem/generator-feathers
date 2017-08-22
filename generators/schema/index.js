@@ -33,7 +33,7 @@ module.exports = class SchemaGenerator extends Generator {
       throw new Error('Count not find module.exports.');
     }
 
-    moduleExports.insertBefore(`const ${this.props.snakeName}Schema = require(\'./${this.props.kebabName}.schema\');`);
+    moduleExports.insertBefore(`const ${this.props.snakeName}Schema = require('./${this.props.kebabName}.schema');`);
     ast.insertHookAsIs('before', 'create', `...${this.props.snakeName}Schema.hooks`);
     ast.insertHookAsIs('before', 'update', `...${this.props.snakeName}Schema.hooks`);
     ast.insertHookAsIs('before', 'patch', `...${this.props.snakeName}Schema.hooks`);
