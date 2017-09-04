@@ -11,7 +11,7 @@ module.exports = function () {
   // Set up authentication with the secret
   app.configure(authentication(config));
   app.configure(jwt());<% if(strategies.indexOf('local') !== -1) { %>
-  app.configure(local(config.local));<% } %>
+  app.configure(local());<% } %>
 <% oauthProviders.forEach(provider => { %>
   app.configure(oauth2(Object.assign({
     name: '<%= provider.name %>',
