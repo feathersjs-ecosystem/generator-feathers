@@ -143,8 +143,14 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath('app.js'),
-      this.destinationPath(props.src, 'app.js'),
+      this.templatePath('tsconfig.json'),
+      this.destinationPath('', 'tsconfig.json'),
+      context
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('app.ts'),
+      this.destinationPath(props.src, 'app.ts'),
       context
     );
 
