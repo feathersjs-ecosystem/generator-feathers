@@ -36,6 +36,8 @@ module.exports = class AppGenerator extends Generator {
     ];
 
     this.devDependencies = [
+      '@types/winston',
+      '@types/mocha',
       'eslint',
       'mocha',
       'request',

@@ -1,7 +1,7 @@
 // Application hooks that run for every service
 const logger = require('./hooks/logger');
 
-export default {
+export const appHooks = {
   before: {
     all: [],
     find: [],

@@ -53,6 +53,7 @@
     "yeoman-generator": "^1.0.1"
   },
   "devDependencies": {
+    "@types/winston": "^2.3.5",
     "body-parser": "^1.17.2",
     "compression": "^1.6.2",
     "cors": "^2.8.3",

@@ -16,7 +16,7 @@ import * as notFound from 'feathers-errors/not-found';
 
 import * as middleware from './middleware';
 import * as services from './services';
-import * as appHooks from './app.hooks';
+import { appHooks } from './app.hooks';
 
 export const app = feathers();
 
