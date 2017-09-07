@@ -11,8 +11,16 @@ try {
   yarnInstalled = false;
 }
 
+var typescriptInstalled;
+try {
+  cmd('tsc --version').toString();
+  typescriptInstalled = true;
+} catch (err) {
+  typescriptInstalled = false;
+}
+
 module.exports = class AppGenerator extends Generator {
-  constructor (args, opts) {
+  constructor(args, opts) {
     super(args, opts);
 
     this.props = {
@@ -36,6 +44,8 @@ module.exports = class AppGenerator extends Generator {
     ];
 
     this.devDependencies = [
+      '@types/winston',
+      '@types/mocha',
       'eslint',
       'mocha',
       'request',
@@ -43,7 +53,7 @@ module.exports = class AppGenerator extends Generator {
     ];
   }
 
-  prompting () {
+  prompting() {
     const dependencies = this.dependencies.concat(this.devDependencies)
       .concat(['feathers-rest', 'feathers-socketio', 'feathers-primus']);
     const prompts = [{
@@ -51,7 +61,7 @@ module.exports = class AppGenerator extends Generator {
       message: 'Project name',
       when: !this.pkg.name,
       default: this.props.name,
-      validate (input) {
+      validate(input) {
         // The project name can not be the same as any of the dependencies
         // we are going to install
         const isSelfReferential = dependencies.some(dependency => {
@@ -104,35 +114,42 @@ module.exports = class AppGenerator extends Generator {
       }, {
         name: 'Realtime via Primus',
         value: 'primus',
-      }],
-      validate (input) {
-        if (input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
-          return 'You can only pick SocketIO or Primus, not both.';
-        }
-
-        return true;
-      }
-    }];
+      }]
+    }, {
+      name: 'language',
+      type: 'list',
+      message: 'Which language would you like to use?',
+      default: typescriptInstalled ? 'ts' : 'js',
+      choices: [{
+        name: 'Javascript',
+        value: 'js'
+      }, {
+        name: 'TypeScript',
+        value: 'ts'
+      }]
+    },];
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props);
     });
   }
 
-  writing () {
+  writing() {
     const props = this.props;
     const pkg = this.pkg = makeConfig.package(this);
     const context = Object.assign({}, props, {
-      hasProvider (name) {
+      hasProvider(name) {
         return props.providers.indexOf(name) !== -1;
       }
     });
+
+    let lang = props.language; 
 
     // Static content for the root folder (including dotfiles)
     this.fs.copy(this.templatePath('static'), this.destinationPath());
     this.fs.copy(this.templatePath('static', '.*'), this.destinationPath());
     // Static content for the directories.lib folder
-    this.fs.copy(this.templatePath('src'), this.destinationPath(props.src));
+      this.fs.copy(this.templatePath('src', '*.' + lang), this.destinationPath(props.src));
     // This hack is necessary because NPM does not publish `.gitignore` files
     this.fs.copy(this.templatePath('_gitignore'), this.destinationPath('', '.gitignore'));
 
@@ -142,11 +159,19 @@ module.exports = class AppGenerator extends Generator {
       context
     );
 
-    this.fs.copyTpl(
-      this.templatePath('app.js'),
-      this.destinationPath(props.src, 'app.js'),
-      context
-    );
+    if (lang == 'ts') {
+      this.fs.copyTpl(
+        this.templatePath('tsconfig.json'),
+        this.destinationPath('', 'tsconfig.json'),
+        context
+      );
+
+      this.fs.copyTpl(
+        this.templatePath('app.ts'),
+        this.destinationPath(props.src, 'app.ts'),
+        context
+      );
+    }
 
     this.fs.copyTpl(
       this.templatePath('app.test.js'),
@@ -170,7 +195,7 @@ module.exports = class AppGenerator extends Generator {
     );
   }
 
-  install () {
+  install() {
     this.props.providers.forEach(
       provider => this.dependencies.push(`feathers-${provider}`)
     );

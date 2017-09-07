@@ -26,6 +26,8 @@ module.exports = function(generator) {
       [packager]: version
     },
     'scripts': {
+      pretest: 'tsc',
+      prestart: 'tsc',
       test: 'npm run eslint && npm run mocha',
       eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
       start: `node ${lib}/`,

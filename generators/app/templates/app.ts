@@ -1,24 +1,24 @@
-const path = require('path');
-const favicon = require('serve-favicon');
-const compress = require('compression');
-const cors = require('cors');
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
+import * as path from 'path';
+import * as favicon from 'serve-favicon';
+import * as compress from 'compression';
+import * as cors from 'cors';
+import * as helmet from 'helmet';
+import * as bodyParser from 'body-parser';
 
-const feathers = require('feathers');
-const configuration = require('feathers-configuration');
-const hooks = require('feathers-hooks');
-<% if (hasProvider('rest')) { %>const rest = require('feathers-rest');<% } %>
-<% if (hasProvider('socketio')) { %>const socketio = require('feathers-socketio');<% } %>
-<% if (hasProvider('primus')) { %>const primus = require('feathers-primus');<% } %>
-const handler = require('feathers-errors/handler');
-const notFound = require('feathers-errors/not-found');
+import * as feathers from 'feathers';
+import * as configuration from 'feathers-configuration';
+import * as hooks from 'feathers-hooks';
+<% if (hasProvider('rest')) { %>import * as rest from 'feathers-rest';<% } %>
+<% if (hasProvider('socketio')) { %>import * as socketio from 'feathers-socketio';<% } %>
+<% if (hasProvider('primus')) { %>import * as primus from 'feathers-primus';<% } %>
+import * as handler from 'feathers-errors/handler';
+import * as notFound from 'feathers-errors/not-found';
 
-const middleware = require('./middleware');
-const services = require('./services');
-const appHooks = require('./app.hooks');
+import * as middleware from './middleware';
+import * as services from './services';
+import { appHooks } from './app.hooks';
 
-const app = feathers();
+export const app = feathers();
 
 // Load app configuration
 app.configure(configuration());
@@ -47,4 +47,3 @@ app.use(handler());
 
 app.hooks(appHooks);
 
-module.exports = app;
