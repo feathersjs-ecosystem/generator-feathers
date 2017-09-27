@@ -29,6 +29,7 @@ module.exports = function(generator) {
       test: 'npm run eslint && npm run mocha',
       eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
       start: `node ${lib}/`,
+      startLatest: `"node --experimental-modules --inspect=9030 ${lib}/"`,
       mocha: 'mocha test/ --recursive'
     }
   };
