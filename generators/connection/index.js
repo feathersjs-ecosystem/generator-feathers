@@ -1,7 +1,7 @@
 const { snakeCase } = require('lodash');
 const url = require('url');
+const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
-const j = require('../../lib/transform');
 
 module.exports = class ConnectionGenerator extends Generator {
   constructor (args, opts) {

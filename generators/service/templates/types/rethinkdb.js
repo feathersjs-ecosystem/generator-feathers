@@ -3,8 +3,7 @@ const createService = require('feathers-rethinkdb');
 const hooks = require('./<%= kebabName %>.hooks');
 const filters = require('./<%= kebabName %>.filters');
 
-module.exports = function () {
-  const app = this;
+module.exports = function (app) {
   const Model = app.get('rethinkdbClient');
   const paginate = app.get('paginate');
 

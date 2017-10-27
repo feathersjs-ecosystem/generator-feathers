@@ -3,8 +3,7 @@ const createService = require('feathers-mongodb');
 const hooks = require('./<%= kebabName %>.hooks');
 const filters = require('./<%= kebabName %>.filters');
 
-module.exports = function () {
-  const app = this;
+module.exports = function (app) {
   const paginate = app.get('paginate');
   const mongoClient = app.get('mongoClient');
   const options = { paginate };
