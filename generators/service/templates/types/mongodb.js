@@ -1,7 +1,6 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
 const createService = require('feathers-mongodb');
 const hooks = require('./<%= kebabName %>.hooks');
-const filters = require('./<%= kebabName %>.filters');
 
 module.exports = function (app) {
   const paginate = app.get('paginate');
@@ -20,7 +19,11 @@ module.exports = function (app) {
 
   service.hooks(hooks);
 
-  if (service.filter) {
-    service.filter(filters);
-  }
+  app.publish(() => {
+    // Here you can add event publishers to channels set up in `channels.js`
+    // To publish only for a specific event use `app.publish(eventname, () => {})`
+
+    // e.g. to publish all service events to all authenticated users use
+    // return app.channel('authenticated');
+  });
 };
