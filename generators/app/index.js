@@ -1,7 +1,6 @@
 const Generator = require('../../lib/generator');
 const path = require('path');
 const makeConfig = require('./configs');
-const cmd = require('child_process').execSync;
 const { kebabCase } = require('lodash');
 
 module.exports = class AppGenerator extends Generator {
