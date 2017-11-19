@@ -3,6 +3,7 @@ const favicon = require('serve-favicon');
 const compress = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
+const logger = require('winston');
 
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
@@ -10,7 +11,6 @@ const express = require('@feathersjs/express');
 <% if (hasProvider('socketio')) { %>const socketio = require('@feathersjs/socketio');<% } %>
 <% if (hasProvider('primus')) { %>const primus = require('@feathersjs/primus');<% } %>
 
-const errorLogger = require('./middleware/error-logger');
 const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
@@ -43,8 +43,7 @@ app.configure(channels);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
-app.use(errorLogger());
-app.use(express.errorHandler());
+app.use(express.errorHandler({ logger }));
 
 app.hooks(appHooks);
 
