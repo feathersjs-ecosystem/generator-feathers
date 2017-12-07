@@ -7,10 +7,10 @@ module.exports = function (app) {
   const promise = MongoClient.connect(config).then(client => {
     // For mongodb <= 2.2
     if(client.collection) {
-      return client
+      return client;
     }
     
-    return client.db(dbName)
+    return client.db(dbName);
   });
 
   app.set('mongoClient', promise);
