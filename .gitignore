@@ -29,3 +29,5 @@ node_modules
 
 # yarn config files and logs
 yarn*
+
+.idea
