@@ -17,7 +17,7 @@ npm install -g yo
 Then install the feathers generator.
 
 ```bash
-npm install -g yo generator-feathers-namespace
+npm install -g yo generator-feathers
 ```
 
 ## Usage
