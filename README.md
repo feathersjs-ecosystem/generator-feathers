@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/feathersjs/generator-feathers.png?branch=master)](https://travis-ci.org/feathersjs/generator-feathers)
 
-> A Yeoman generator for a Feathers application
+> A Yeoman generator for a Feathers application. This is a fork of the generator-feathers that places services namespaced with a . on their own url instead of the root url. I.E. yo feathers:service foo.bar would create the following endpoint: /foo/bar It would also place bar as a service within a foo parent directory
 
 ## Installation
 
@@ -17,7 +17,7 @@ npm install -g yo
 Then install the feathers generator.
 
 ```bash
-npm install -g yo generator-feathers
+npm install -g yo generator-feathers-namespace
 ```
 
 ## Usage
