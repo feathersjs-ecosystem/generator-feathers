@@ -35,14 +35,14 @@
     "node": ">= 6.0.0"
   },
   "scripts": {
-    "publish": "git push origin --tags && npm run changelog && git push origin",
-    "release:pre": "npm version prerelease && npm publish --tag pre",
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
+    "publish": "git push origin --tags && yarn run changelog && git push origin",
+    "release:pre": "yarn version prerelease && yarn publish --tag pre",
+    "release:patch": "yarn version patch && yarn publish",
+    "release:minor": "yarn version minor && yarn publish",
+    "release:major": "yarn version major && yarn publish",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "eslint": "eslint lib/. generators/**/index.js test/. --config .eslintrc.json",
-    "test": "npm run eslint && npm run mocha",
+    "test": "yarn run eslint && yarn run mocha",
     "mocha": "mocha test/generators.test.js --timeout 300000 --exit"
   },
   "dependencies": {
