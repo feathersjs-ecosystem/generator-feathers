@@ -66,8 +66,8 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'Which path should the service be registered on?',
         when: !props.path,
         default(answers) {
-          const name = (answers.name || props.name).split('.').join('/');
-          return `/${_.kebabCase(name)}`;
+          
+          return `/${kebabPath(answers.name || props.name)}`;
         },
         validate(input) {
           if(input.trim() === '') {
