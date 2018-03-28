@@ -3,6 +3,7 @@ const j = require('@feathersjs/tools').transform;
 const crypto = require('crypto');
 
 const Generator = require('../../lib/generator');
+
 const OAUTH2_STRATEGY_MAPPINGS = {
   auth0: 'passport-auth0',
   google: 'passport-google-oauth20',

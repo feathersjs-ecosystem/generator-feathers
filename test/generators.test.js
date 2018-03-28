@@ -64,6 +64,7 @@ describe('generator-feathers', function() {
 
   it('feathers:app', () => 
     runTest('starts and shows the index page').then(() => {
+      // eslint-disable-next-line import/no-dynamic-require
       const pkg = require(path.join(appDir, 'package.json'));
 
       assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
