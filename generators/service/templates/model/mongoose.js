@@ -11,5 +11,5 @@ module.exports = function (app) {
     timestamps: true
   });
 
-  return mongooseClient.model('<%= dotName %>', <%= camelName %>);
+  return mongooseClient.model('<%= dotCamelName %>', <%= camelName %>);
 };
