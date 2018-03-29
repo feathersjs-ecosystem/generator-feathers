@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
-const {snakePath, kebabPath, camelPath, dotName, backOutOf} = require('../helpers/path-helpers');
+const {kebabPath, dotName, backOutOf} = require('../helpers/path-helpers');
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -92,12 +92,10 @@ module.exports = class ServiceGenerator extends Generator {
         requiresAuth: false
       }, props, answers, {
         snakeName: _.snakeCase(name),
-        snakePath: snakePath(name),
         kebabName: _.kebabCase(name),
         kebabPath: kebabPath(name),
         camelName: _.camelCase(name),
-        camelPath: camelPath(name),
-        dotName: dotName(name, _.camelCase),
+        dotCamelName: dotName(name, _.camelCase),
       });
     });
   }
