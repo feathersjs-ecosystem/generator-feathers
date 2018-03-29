@@ -146,7 +146,7 @@ module.exports = class ServiceGenerator extends Generator {
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
       libDirectory: this.libDirectory,
-      modelName: hasModel ? `${path.join(backOutOf('services', kebabPath), 'models', kebabPath, kebabName).replace(/\\/g, '/')}.model` : null,
+      modelName: hasModel ? `${path.join(backOutOf('services', kebabPath), 'models', kebabPath).replace(/\\/g, '/')}.model` : null,
       path: stripSlashes(this.props.path),
       serviceModule
     });
@@ -184,7 +184,7 @@ module.exports = class ServiceGenerator extends Generator {
       // Copy the model
       this.fs.copyTpl(
         this.templatePath('model', modelTpl),
-        this.destinationPath(this.libDirectory, 'models', kebabPath, `${context.modelName}.js`),
+        this.destinationPath(this.libDirectory, 'models', `${kebabPath}.model.js`),
         context
       );
     }
