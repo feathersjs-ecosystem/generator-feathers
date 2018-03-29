@@ -275,10 +275,10 @@ describe('generator-feathers', function() {
         .withPrompts({
           adapter,
           database,
-          name: adapter + '.test',
+          name: `${adapter}.test`,
         })
         .withOptions({ skipInstall: false })
-        .then(() => runTest(`'${adapter}' service`))
+        .then(() => runTest(`'${adapter}.test' service`))
         .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
         .then(delay(1000))
         .then(({ child }) => {
