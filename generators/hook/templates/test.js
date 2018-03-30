@@ -1,6 +1,6 @@
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
-const <%= camelName %> = require('<%= appDir %>/<%= libDirectory %>/hooks/<%= kebabPath %>/<%= kebabName %>');
+const <%= camelName %> = require('<%= appDir %>/<%= libDirectory %>/hooks/<%= kebabPath %>');
 
 describe('\'<%= name %>\' hook', () => {
   let app;

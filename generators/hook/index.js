@@ -170,7 +170,7 @@ module.exports = class HookGenerator extends Generator {
     const context = Object.assign({
       libDirectory: this.libDirectory
     }, this.props);
-    const mainFile = this.destinationPath(this.libDirectory, 'hooks', context.kebabPath, `${context.kebabName}.js`);
+    const mainFile = this.destinationPath(this.libDirectory, 'hooks', `${context.kebabPath}.js`);
 
     if (!this.fs.exists(mainFile) && context.type) {
       this.props.services.forEach(serviceName =>
