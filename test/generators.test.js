@@ -64,6 +64,7 @@ describe('generator-feathers', function() {
 
   it('feathers:app', () => 
     runTest('starts and shows the index page').then(() => {
+      // eslint-disable-next-line import/no-dynamic-require
       const pkg = require(path.join(appDir, 'package.json'));
 
       assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
@@ -238,6 +239,53 @@ describe('generator-feathers', function() {
 
           return rp({
             url: `http://localhost:3030/${adapter}`,
+            method: 'post',
+            json: true,
+            body: { text }
+          }).then(response => {
+            if(id) {
+              assert.ok(typeof response[id] !== 'undefined');
+            }
+            
+            assert.equal(response.text, text);
+          }).then(() => child.kill())
+            .catch(e =>
+              new Promise((resolve, reject) => {
+                child.once('exit', () => reject(e));
+                child.kill('SIGKILL');
+              })
+            );
+        });
+    }
+
+    it('generic', () => testServiceGenerator('generic'));
+    it('memory', () => testServiceGenerator('memory', null, 'id'));
+    it('nedb', () => testServiceGenerator('nedb', null, '_id'));
+    it('mongodb', () => testServiceGenerator('mongodb', 'mongodb', '_id'));
+    it('mongoose', () => testServiceGenerator('mongoose', 'mongodb', '_id'));
+    it('knex', () => testServiceGenerator('knex', 'sqlite', 'id'));
+    it('sequelize', () => testServiceGenerator('sequelize', 'sqlite', 'id'));
+    it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
+  });  
+  
+  describe('feathers:service-namespace', () => {
+    function testServiceGenerator(adapter, database, id = null) {
+      return helpers.run(path.join(__dirname, '..', 'generators', 'service'))
+        .inTmpDir(() => process.chdir(appDir))
+        .withPrompts({
+          adapter,
+          database,
+          name: `${adapter}.test`,
+        })
+        .withOptions({ skipInstall: false })
+        .then(() => runTest(`'${adapter}.test' service`))
+        .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
+        .then(delay(1000))
+        .then(({ child }) => {
+          const text = 'This is a test';
+
+          return rp({
+            url: `http://localhost:3030/${adapter}/test`,
             method: 'post',
             json: true,
             body: { text }

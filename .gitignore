@@ -26,3 +26,8 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+# yarn config files and logs
+yarn*
+
+.idea

@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
+const {kebabPath, dotName, backOutOf} = require('../helpers/path-helpers');
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -65,7 +66,8 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'Which path should the service be registered on?',
         when: !props.path,
         default(answers) {
-          return `/${_.kebabCase(answers.name || props.name)}`;
+          
+          return `/${kebabPath(answers.name || props.name)}`;
         },
         validate(input) {
           if(input.trim() === '') {
@@ -84,24 +86,26 @@ module.exports = class ServiceGenerator extends Generator {
     ];
 
     return this.prompt(prompts).then(answers => {
-      const name = answers.name || props.name;
+      const name = (answers.name || props.name);
 
       this.props = Object.assign({
         requiresAuth: false
       }, props, answers, {
         snakeName: _.snakeCase(name),
         kebabName: _.kebabCase(name),
-        camelName: _.camelCase(name)
+        kebabPath: kebabPath(name),
+        camelName: _.camelCase(name),
+        dotCamelName: dotName(name, _.camelCase),
       });
     });
   }
 
   _transformCode(code) {
-    const { camelName, kebabName } = this.props;
+    const { camelName, kebabPath, kebabName } = this.props;
     const ast = j(code);
     const mainExpression = ast.find(j.FunctionExpression)
       .closest(j.ExpressionStatement);
-    const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
+    const serviceRequire = `const ${camelName} = require('./${kebabPath}/${kebabName}.service.js');`;
     const serviceCode = `app.configure(${camelName});`;
     
     if(mainExpression.length !== 1) {
@@ -123,7 +127,7 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing() {
-    const { adapter, kebabName } = this.props;
+    const { adapter, kebabName, kebabPath } = this.props;
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
       memory: 'feathers-memory',
@@ -135,12 +139,12 @@ module.exports = class ServiceGenerator extends Generator {
       rethinkdb: 'feathers-rethinkdb'
     };
     const serviceModule = moduleMappings[adapter];
-    const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
+    const mainFile = this.destinationPath(this.libDirectory, 'services', kebabPath, `${kebabName}.service.js`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
       libDirectory: this.libDirectory,
-      modelName: hasModel ? `${kebabName}.model` : null,
+      modelName: hasModel ? `${path.join(backOutOf('services', kebabPath), 'models', kebabPath).replace(/\\/g, '/')}.model` : null,
       path: stripSlashes(this.props.path),
       serviceModule
     });
@@ -169,7 +173,7 @@ module.exports = class ServiceGenerator extends Generator {
       // Copy the generic service class
       this.fs.copyTpl(
         this.templatePath(this.hasAsync ? 'class-async.js' : 'class.js'),
-        this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.class.js`),
+        this.destinationPath(this.libDirectory, 'services', kebabPath, `${kebabName}.class.js`),
         context
       );
     }
@@ -178,14 +182,14 @@ module.exports = class ServiceGenerator extends Generator {
       // Copy the model
       this.fs.copyTpl(
         this.templatePath('model', modelTpl),
-        this.destinationPath(this.libDirectory, 'models', `${context.modelName}.js`),
+        this.destinationPath(this.libDirectory, 'models', `${kebabPath}.model.js`),
         context
       );
     }
 
     this.fs.copyTpl(
       this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
-      this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`),
+      this.destinationPath(this.libDirectory, 'services', kebabPath, `${kebabName}.hooks.js`),
       context
     );
 
@@ -205,8 +209,8 @@ module.exports = class ServiceGenerator extends Generator {
 
     this.fs.copyTpl(
       this.templatePath('test.js'),
-      this.destinationPath(this.testDirectory, 'services', `${kebabName}.test.js`),
-      context
+      kebabPath.split('/').length === 1 ? this.destinationPath(this.testDirectory, 'services', `${kebabName}.test.js`) : this.destinationPath(this.testDirectory, 'services', kebabPath, `${kebabName}.test.js`),
+      Object.assign({}, context, {appDir: kebabPath.split('/').length === 1 ? backOutOf(this.testDirectory, 'services') : backOutOf(this.testDirectory, 'services', kebabPath)})
     );
 
     if (serviceModule.charAt(0) !== '.') {

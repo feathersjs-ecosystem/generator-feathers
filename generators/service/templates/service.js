@@ -1,14 +1,20 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
 const createService = require('<%= serviceModule %>');<% if(modelName) { %>
-const createModel = require('../../models/<%= modelName %>');<% } %>
+const createModel = require('<%= modelName %>');<% } %>
 const hooks = require('./<%= kebabName %>.hooks');
-
+<% // Choose the correct service name depending on the model being used %>
 module.exports = function (app) {
   <% if (modelName) { %>const Model = createModel(app);<% } %>
   const paginate = app.get('paginate');
 
-  const options = {
-    name: '<%= kebabName %>',<% if (modelName) { %>
+  const options = {<% switch(adapter.toLowerCase()) {
+    case 'mongodb':
+    case 'mongoose': %>
+    name: '<%= dotCamelName %>',<% break; %>
+    <% case 'sequelize':
+    case 'knex': %>
+    name: '<%= snakeName %>',<% break; %>
+    <% default: %> name: '<%= kebabName %>',<% break; } if (modelName) { %>
     Model,<% } %>
     paginate
   };
