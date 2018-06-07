@@ -160,12 +160,12 @@ module.exports = class HookGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath(this.hasAsync ? 'hook-async.js' : 'hook.js'),
+      this.templatePath('hook.js'),
       mainFile, context
     );
 
     this.fs.copyTpl(
-      this.templatePath(this.hasAsync ? 'test-async.js' : 'test.js'),
+      this.templatePath('test.js'),
       this.destinationPath(this.testDirectory, 'hooks', `${context.kebabName}.test.js`),
       context
     );
