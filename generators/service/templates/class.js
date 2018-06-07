@@ -4,34 +4,34 @@ class Service {
     this.options = options || {};
   }
 
-  find (params) {
-    return Promise.resolve([]);
+  async find (params) {
+    return [];
   }
 
-  get (id, params) {
-    return Promise.resolve({
+  async get (id, params) {
+    return {
       id, text: `A new message with ID: ${id}!`
-    });
+    };
   }
 
-  create (data, params) {
+  async create (data, params) {
     if (Array.isArray(data)) {
       return Promise.all(data.map(current => this.create(current, params)));
     }
 
-    return Promise.resolve(data);
+    return data;
   }
 
-  update (id, data, params) {
-    return Promise.resolve(data);
+  async update (id, data, params) {
+    return data;
   }
 
-  patch (id, data, params) {
-    return Promise.resolve(data);
+  async patch (id, data, params) {
+    return data;
   }
 
-  remove (id, params) {
-    return Promise.resolve({ id });
+  async remove (id, params) {
+    return { id };
   }
 }
 

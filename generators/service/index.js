@@ -176,7 +176,7 @@ module.exports = class ServiceGenerator extends Generator {
     } else if(adapter === 'generic') {
       // Copy the generic service class
       this.fs.copyTpl(
-        this.templatePath(this.hasAsync ? 'class-async.js' : 'class.js'),
+        this.templatePath('class.js'),
         this.destinationPath(... serviceFolder, `${kebabName}.class.js`),
         context
       );
