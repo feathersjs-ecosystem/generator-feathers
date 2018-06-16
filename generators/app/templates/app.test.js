@@ -43,7 +43,10 @@ describe('Feathers application tests', () => {
     it('shows a 404 JSON error without stack trace', () => {
       return rp({
         url: getUrl('path/to/nowhere'),
-        json: true
+        json: true,
+        headers: {
+          'Accept': 'application/json'
+        }
       }).catch(res => {
         assert.equal(res.statusCode, 404);
         assert.equal(res.error.code, 404);
