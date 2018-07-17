@@ -145,8 +145,8 @@ module.exports = class AuthGenerator extends Generator {
       '@feathersjs/authentication-jwt'
     ];
     const context = Object.assign({
-      kebabEntity: _.kebabCase(this.props.entity),
-      camelEntity: _.camelCase(this.props.entity),
+      kebabEntity: this.props.entity.split('.').map(part => _.kebabCase(part)).join('.'),
+      camelEntity: this.props.entity.split('.').map(part => _.camelCase(part)).join('.'),
       oauthProviders: []
     }, this.props);
 

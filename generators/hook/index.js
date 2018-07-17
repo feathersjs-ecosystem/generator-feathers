@@ -141,8 +141,8 @@ module.exports = class HookGenerator extends Generator {
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props, {
-        kebabName: kebabCase(props.name),
-        camelName: camelCase(props.name)
+        kebabName: props.name.split('.').map(part => kebabCase(part)).join('.'),
+        camelName: props.name.split('.').map(part => camelCase(part)).join('.')
       });
     });
   }

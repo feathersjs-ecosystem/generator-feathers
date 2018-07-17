@@ -97,9 +97,9 @@ module.exports = class ServiceGenerator extends Generator {
         requiresAuth: false
       }, props, answers, {
         subfolder: parts,
-        snakeName: _.snakeCase(name),
-        kebabName: _.kebabCase(name),
-        camelName: _.camelCase(name)
+        snakeName: name.split('.').map(part => _.snakeCase(part)).join('.'),
+        kebabName: name.split('.').map(part => _.kebabCase(part)).join('.'),
+        camelName: name.split('.').map(part => _.camelCase(part)).join('.')
       });
     });
   }
