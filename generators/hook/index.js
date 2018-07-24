@@ -2,6 +2,7 @@ const path = require('path');
 const j = require('@feathersjs/tools').transform;
 const { kebabCase, camelCase, last } = require('lodash');
 const dir = require('node-dir');
+const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
 
 module.exports = class HookGenerator extends Generator {
@@ -141,8 +142,8 @@ module.exports = class HookGenerator extends Generator {
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props, {
-        kebabName: props.name.split('.').map(part => kebabCase(part)).join('.'),
-        camelName: props.name.split('.').map(part => camelCase(part)).join('.')
+        kebabName: validate(props.name).validForNewPackages ? props.name : kebabCase(props.name),
+        camelName: validate(props.name).validForNewPackages ? props.name : camelCase(props.name)
       });
     });
   }

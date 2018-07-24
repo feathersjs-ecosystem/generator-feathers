@@ -2,6 +2,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
 const j = require('@feathersjs/tools').transform;
+const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
 
 const templatePath = path.join(__dirname, 'templates');
@@ -97,9 +98,9 @@ module.exports = class ServiceGenerator extends Generator {
         requiresAuth: false
       }, props, answers, {
         subfolder: parts,
-        snakeName: name.split('.').map(part => _.snakeCase(part)).join('.'),
-        kebabName: name.split('.').map(part => _.kebabCase(part)).join('.'),
-        camelName: name.split('.').map(part => _.camelCase(part)).join('.')
+        snakeName: validate(name).validForNewPackages ? name : _.snakeCase(name),
+        kebabName: validate(name).validForNewPackages ? name : _.kebabCase(name),
+        camelName: validate(name).validForNewPackages ? name : _.camelCase(name)
       });
     });
   }
