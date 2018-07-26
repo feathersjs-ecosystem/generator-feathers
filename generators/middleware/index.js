@@ -22,7 +22,7 @@ module.exports = class MiddlewareGenerator extends Generator {
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props, {
         kebabName: validate(props.name).validForNewPackages ? props.name : kebabCase(props.name),
-        camelName: validate(props.name).validForNewPackages ? props.name : camelCase(props.name)
+        camelName: camelCase(props.name)
       });
     });
   }

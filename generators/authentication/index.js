@@ -147,7 +147,7 @@ module.exports = class AuthGenerator extends Generator {
     ];
     const context = Object.assign({
       kebabEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.kebabCase(this.props.entity),
-      camelEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.camelCase(this.props.entity),
+      camelEntity: _.camelCase(this.props.entity),
       oauthProviders: []
     }, this.props);
 

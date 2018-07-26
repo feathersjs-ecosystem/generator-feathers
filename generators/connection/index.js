@@ -1,7 +1,6 @@
 const { snakeCase } = require('lodash');
 const url = require('url');
 const j = require('@feathersjs/tools').transform;
-const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
 
 module.exports = class ConnectionGenerator extends Generator {
@@ -117,7 +116,7 @@ module.exports = class ConnectionGenerator extends Generator {
   prompting () {
     this.checkPackage();
 
-    const databaseName = validate(this.pkg.name).validForNewPackages ? this.pkg.name : snakeCase(this.pkg.name);
+    const databaseName = snakeCase(this.pkg.name);
     const { defaultConfig } = this;
 
     const getProps = answers => Object.assign({}, this.props, answers);
