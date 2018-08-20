@@ -195,6 +195,38 @@ describe('generator-feathers', function() {
           )
         ).then(() => runTest('starts and shows the index page'));
       });
+
+      it('sequelize w/ connection object instead of string', () => {
+        const databaseName = 'dbname';
+        const databasePort = '5432';
+        const databaseHostname = '127.0.0.1';
+        const databaseUsername = 'user';
+        const databasePassword = 'password';
+        const connectionObject = {
+          username: databaseUsername,
+          password: databasePassword,
+          hostname: databaseHostname,
+          port: databasePort,
+          database: databaseName,
+        };
+
+        return runConnectionGenerator({
+          database: 'postgres',
+          adapter: 'sequelize',
+          connectionStyle: 'connectionObject',
+          databaseName,
+          databasePort,
+          databaseHostname,
+          databaseUsername,
+          databasePassword
+        }).then(() =>
+          assert.jsonFileContent(
+            path.join(appDir, 'config', 'default.json'), {
+              postgres: connectionObject
+            }
+          )
+        ).then(() => runTest('starts and shows the index page'));
+      });
     });
 
     it('rethinkdb', () => {
