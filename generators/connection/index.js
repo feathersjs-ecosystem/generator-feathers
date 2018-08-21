@@ -41,7 +41,23 @@ module.exports = class ConnectionGenerator extends Generator {
       // oracle: 'oracle'
     };
 
-    const { connectionString, database, adapter } = this.props;
+    const {
+      connectionString,
+      databaseName,
+      databasePort,
+      databaseHostname,
+      databaseUsername,
+      databasePassword,
+      database,
+      adapter
+    } = this.props;
+    const connectionObject = {
+      username: databaseUsername,
+      password: databasePassword,
+      hostname: databaseHostname,
+      port: databasePort,
+      database: databaseName,
+    };
     let parsed = {};
 
     switch (database) {
@@ -82,7 +98,7 @@ module.exports = class ConnectionGenerator extends Generator {
       }
 
       if (adapter === 'sequelize') {
-        return connectionString;
+        return connectionString || connectionObject;
       }
 
       return {
@@ -214,6 +230,91 @@ module.exports = class ConnectionGenerator extends Generator {
         }
       },
       {
+        type: 'list',
+        name: 'connectionStyle',
+        message: 'How would you like to enter your database credentials?',
+        default: 'connectionString',
+        choices: [
+          { name: 'Connection string', value: 'connectionString' },
+          { name: 'Connection object', value: 'connectionObject' },
+        ],
+        when (current) {
+          const answers = getProps(current);
+          const { adapter, database } = answers;
+
+          return adapter === 'sequelize' && database !== 'mssql';
+        }
+      },
+      {
+        type: 'input',
+        name: 'databaseName',
+        message: 'Database name',
+        default: databaseName,
+        when (current) {
+          const answers = getProps(current);
+          const { connectionStyle } = answers;
+
+          return connectionStyle === 'connectionObject';
+        }
+      },
+      {
+        type: 'input',
+        name: 'databasePort',
+        message: 'Port',
+        default (current) {
+          const answers = getProps(current);
+          const { database } = answers;
+          const defaultPorts = {
+            mongodb: '27017',
+            mysql: '3306',
+            postgres: '5432',
+            rethinkdb: '28015',
+            mssql: '1433'
+          };
+
+          return defaultPorts[database];
+        },
+        when (current) {
+          const answers = getProps(current);
+          const { connectionStyle } = answers;
+
+          return connectionStyle === 'connectionObject';
+        }
+      },
+      {
+        type: 'input',
+        name: 'databaseHostname',
+        message: 'Hostname',
+        when (current) {
+          const answers = getProps(current);
+          const { connectionStyle } = answers;
+
+          return connectionStyle === 'connectionObject';
+        }
+      },
+      {
+        type: 'input',
+        name: 'databaseUsername',
+        message: 'Username',
+        when (current) {
+          const answers = getProps(current);
+          const { connectionStyle } = answers;
+
+          return connectionStyle === 'connectionObject';
+        }
+      },
+      {
+        type: 'password',
+        name: 'databasePassword',
+        message: 'Password',
+        when (current) {
+          const answers = getProps(current);
+          const { connectionStyle } = answers;
+
+          return connectionStyle === 'connectionObject';
+        }
+      },
+      {
         name: 'connectionString',
         message: 'What is the database connection string?',
         default (current) {
@@ -234,7 +335,8 @@ module.exports = class ConnectionGenerator extends Generator {
         },
         when (current) {
           const answers = getProps(current);
-          const { database } = answers;
+          const { connectionStyle, database } = answers;
+
           const connection = defaultConfig[database];
 
           if (connection) {
@@ -248,7 +350,7 @@ module.exports = class ConnectionGenerator extends Generator {
             return false;
           }
 
-          return database !== 'memory';
+          return connectionStyle !== 'connectionObject' && database !== 'memory';
         }
       }
     ];

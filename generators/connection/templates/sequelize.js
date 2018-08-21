@@ -38,15 +38,35 @@ const operatorsAliases = {
 };
 
 module.exports = function (app) {
-  const connectionString = app.get('<%= database %>');
-  const sequelize = new Sequelize(connectionString, {
+  const connection = app.get('<%= database %>');
+  const connectionOptions = {
     dialect: '<%= database %>',
     logging: false,
     operatorsAliases,
     define: {
       freezeTableName: true
     }
-  });
+  };
+  let sequelize;
+
+  if (typeof connection === 'string') {
+    sequelize = new Sequelize(connection, connectionOptions);
+  }
+  else {
+    connectionOptions.host = connection.host || connection.hostname;
+
+    if (connection.port) {
+      connectionOptions.port = connection.port;
+    }
+
+    sequelize = new Sequelize(
+      connection.database,
+      connection.username,
+      connection.password,
+      connectionOptions
+    );
+  }
+
   const oldSetup = app.setup;
 
   app.set('sequelizeClient', sequelize);
