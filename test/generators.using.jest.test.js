@@ -72,37 +72,34 @@ describe('generator-feathers with jest', () => {
   describe('feathers:service', () => {
     const testServiceGenerator = (adapter, database, id = null) => {
       return helpers
-      .run(path.join(__dirname, '../generators/service'))
-      .inTmpDir(() => process.chdir(appDir))
-      .withPrompts({ adapter, database, name: adapter, path: adapter })
-      .withOptions({ skipInstall: false })
-      .then(() => runTest(`test/services/${adapter}.test.js`))
-      .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
-      .then(delay(3000))
-      .then(({ child }) => {
-        const text = 'This is a jest.';
-        const body = { text };
-        if ('cassandra' === database) {
-          body.id = 1;
-        }
-        return rp({
-          url: `http://localhost:3030/${adapter}`,
-          method: 'post',
-          json: true,
-          body
-        })
-        .then(res => {
-          if (id) {
-            assert.ok(typeof res[id] !== 'undefined');
+        .run(path.join(__dirname, '../generators/service'))
+        .inTmpDir(() => process.chdir(appDir))
+        .withPrompts({ adapter, database, name: adapter, path: adapter })
+        .withOptions({ skipInstall: false })
+        .then(() => runTest(`test/services/${adapter}.test.js`))
+        .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
+        .then(delay(3000))
+        .then(({ child }) => {
+          const text = 'This is a jest.';
+          const body = { text };
+          if ('cassandra' === database) {
+            body.id = 1;
           }
-          assert.equal(res.text, text);
-        })
-        .then(() => child.kill())
-        .catch(e => new Promise((resolve, reject) => {
-          child.once('exit', () => reject(e));
-          child.kill('SIGKILL')
-        }));
-      });
+          return rp({
+            url: `http://localhost:3030/${adapter}`,
+            method: 'post',
+            json: true,
+            body
+          }).then(res => {
+            if (id) {
+              assert.ok(typeof res[id] !== 'undefined');
+            }
+            assert.equal(res.text, text);
+          }).then(() => child.kill()).catch(e => new Promise((resolve, reject) => {
+            child.once('exit', () => reject(e));
+            child.kill('SIGKILL');
+          }));
+        });
     };
 
     it('generic',   () => testServiceGenerator('generic'));

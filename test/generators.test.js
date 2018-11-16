@@ -69,9 +69,9 @@ describe('generator-feathers', function() {
       const pkg = require(path.join(appDir, 'package.json'));
       const tester = pkg.scripts.jest ? 'jest' : 'mocha';
       switch(tester) {
-        case 'jest': assert.ok(pkg.devDependencies.jest, 'Added jest as a devDependency'); break;
-        case 'mocha':
-        default: assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
+      case 'jest': assert.ok(pkg.devDependencies.jest, 'Added jest as a devDependency'); break;
+      case 'mocha':
+      default: assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
       }
     })
   );

@@ -36,9 +36,9 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'What is the name of the service?',
         validate(input) {
           switch(input.trim()) {
-            case '': return 'Service name can not be empty';
-            case 'authentication': return '`authentication` is a reserved service name';
-            default: return true;
+          case '': return 'Service name can not be empty';
+          case 'authentication': return '`authentication` is a reserved service name';
+          default: return true;
           }
         },
         when: !props.name
