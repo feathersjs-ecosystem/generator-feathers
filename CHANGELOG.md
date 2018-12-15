@@ -1,84 +1,23 @@
 # Change Log
 
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+## [v2.8.1](https://github.com/feathersjs/generator-feathers/tree/v2.8.1) (2018-12-15)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.6.1...v2.8.1)
 
-<a name="2.8.0"></a>
-# [2.8.0](https://github.com/feathersjs/feathers/compare/generator-feathers@2.7.1...generator-feathers@2.8.0) (2018-10-25)
+## [v2.6.1](https://github.com/feathersjs/generator-feathers/tree/v2.6.1) (2018-12-15)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.6.0...v2.6.1)
 
+**Closed issues:**
 
-### Bug Fixes
+- feathers-plus generate app crashing [\#394](https://github.com/feathersjs/generator-feathers/issues/394)
+- Valid password characters can break sequelize connection string [\#388](https://github.com/feathersjs/generator-feathers/issues/388)
+- Outdated README.md template [\#387](https://github.com/feathersjs/generator-feathers/issues/387)
+- mongodb config does not seem to wait for the connection to resolve [\#253](https://github.com/feathersjs/generator-feathers/issues/253)
 
-* Make Mocha a proper devDependency for every repository ([#1053](https://github.com/feathersjs/feathers/issues/1053)) ([9974803](https://github.com/feathersjs/feathers/commit/9974803))
+**Merged pull requests:**
 
-
-### Features
-
-* [@feathers](https://github.com/feathers)/cli: introduce option to choose jest for tests instead of mocha ([#1057](https://github.com/feathersjs/feathers/issues/1057)) ([1356a1c](https://github.com/feathersjs/feathers/commit/1356a1c))
-
-
-
-
-
-<a name="2.7.1"></a>
-## [2.7.1](https://github.com/feathersjs/feathers/compare/generator-feathers@2.7.0...generator-feathers@2.7.1) (2018-10-06)
-
-
-### Bug Fixes
-
-* Catch connection initialization errors ([#1043](https://github.com/feathersjs/feathers/issues/1043)) ([4f9acd6](https://github.com/feathersjs/feathers/commit/4f9acd6))
-
-
-
-
-
-<a name="2.7.0"></a>
-# [2.7.0](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.4...generator-feathers@2.7.0) (2018-09-24)
-
-
-### Bug Fixes
-
-* More robust parsing of mongodb connection string. Use new url parser. ([#1002](https://github.com/feathersjs/feathers/issues/1002)) ([74b31df](https://github.com/feathersjs/feathers/commit/74b31df))
-
-
-### Features
-
-* Added generators for feathers-objection & feathers-cassandra ([#1010](https://github.com/feathersjs/feathers/issues/1010)) ([c8b27d0](https://github.com/feathersjs/feathers/commit/c8b27d0))
-
-
-
-
-
-<a name="2.6.4"></a>
-## [2.6.4](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.3...generator-feathers@2.6.4) (2018-09-21)
-
-**Note:** Version bump only for package generator-feathers
-
-
-
-
-
-<a name="2.6.3"></a>
-## [2.6.3](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.2...generator-feathers@2.6.3) (2018-09-17)
-
-
-### Bug Fixes
-
-* Support Logger swallowing ([#995](https://github.com/feathersjs/feathers/issues/995)) ([5b3b37e](https://github.com/feathersjs/feathers/commit/5b3b37e)), closes [/github.com/feathersjs/generator-feathers/pull/392#issuecomment-420408312](https://github.com//github.com/feathersjs/generator-feathers/pull/392/issues/issuecomment-420408312)
-
-
-
-
-
-<a name="2.6.2"></a>
-## [2.6.2](https://github.com/feathersjs/feathers/compare/generator-feathers@2.6.1...generator-feathers@2.6.2) (2018-09-02)
-
-**Note:** Version bump only for package generator-feathers
-
-<a name="2.6.1"></a>
-## 2.6.1
-
-- Migrate to Monorepo ([feathers#462](https://github.com/feathersjs/feathers/issues/462))
+- Security update: ensure nodemon^1.18.7 [\#395](https://github.com/feathersjs/generator-feathers/pull/395) ([morphatic](https://github.com/morphatic))
+- Back merge with changes from monorepo to put back into own repository [\#393](https://github.com/feathersjs/generator-feathers/pull/393) ([daffl](https://github.com/daffl))
+- Remove reference to model generator from README.md template \(\#387\) [\#391](https://github.com/feathersjs/generator-feathers/pull/391) ([Alfredo-Delgado](https://github.com/Alfredo-Delgado))
 
 ## [v2.6.0](https://github.com/feathersjs/generator-feathers/tree/v2.6.0) (2018-08-13)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.5.6...v2.6.0)
