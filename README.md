@@ -1,6 +1,6 @@
 # generator-feathers
 
-[![Build Status](https://travis-ci.org/feathersjs/generator-feathers.png?branch=master)](https://travis-ci.org/feathersjs/generator-feathers)
+[![Build Status](https://travis-ci.org/feathersjs/generator-feathers.png?branch=master)](https://travis-ci.org/feathersjs/generator-feathers) [![Greenkeeper badge](https://badges.greenkeeper.io/feathersjs/generator-feathers.svg)](https://greenkeeper.io/)
 
 > A Yeoman generator for a Feathers application
 
