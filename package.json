@@ -77,7 +77,7 @@
     "feathers-memory": "^2.2.0",
     "feathers-mongodb": "^3.4.0",
     "feathers-mongoose": "^6.2.0",
-    "feathers-nedb": "^3.1.0",
+    "feathers-nedb": "^4.0.0",
     "feathers-objection": "^1.2.3",
     "feathers-rethinkdb": "^0.5.3",
     "feathers-sequelize": "^3.1.3",
