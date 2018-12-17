@@ -75,7 +75,7 @@
     "feathers-cassandra": "^1.1.4",
     "feathers-knex": "^4.0.0",
     "feathers-memory": "^3.0.0",
-    "feathers-mongodb": "^3.4.0",
+    "feathers-mongodb": "^4.0.0",
     "feathers-mongoose": "^6.2.0",
     "feathers-nedb": "^4.0.0",
     "feathers-objection": "^1.2.3",
