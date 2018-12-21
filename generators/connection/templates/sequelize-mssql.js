@@ -1,6 +1,5 @@
 const url = require('url');
 const Sequelize = require('sequelize');
-const { Op } = Sequelize;
 
 module.exports = function (app) {
   const connectionString = app.get('mssql');
