@@ -1,5 +1,21 @@
 # Change Log
 
+## [v2.8.2](https://github.com/feathersjs/generator-feathers/tree/v2.8.2) (2018-12-26)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.8.1...v2.8.2)
+
+**Closed issues:**
+
+- Best practice to extend a generator [\#399](https://github.com/feathersjs/generator-feathers/issues/399)
+
+**Merged pull requests:**
+
+- Update feathers-sequelize to the latest version 🚀 [\#402](https://github.com/feathersjs/generator-feathers/pull/402) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-mongoose to the latest version 🚀 [\#401](https://github.com/feathersjs/generator-feathers/pull/401) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-mongodb to the latest version 🚀 [\#400](https://github.com/feathersjs/generator-feathers/pull/400) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-nedb to the latest version 🚀 [\#398](https://github.com/feathersjs/generator-feathers/pull/398) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#397](https://github.com/feathersjs/generator-feathers/pull/397) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Add Greenkeeper badge 🌴 [\#396](https://github.com/feathersjs/generator-feathers/pull/396) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.8.1](https://github.com/feathersjs/generator-feathers/tree/v2.8.1) (2018-12-15)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.6.1...v2.8.1)
 
