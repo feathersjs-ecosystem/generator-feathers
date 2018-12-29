@@ -139,7 +139,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
       this.conflicter.force = true;
       this.fs.writeJSON(
-        this.destinationPath('config', 'default.json'),
+        this.destinationPath(this.configDirectory, 'default.json'),
         config
       );
     }
