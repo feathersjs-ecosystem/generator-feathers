@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.9.0](https://github.com/feathersjs/generator-feathers/tree/v2.9.0) (2018-12-29)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.8.3...v2.9.0)
+
+**Merged pull requests:**
+
+- Update feathers-cassandra to the latest version 🚀 [\#407](https://github.com/feathersjs/generator-feathers/pull/407) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Use createIndexes, and hide deprecation warnings. [\#406](https://github.com/feathersjs/generator-feathers/pull/406) ([samburgers](https://github.com/samburgers))
+- Feat/config path from package.json [\#405](https://github.com/feathersjs/generator-feathers/pull/405) ([jraut](https://github.com/jraut))
+
 ## [v2.8.3](https://github.com/feathersjs/generator-feathers/tree/v2.8.3) (2018-12-29)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.8.2...v2.8.3)
 
