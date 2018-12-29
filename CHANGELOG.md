@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.8.3](https://github.com/feathersjs/generator-feathers/tree/v2.8.3) (2018-12-29)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.8.2...v2.8.3)
+
+**Merged pull requests:**
+
+- Update feathers-objection to the latest version 🚀 [\#404](https://github.com/feathersjs/generator-feathers/pull/404) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-knex to the latest version 🚀 [\#403](https://github.com/feathersjs/generator-feathers/pull/403) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.8.2](https://github.com/feathersjs/generator-feathers/tree/v2.8.2) (2018-12-26)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.8.1...v2.8.2)
 
