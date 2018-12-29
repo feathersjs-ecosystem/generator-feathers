@@ -73,7 +73,7 @@
     "eslint": "^5.9.0",
     "express-cassandra": "^2.2.3",
     "feathers-cassandra": "^1.1.4",
-    "feathers-knex": "^4.0.0",
+    "feathers-knex": "^5.0.0",
     "feathers-memory": "^3.0.0",
     "feathers-mongodb": "^4.0.0",
     "feathers-mongoose": "^7.0.0",
