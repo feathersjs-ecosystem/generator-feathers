@@ -51,7 +51,7 @@
     "lodash": "^4.17.11",
     "node-dir": "^0.1.17",
     "randomstring": "^1.1.5",
-    "semver": "^5.6.0",
+    "semver": "^6.0.0",
     "validate-npm-package-name": "^3.0.0",
     "yeoman-generator": "^3.1.1"
   },
