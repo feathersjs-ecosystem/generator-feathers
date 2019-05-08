@@ -53,7 +53,7 @@
     "randomstring": "^1.1.5",
     "semver": "^6.0.0",
     "validate-npm-package-name": "^3.0.0",
-    "yeoman-generator": "^3.1.1"
+    "yeoman-generator": "^4.0.0"
   },
   "devDependencies": {
     "@feathersjs/authentication": "^2.1.13",
