@@ -8,8 +8,8 @@ describe('\'<%= name %>\' hook', () => {
     app = feathers();
 
     app.use('/dummy', {
-      get(id) {
-        return Promise.resolve({ id });
+      async get(id) {
+        return { id };
       }
     });
 
@@ -18,9 +18,9 @@ describe('\'<%= name %>\' hook', () => {
     });
   });
 
-  it('runs the hook', () => {
-    return app.service('dummy').get('test').then(result => {
-      expect(result).toEqual({ id: 'test' });
-    });
+  it('runs the hook', async () => {
+    expect.assertions(1);
+    const result = await app.service('dummy').get('test');
+    expect(result).toEqual({ id: 'test' });
   });
 });
