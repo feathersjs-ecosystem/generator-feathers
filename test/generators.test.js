@@ -306,19 +306,4 @@ describe('generator-feathers', function() {
     it.skip('cassandra', () => testServiceGenerator('cassandra', 'cassandra', 'id'));
     it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
   });
-
-  describe('feathers:authentication', () => {
-    it.skip('runs and initializes working local strategy', () => {
-      return helpers
-        .run(path.join(__dirname, '../generators/authentication'))
-        .withPrompts({
-          strategies: ['local'],
-          entity: 'users',
-          database: 'memory'
-        })
-        .withOptions({ skipInstall: false })
-        .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
-        .then(delay(1000));
-    });
-  });
 });
