@@ -56,20 +56,6 @@ module.exports = class ConnectionGenerator extends Generator {
       this.dependencies.push('nedb');
       return connectionString.substring(7, connectionString.length);
 
-    case 'rethinkdb':
-      parsed = url.parse(connectionString);
-      this.dependencies.push('rethinkdbdash');
-
-      return {
-        db: parsed.path.substring(1, parsed.path.length),
-        servers: [
-          {
-            host: parsed.hostname,
-            port: parsed.port
-          }
-        ]
-      };
-
     case 'memory':
       return null;
 
