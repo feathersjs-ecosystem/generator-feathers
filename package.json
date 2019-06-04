@@ -57,7 +57,6 @@
   },
   "devDependencies": {
     "@feathersjs/authentication": "^4.0.0-pre.3",
-    "@feathersjs/authentication-jwt": "^4.0.0-pre.3",
     "@feathersjs/authentication-local": "^4.0.0-pre.3",
     "@feathersjs/authentication-oauth": "^4.0.0-pre.3",
     "@feathersjs/configuration": "^4.0.0-pre.3",
