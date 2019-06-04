@@ -222,27 +222,6 @@ describe('generator-feathers', function() {
       });
     });
 
-    it('rethinkdb', () => {
-      return runConnectionGenerator({
-        database: 'rethinkdb',
-        connectionString: 'rethinkdb://localhost:11078/testing'
-      }).then(() =>
-        assert.jsonFileContent(
-          path.join(appDir, 'config', 'default.json'), {
-            rethinkdb: {
-              db: 'testing',
-              servers: [
-                {
-                  host: 'localhost',
-                  port: 11078
-                }
-              ]
-            }
-          }
-        )
-      ).then(() => runTest('starts and shows the index page'));
-    });
-
     it('cassandra', () => {
       return runConnectionGenerator({
         database: 'cassandra',
