@@ -1,5 +1,28 @@
 # Change Log
 
+## [v4.0.0-pre.1](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.1) (2019-06-05)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.10.0...v4.0.0-pre.1)
+
+**Closed issues:**
+
+- Could not find the hooks definition object while adding ../../hooks/\*\*\* [\#419](https://github.com/feathersjs/generator-feathers/issues/419)
+- An in-range update of mongoose is breaking the build 🚨 [\#418](https://github.com/feathersjs/generator-feathers/issues/418)
+- An in-range update of mocha is breaking the build 🚨 [\#415](https://github.com/feathersjs/generator-feathers/issues/415)
+- An in-range update of mongoose is breaking the build 🚨 [\#411](https://github.com/feathersjs/generator-feathers/issues/411)
+
+**Merged pull requests:**
+
+- Update to v4 and add v4 upgrade generator [\#422](https://github.com/feathersjs/generator-feathers/pull/422) ([daffl](https://github.com/daffl))
+- Remove Node 6 and RethinkDB support [\#421](https://github.com/feathersjs/generator-feathers/pull/421) ([daffl](https://github.com/daffl))
+- If mongoose can't connect, the process is unhealthy and should termin… [\#420](https://github.com/feathersjs/generator-feathers/pull/420) ([MichaelJCole](https://github.com/MichaelJCole))
+- Update yeoman-generator to the latest version 🚀 [\#417](https://github.com/feathersjs/generator-feathers/pull/417) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-sequelize to the latest version 🚀 [\#414](https://github.com/feathersjs/generator-feathers/pull/414) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update semver to the latest version 🚀 [\#413](https://github.com/feathersjs/generator-feathers/pull/413) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update sequelize to the latest version 🚀 [\#412](https://github.com/feathersjs/generator-feathers/pull/412) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update mocha to the latest version 🚀 [\#410](https://github.com/feathersjs/generator-feathers/pull/410) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-objection to the latest version 🚀 [\#409](https://github.com/feathersjs/generator-feathers/pull/409) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-cassandra to the latest version 🚀 [\#408](https://github.com/feathersjs/generator-feathers/pull/408) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v2.10.0](https://github.com/feathersjs/generator-feathers/tree/v2.10.0) (2018-12-30)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.9.0...v2.10.0)
 
