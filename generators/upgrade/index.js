@@ -1,5 +1,4 @@
 const Generator = require('../../lib/generator');
-const { cloneDeep } = require('lodash');
 const crypto = require('crypto');
 
 const oldPackages = [
@@ -12,7 +11,6 @@ module.exports = class UpgradeGenerator extends Generator {
   writing() {
     const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const dependencies = [ '@feathersjs/authentication-oauth' ];
-    const pkg = cloneDeep(this.pkg);
     
     config.authentication = {
       'entity': 'user',
@@ -38,10 +36,12 @@ module.exports = class UpgradeGenerator extends Generator {
 
       if (isCore || isAdapter) {
         dependencies.push(name);
-        delete pkg.dependencies[name];
+        delete this.pkg.dependencies[name];
       }
     });
 
+    this.conflicter.force = true;
+    
     this.fs.copy(
       this.destinationPath(this.libDirectory, 'authentication.js'),
       this.destinationPath(this.libDirectory, 'authentication.backup.js')
@@ -56,7 +56,7 @@ module.exports = class UpgradeGenerator extends Generator {
       this.destinationPath(this.libDirectory, 'authentication.js')
     );
     this.fs.writeJSON(this.destinationPath('config', 'default.json'), config);
-    this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+    this.fs.writeJSON(this.destinationPath('package.json'), this.pkg);
     this._packagerInstall(dependencies, {
       save: true
     });
