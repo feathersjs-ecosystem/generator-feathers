@@ -68,70 +68,26 @@ module.exports = class AuthGenerator extends Generator {
     return ast.toSource();
   }
 
-  _writeConfiguration(context) {
+  _writeConfiguration() {
     const config = Object.assign({}, this.defaultConfig);
 
     config.authentication = {
-      secret: crypto.randomBytes(256).toString('hex'),
-      strategies: [ 'jwt' ],
-      path: '/authentication',
-      service: context.kebabEntity,
-      jwt: {
-        header: { typ: 'access' },
-        audience: 'https://yourdomain.com',
-        subject: 'anonymous',
-        issuer: 'feathers',
-        algorithm: 'HS256',
-        expiresIn: '1d'
+      'entity': 'user',
+      'service': 'users',
+      'secret': crypto.randomBytes(20).toString('base64'),
+      'authStrategies': ['jwt', 'local'],
+      'jwtOptions': {
+        'header': { 'typ': 'access' },
+        'audience': 'https://yourdomain.com',
+        'issuer': 'feathers',
+        'algorithm': 'HS256',
+        'expiresIn': '1d'
+      },
+      'local': {
+        'usernameField': 'email',
+        'passwordField': 'password'
       }
     };
-
-    if (context.strategies.indexOf('local') !== -1) {
-      config.authentication.strategies.push('local');
-      config.authentication.local = {
-        entity: 'user',
-        usernameField: 'email',
-        passwordField: 'password'
-      };
-    }
-
-    let includesOAuth = false;
-
-    context.strategies.forEach(strategy => {
-      if (OAUTH2_STRATEGY_MAPPINGS[strategy]) {
-        const strategyConfig = {
-          clientID: `your ${strategy} client id`,
-          clientSecret: `your ${strategy} client secret`,
-          successRedirect: '/'
-        };
-        includesOAuth = true;
-
-        if(strategy === 'auth0') {
-          strategyConfig.domain = 'mydomain.auth0.com';
-          strategyConfig.scopes = [ 'profile' ];
-        }
-
-        if (strategy === 'facebook') {
-          strategyConfig.scope = ['public_profile', 'email'];
-          strategyConfig.profileFields = ['id', 'displayName', 'first_name', 'last_name', 'email', 'gender', 'profileUrl', 'birthday', 'picture', 'permissions'];
-        }
-
-        if (strategy === 'google') {
-          strategyConfig.scope = ['profile openid email'];
-        }
-
-        config.authentication[strategy] = strategyConfig;
-      }
-    });
-
-    if (includesOAuth) {
-      config.authentication.cookie = {
-        enabled: true,
-        name: 'feathers-jwt',
-        httpOnly: false,
-        secure: false
-      };
-    }
 
     this.conflicter.force = true;
     this.fs.writeJSON(
@@ -143,7 +99,8 @@ module.exports = class AuthGenerator extends Generator {
   writing() {
     const dependencies = [
       '@feathersjs/authentication',
-      '@feathersjs/authentication-jwt'
+      '@feathersjs/authentication-local',
+      '@feathersjs/authentication-oauth'
     ];
     const context = Object.assign({
       kebabEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.kebabCase(this.props.entity),
