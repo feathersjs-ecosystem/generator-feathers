@@ -1,5 +1,12 @@
 # Change Log
 
+## [v4.0.0-pre.2](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.2) (2019-06-05)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.1...v4.0.0-pre.2)
+
+**Merged pull requests:**
+
+- Fix issue in v4 upgrade command [\#423](https://github.com/feathersjs/generator-feathers/pull/423) ([daffl](https://github.com/daffl))
+
 ## [v4.0.0-pre.1](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.1) (2019-06-05)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.10.0...v4.0.0-pre.1)
 
