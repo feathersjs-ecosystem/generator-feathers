@@ -15,7 +15,6 @@ const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
 const channels = require('./channels');
-const authentication = require('./authentication');
 
 const app = express(feathers());
 
@@ -37,8 +36,6 @@ app.use('/', express.static(app.get('public')));
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
-// Set up authenticaiton
-app.configure(authentication);
 // Set up our services (see `services/index.js`)
 app.configure(services);
 // Set up event channels (see channels.js)
