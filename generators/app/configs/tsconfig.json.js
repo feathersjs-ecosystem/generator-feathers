@@ -7,7 +7,8 @@ module.exports = function() {
       rootDir: './src',
       strict: true,
       esModuleInterop: true
-    }
+    },
+    exclude: ['test']
   };
   
   return config;

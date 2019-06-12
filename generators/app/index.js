@@ -132,11 +132,7 @@ module.exports = class AppGenerator extends Generator {
     this.fs.copy(this.templatePath('static'), this.destinationPath());
     this.fs.copy(this.templatePath('static', '.*'), this.destinationPath());
     // Static content for the directories.lib folder
-    if (props.ts) {
-      this.fs.copy(this.templatePath('src-ts'), this.destinationPath(props.src));
-    } else {
-      this.fs.copy(this.templatePath('src'), this.destinationPath(props.src));
-    }
+    this.fs.copy(this.templatePath(props.ts ? 'src-ts' : 'src'), this.destinationPath(props.src));
     // This hack is necessary because NPM does not publish `.gitignore` files
     this.fs.copy(this.templatePath('_gitignore'), this.destinationPath('', '.gitignore'));
 
@@ -153,8 +149,8 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath(`app.test.${props.tester}.js`),
-      this.destinationPath(this.testDirectory, 'app.test.js'),
+      this.templatePath(props.ts ? `app.test.${props.tester}.ts` : `app.test.${props.tester}.js`),
+      this.destinationPath(this.testDirectory, props.ts ? 'app.test.ts' : 'app.test.js'),
       context
     );
 
@@ -163,12 +159,7 @@ module.exports = class AppGenerator extends Generator {
       pkg
     );
 
-    if (props.ts) {
-      this.fs.writeJSON(
-        this.destinationPath('tsconfig.json'),
-        makeConfig.tsconfig(this)
-      );
-    } else {
+    if (!props.ts) {
       this.fs.writeJSON(
         this.destinationPath('.eslintrc.json'),
         makeConfig.eslintrc(this)
@@ -184,6 +175,21 @@ module.exports = class AppGenerator extends Generator {
       this.destinationPath(this.configDirectory, 'production.json'),
       makeConfig.configProduction(this)
     );
+
+    if (props.ts) {
+      this.fs.writeJSON(
+        this.destinationPath('tsconfig.json'),
+        makeConfig.tsconfig(this)
+      );
+
+      if (props.tester === 'jest') {
+        this.fs.copyTpl(
+          this.templatePath('jest.config.js'),
+          this.destinationPath('jest.config.js'),
+          context
+        );
+      }
+    }
   }
 
   install () {
@@ -210,11 +216,14 @@ module.exports = class AppGenerator extends Generator {
         '@types/compression',
         '@types/cors',
         '@types/helmet',
+        '@types/request-promise',
         '@types/serve-favicon',
         'shx',
         'ts-node-dev',
         'tslint',
         'typescript',
+        `@types/${this.props.tester}`,
+        `ts-${this.props.tester}`,
       ]).filter(item => !excluded.includes(item));
     }
 
