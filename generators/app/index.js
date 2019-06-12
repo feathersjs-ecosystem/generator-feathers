@@ -41,6 +41,11 @@ module.exports = class AppGenerator extends Generator {
         '@feathersjs/primus'
       ]);
     const prompts = [{
+      type: 'confirm',
+      name: 'ts',
+      message: 'Use typescript',
+      default: false,
+    }, {
       name: 'name',
       message: 'Project name',
       when: !this.pkg.name,
@@ -127,7 +132,11 @@ module.exports = class AppGenerator extends Generator {
     this.fs.copy(this.templatePath('static'), this.destinationPath());
     this.fs.copy(this.templatePath('static', '.*'), this.destinationPath());
     // Static content for the directories.lib folder
-    this.fs.copy(this.templatePath('src'), this.destinationPath(props.src));
+    if (props.ts) {
+      this.fs.copy(this.templatePath('src-ts'), this.destinationPath(props.src));
+    } else {
+      this.fs.copy(this.templatePath('src'), this.destinationPath(props.src));
+    }
     // This hack is necessary because NPM does not publish `.gitignore` files
     this.fs.copy(this.templatePath('_gitignore'), this.destinationPath('', '.gitignore'));
 
@@ -138,8 +147,8 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath('app.js'),
-      this.destinationPath(props.src, 'app.js'),
+      this.templatePath(props.ts ? 'app.ts' : 'app.js'),
+      this.destinationPath(props.src, props.ts ? 'app.ts' : 'app.js'),
       context
     );
 
@@ -154,10 +163,17 @@ module.exports = class AppGenerator extends Generator {
       pkg
     );
 
-    this.fs.writeJSON(
-      this.destinationPath('.eslintrc.json'),
-      makeConfig.eslintrc(this)
-    );
+    if (props.ts) {
+      this.fs.writeJSON(
+        this.destinationPath('tsconfig.json'),
+        makeConfig.tsconfig(this)
+      );
+    } else {
+      this.fs.writeJSON(
+        this.destinationPath('.eslintrc.json'),
+        makeConfig.eslintrc(this)
+      );
+    }
 
     this.fs.writeJSON(
       this.destinationPath(this.configDirectory, 'default.json'),
@@ -184,6 +200,23 @@ module.exports = class AppGenerator extends Generator {
     this._packagerInstall(this.dependencies, {
       save: true
     });
+
+    if (this.props.ts) {
+      const excluded = [
+        'eslint',
+        'nodemon@^1.18.7',
+      ];
+      this.devDependencies = this.devDependencies.concat([
+        '@types/compression',
+        '@types/cors',
+        '@types/helmet',
+        '@types/serve-favicon',
+        'shx',
+        'ts-node-dev',
+        'tslint',
+        'typescript',
+      ]).filter(item => !excluded.includes(item));
+    }
 
     this.devDependencies.push(this.props.tester);
 

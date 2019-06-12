@@ -34,14 +34,18 @@ module.exports = function(generator) {
     'scripts': {
       test: `${packager} run eslint && NODE_ENV= ${packager} run ${props.tester}`,
       eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
-      dev: `nodemon ${lib}/`,
-      start: `node ${lib}/`
+      dev: `ts-node-dev --no-notify ${lib}/`,
+      start: props.ts ? 'shx rm -rf lib/ && tsc && node lib/' : `node ${lib}/`
     }
   };
   if ('mocha' === props.tester) {
     pkg.scripts['mocha'] = 'mocha test/ --recursive --exit';
   } else {
     pkg.scripts['jest'] = 'jest';
+  }
+
+  if (props.ts) {
+    delete pkg.scripts['eslint'];
   }
 
   return pkg;
