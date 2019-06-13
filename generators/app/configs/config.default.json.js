@@ -1,4 +1,5 @@
-module.exports = function() {
+module.exports = function(generator) {
+  const { props } = generator;
   const config = {
     host: 'localhost',
     port: 3030,
@@ -8,6 +9,9 @@ module.exports = function() {
       max: 50
     }
   };
+  if (props.ts) {
+    config.ts = true;
+  }
 
   return config;
 };
