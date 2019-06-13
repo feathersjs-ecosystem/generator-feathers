@@ -1,3 +1,4 @@
+const path = require('path');
 const { kebabCase, camelCase } = require('lodash');
 const j = require('@feathersjs/tools').transform;
 const validate = require('validate-npm-package-name');
@@ -46,23 +47,55 @@ module.exports = class MiddlewareGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformCodeTs (code) {
+    const { props } = this;
+    const ast = j(code);
+
+    const importCode = `import ${props.camelName} from './${props.kebabName}';\n`;
+    const middlewareCode = props.path === '*' ? `app.use(${props.camelName}());` : `app.use('${props.path}', ${props.camelName}());`;
+
+    const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
+    const newImport = j(importCode).find(j.ImportDeclaration).get().node;
+    lastImport.insertBefore(newImport);
+
+    const { body } = ast.find(j.BlockStatement).get().node;
+    const es = j(middlewareCode).find(j.ExpressionStatement).get().node;
+    body.push(es);
+
+    return ast.toSource();
+  }
+
   writing () {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
+    if (config.ts) {
+      this.sourceRoot(path.join(__dirname, 'templates-ts'));
+    }
     const context = this.props;
-    const mainFile = this.destinationPath(this.libDirectory, 'middleware', `${context.kebabName}.js`);
+    const mainFile = this.destinationPath(this.libDirectory, 'middleware', config.ts ? `${context.kebabName}.ts` : `${context.kebabName}.js`);
 
     // Do not run code transformations if the middleware file already exists
     if (!this.fs.exists(mainFile)) {
-      const middlewarejs = this.destinationPath(this.libDirectory, 'middleware', 'index.js');
-      const transformed = this._transformCode(
-        this.fs.read(middlewarejs).toString()
-      );
+      if (config.ts) {
+        const middlewarets = this.destinationPath(this.libDirectory, 'middleware', 'index.ts');
+        const transformed = this._transformCodeTs(
+          this.fs.read(middlewarets).toString()
+        );
 
-      this.conflicter.force = true;
-      this.fs.write(middlewarejs, transformed);
+        this.conflicter.force = true;
+        this.fs.write(middlewarets, transformed);
+      } else {
+        const middlewarejs = this.destinationPath(this.libDirectory, 'middleware', 'index.js');
+        const transformed = this._transformCode(
+          this.fs.read(middlewarejs).toString()
+        );
+
+        this.conflicter.force = true;
+        this.fs.write(middlewarejs, transformed);
+      }
     }
 
     this.fs.copyTpl(
-      this.templatePath('middleware.js'),
+      this.templatePath(config.ts ? 'middleware.ts' : 'middleware.js'),
       mainFile, context
     );
   }
