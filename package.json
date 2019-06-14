@@ -1,5 +1,5 @@
 {
-  "name": "generator-feathers",
+  "name": "generator-feathers-ts",
   "description": "A Yeoman generator for a Feathers application",
   "version": "4.0.0-pre.2",
   "homepage": "https://github.com/feathersjs/generator-feathers",
