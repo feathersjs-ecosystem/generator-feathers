@@ -121,6 +121,9 @@ module.exports = class AppGenerator extends Generator {
 
   writing () {
     const props = this.props;
+    if (props.ts) {
+      this.sourceRoot(path.join(__dirname, 'templates-ts'));
+    }
     const pkg = this.pkg = makeConfig.package(this);
     const context = Object.assign({}, props, {
       hasProvider (name) {
@@ -132,7 +135,7 @@ module.exports = class AppGenerator extends Generator {
     this.fs.copy(this.templatePath('static'), this.destinationPath());
     this.fs.copy(this.templatePath('static', '.*'), this.destinationPath());
     // Static content for the directories.lib folder
-    this.fs.copy(this.templatePath(props.ts ? 'src-ts' : 'src'), this.destinationPath(props.src));
+    this.fs.copy(this.templatePath('src'), this.destinationPath(props.src));
     // This hack is necessary because NPM does not publish `.gitignore` files
     this.fs.copy(this.templatePath('_gitignore'), this.destinationPath('', '.gitignore'));
 
@@ -159,7 +162,20 @@ module.exports = class AppGenerator extends Generator {
       pkg
     );
 
-    if (!props.ts) {
+    if (props.ts) {
+      this.fs.writeJSON(
+        this.destinationPath('tsconfig.json'),
+        makeConfig.tsconfig(this)
+      );
+
+      if (props.tester === 'jest') {
+        this.fs.copyTpl(
+          this.templatePath('jest.config.js'),
+          this.destinationPath('jest.config.js'),
+          context
+        );
+      }
+    } else {
       this.fs.writeJSON(
         this.destinationPath('.eslintrc.json'),
         makeConfig.eslintrc(this)
@@ -175,21 +191,6 @@ module.exports = class AppGenerator extends Generator {
       this.destinationPath(this.configDirectory, 'production.json'),
       makeConfig.configProduction(this)
     );
-
-    if (props.ts) {
-      this.fs.writeJSON(
-        this.destinationPath('tsconfig.json'),
-        makeConfig.tsconfig(this)
-      );
-
-      if (props.tester === 'jest') {
-        this.fs.copyTpl(
-          this.templatePath('jest.config.js'),
-          this.destinationPath('jest.config.js'),
-          context
-        );
-      }
-    }
   }
 
   install () {
