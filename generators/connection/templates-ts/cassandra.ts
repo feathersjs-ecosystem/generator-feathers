@@ -1,7 +1,8 @@
-const ExpressCassandra = require('express-cassandra');
-const FeathersCassandra = require('feathers-cassandra');
+import { Application } from '@feathersjs/feathers';
+import ExpressCassandra from 'express-cassandra';
+import FeathersCassandra from 'feathers-cassandra';
 
-module.exports = function (app) {
+export default function (app: Application) {
   const connectionInfo = app.get('<%= database %>');
   const models = ExpressCassandra.createClient(connectionInfo);
   const cassandraClient = models.orm.get_system_client();
@@ -21,4 +22,4 @@ module.exports = function (app) {
 
     app.set('cassanknex', cassanknex);
   });
-};
+}

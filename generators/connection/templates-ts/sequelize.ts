@@ -1,6 +1,7 @@
-const Sequelize = require('sequelize');
+import { Application } from '@feathersjs/feathers';
+import Sequelize from 'sequelize';
 
-module.exports = function (app) {
+export default function (app: Application) {
   const connectionString = app.get('<%= database %>');
   const sequelize = new Sequelize(connectionString, {
     dialect: '<%= database %>',
@@ -30,4 +31,4 @@ module.exports = function (app) {
 
     return result;
   };
-};
+}

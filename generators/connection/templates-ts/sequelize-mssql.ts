@@ -1,7 +1,8 @@
-const url = require('url');
-const Sequelize = require('sequelize');
+import { Application } from '@feathersjs/feathers';
+import url from 'url';
+import Sequelize from 'sequelize';
 
-module.exports = function (app) {
+export default function (app: Application) {
   const connectionString = app.get('mssql');
   const connection = url.parse(connectionString);
   const database = connection.path.substring(1, connection.path.length);
@@ -41,4 +42,4 @@ module.exports = function (app) {
 
     return result;
   };
-};
+}

@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
-const logger = require('./logger');
+import { Application } from '@feathersjs/feathers';
+import mongoose from 'mongoose';
+import logger from './logger';
 
-module.exports = function (app) {
+export default function (app: Application) {
   mongoose.connect(
     app.get('mongodb'),
     { useCreateIndex: true, useNewUrlParser: true }
@@ -13,4 +14,4 @@ module.exports = function (app) {
   mongoose.Promise = global.Promise;
 
   app.set('mongooseClient', mongoose);
-};
+}

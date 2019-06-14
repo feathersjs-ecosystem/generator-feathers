@@ -1,8 +1,9 @@
-const parse = require('mongodb-core').parseConnectionString;
-const MongoClient = require('mongodb').MongoClient;
+import { Application } from '@feathersjs/feathers';
+import { parseConnectionString as parse } from 'mongodb-core';
+import { MongoClient } from 'mongodb';
 const logger = require('./logger');
 
-module.exports = function (app) {
+export default function (app: Application) {
   const config = app.get('mongodb');
   const promise = MongoClient.connect(config, { useNewUrlParser: true }).then(client => {
     // For mongodb <= 2.2
@@ -17,4 +18,4 @@ module.exports = function (app) {
   });
 
   app.set('mongoClient', promise);
-};
+}
