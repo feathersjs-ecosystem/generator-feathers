@@ -51,16 +51,15 @@ module.exports = class MiddlewareGenerator extends Generator {
     const { props } = this;
     const ast = j(code);
 
-    const importCode = `import ${props.camelName} from './${props.kebabName}';\n`;
+    const middlewareImport = `import ${props.camelName} from './${props.kebabName}';`;
     const middlewareCode = props.path === '*' ? `app.use(${props.camelName}());` : `app.use('${props.path}', ${props.camelName}());`;
 
     const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
-    const newImport = j(importCode).find(j.ImportDeclaration).get().node;
-    lastImport.insertBefore(newImport);
-
-    const { body } = ast.find(j.BlockStatement).get().node;
-    const es = j(middlewareCode).find(j.ExpressionStatement).get().node;
-    body.push(es);
+    const newImport = j(middlewareImport).find(j.ImportDeclaration).get().node;
+    lastImport.insertAfter(newImport);
+    const blockStatement = ast.find(j.BlockStatement).get().node;
+    const newCode = j(middlewareCode).find(j.ExpressionStatement).get().node;
+    blockStatement.body.push(newCode);
 
     return ast.toSource();
   }
