@@ -5,7 +5,7 @@ interface Data {}
 interface ServiceOptions {}
 
 export class Service implements ServiceMethods<any>, SetupMethod {
-  app: App;
+  app!: App;
 
   constructor (private options: ServiceOptions = {}) {
   }
