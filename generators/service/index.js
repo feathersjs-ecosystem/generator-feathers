@@ -113,10 +113,32 @@ module.exports = class ServiceGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformCodeTs(code) {
+    const { kebabName, subfolder } = this.props;
+    const ast = j(code);
+    const folder = subfolder.concat(kebabName).join('/');
+    const camelName = _.camelCase(folder);
+    const serviceImport = `import ${camelName} from './${folder}/${kebabName}.service';`;
+    const serviceCode = `app.configure(${camelName});`;
+
+    const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
+    const newImport = j(serviceImport).find(j.ImportDeclaration).get().node;
+    lastImport.insertAfter(newImport);
+    const blockStatement = ast.find(j.BlockStatement).get().node;
+    const newCode = j(serviceCode).find(j.ExpressionStatement).get().node;
+    blockStatement.body.push(newCode);
+
+    return ast.toSource();
+  }
+
   writing() {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
+    if (config.ts) {
+      this.sourceRoot(path.join(__dirname, 'templates-ts'));
+    }
     const { adapter, kebabName, subfolder } = this.props;
     const moduleMappings = {
-      generic: `./${kebabName}.class.js`,
+      generic: `./${kebabName}.class.${config.ts ? '' : 'js'}`,
       memory: 'feathers-memory',
       nedb: 'feathers-nedb',
       mongodb: 'feathers-mongodb',
@@ -129,8 +151,8 @@ module.exports = class ServiceGenerator extends Generator {
     };
     const serviceModule = moduleMappings[adapter];
     const serviceFolder = [ this.libDirectory, 'services', ...subfolder, kebabName ];
-    const mainFile = this.destinationPath(... serviceFolder, `${kebabName}.service.js`);
-    const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
+    const mainFile = this.destinationPath(... serviceFolder, `${kebabName}.service.${config.ts ? 'ts' : 'js'}`);
+    const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.${config.ts ? 'ts' : 'js'}`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
       libDirectory: this.libDirectory,
@@ -143,11 +165,17 @@ module.exports = class ServiceGenerator extends Generator {
 
     // Do not run code transformations if the service file already exists
     if (!this.fs.exists(mainFile)) {
-      const servicejs = this.destinationPath(this.libDirectory, 'services', 'index.js');
-      const transformed = this._transformCode(
-        this.fs.read(servicejs).toString()
-      );
-
+      const servicejs = this.destinationPath(this.libDirectory, 'services', `index.${config.ts ? 'ts' : 'js'}`);
+      let transformed;
+      if (config.ts) {
+        transformed = this._transformCodeTs(
+          this.fs.read(servicejs).toString()
+        );
+      } else {
+        transformed = this._transformCode(
+          this.fs.read(servicejs).toString()
+        );
+      }
       this.conflicter.force = true;
       this.fs.write(servicejs, transformed);
     }
@@ -161,8 +189,8 @@ module.exports = class ServiceGenerator extends Generator {
     } else if(adapter === 'generic') {
       // Copy the generic service class
       this.fs.copyTpl(
-        this.templatePath('class.js'),
-        this.destinationPath(... serviceFolder, `${kebabName}.class.js`),
+        this.templatePath(`class.${config.ts ? 'ts' : 'js'}`),
+        this.destinationPath(... serviceFolder, `${kebabName}.class.${config.ts ? 'ts' : 'js'}`),
         context
       );
     }
@@ -171,34 +199,34 @@ module.exports = class ServiceGenerator extends Generator {
       // Copy the model
       this.fs.copyTpl(
         this.templatePath('model', modelTpl),
-        this.destinationPath(this.libDirectory, 'models', `${context.modelName}.js`),
+        this.destinationPath(this.libDirectory, 'models', `${context.modelName}.${config.ts ? 'ts' : 'js'}`),
         context
       );
     }
 
     this.fs.copyTpl(
-      this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
-      this.destinationPath(... serviceFolder, `${kebabName}.hooks.js`),
+      this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.${config.ts ? 'ts' : 'js'}`),
+      this.destinationPath(... serviceFolder, `${kebabName}.hooks.${config.ts ? 'ts' : 'js'}`),
       context
     );
 
-    if (fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`))) {
+    if (fs.existsSync(path.join(templatePath, 'types', `${adapter}.${config.ts ? 'ts' : 'js'}`))) {
       this.fs.copyTpl(
-        this.templatePath('types', `${adapter}.js`),
+        this.templatePath('types', `${adapter}.${config.ts ? 'ts' : 'js'}`),
         mainFile,
         context
       );
     } else {
       this.fs.copyTpl(
-        this.templatePath('service.js'),
+        this.templatePath(`service.${config.ts ? 'ts' : 'js'}`),
         mainFile,
         context
       );
     }
 
     this.fs.copyTpl(
-      this.templatePath(`test.${tester}.js`),
-      this.destinationPath(this.testDirectory, 'services', ...subfolder, `${kebabName}.test.js`),
+      this.templatePath(`test.${tester}.${config.ts ? 'ts' : 'js'}`),
+      this.destinationPath(this.testDirectory, 'services', ...subfolder, `${kebabName}.test.${config.ts ? 'ts' : 'js'}`),
       context
     );
 
