@@ -138,7 +138,7 @@ module.exports = class ServiceGenerator extends Generator {
     }
     const { adapter, kebabName, subfolder } = this.props;
     const moduleMappings = {
-      generic: `./${kebabName}.class.${config.ts ? '' : 'js'}`,
+      generic: config.ts ? `./${kebabName}.class` : `./${kebabName}.class.js`,
       memory: 'feathers-memory',
       nedb: 'feathers-nedb',
       mongodb: 'feathers-mongodb',
