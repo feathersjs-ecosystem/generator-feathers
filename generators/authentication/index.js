@@ -1,3 +1,4 @@
+const path = require('path');
 const _ = require('lodash');
 const j = require('@feathersjs/tools').transform;
 const crypto = require('crypto');
@@ -97,6 +98,10 @@ module.exports = class AuthGenerator extends Generator {
   }
 
   writing() {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
+    if (config.ts) {
+      this.sourceRoot(path.join(__dirname, 'templates-ts'));
+    }
     const dependencies = [
       '@feathersjs/authentication',
       '@feathersjs/authentication-local',
@@ -125,7 +130,7 @@ module.exports = class AuthGenerator extends Generator {
       }
     });
 
-    if(!this.fs.exists(this.destinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service.js`))) {
+    if(!this.fs.exists(this.destinationPath(this.libDirectory, 'services', context.kebabEntity, config.ts ? `${context.kebabEntity}.service.ts` : `${context.kebabEntity}.service.js`))) {
       // Create the users service
       this.composeWith(require.resolve('../service'), {
         props: {
@@ -137,8 +142,8 @@ module.exports = class AuthGenerator extends Generator {
     }
 
     // If the file doesn't exist yet, add it to the app.js
-    if (!this.fs.exists(this.destinationPath(this.libDirectory, 'authentication.js'))) {
-      const appjs = this.destinationPath(this.libDirectory, 'app.js');
+    if (!this.fs.exists(this.destinationPath(this.libDirectory, config.ts ? 'authentication.ts' : 'authentication.js'))) {
+      const appjs = this.destinationPath(this.libDirectory, config.ts ? 'app.ts' : 'app.js');
 
       this.conflicter.force = true;
       this.fs.write(appjs, this._transformCode(
@@ -147,8 +152,8 @@ module.exports = class AuthGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath('authentication.js'),
-      this.destinationPath(this.libDirectory, 'authentication.js'),
+      this.templatePath(config.ts ? 'authentication.ts' : 'authentication.js'),
+      this.destinationPath(this.libDirectory, config.ts ? 'authentication.ts' : 'authentication.js'),
       context
     );
 
