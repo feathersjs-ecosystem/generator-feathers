@@ -1,10 +1,13 @@
-const { authenticate } = require('@feathersjs/authentication').hooks;
+import feathersAuthentication from '@feathersjs/authentication';
 
-<% if (authentication.strategies.indexOf('local') !== -1) { %>const {
-  hashPassword, protect
-} = require('@feathersjs/authentication-local').hooks;<% } %>
+const { authenticate } = feathersAuthentication.hooks;
 
-module.exports = {
+<% if (authentication.strategies.indexOf('local') !== -1) { %>
+import local from '@feathersjs/authentication-local';
+const { hashPassword, protect } = local.hooks;
+<% } %>
+
+export default {
   before: {
     all: [],
     find: [ authenticate('jwt') ],

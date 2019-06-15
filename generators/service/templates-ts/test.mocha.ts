@@ -1,5 +1,5 @@
-const assert = require('assert');
-const app = require('<%= relativeRoot %><%= libDirectory %>/app');
+import assert from 'assert';
+import app from '<%= relativeRoot %><%= libDirectory %>/app';
 
 describe('\'<%= name %>\' service', () => {
   it('registered the service', () => {

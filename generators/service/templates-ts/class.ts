@@ -1,20 +1,30 @@
-/* eslint-disable no-unused-vars */
-class Service {
-  constructor (options) {
-    this.options = options || {};
+import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '@feathersjs/feathers';
+
+interface App {}
+interface Data {}
+interface ServiceOptions {}
+
+export class Service implements ServiceMethods<any>, SetupMethod {
+  app: App;
+
+  constructor (private options: ServiceOptions = {}) {
   }
 
-  async find (params) {
+  setup (app: App) {
+    this.app = app;
+  }
+
+  async find (params?: Params): Promise<Data[] | Paginated<Data>> {
     return [];
   }
 
-  async get (id, params) {
+  async get (id: Id, params?: Params): Promise<Data> {
     return {
       id, text: `A new message with ID: ${id}!`
     };
   }
 
-  async create (data, params) {
+  async create (data: Data, params?: Params): Promise<Data> {
     if (Array.isArray(data)) {
       return Promise.all(data.map(current => this.create(current, params)));
     }
@@ -22,21 +32,19 @@ class Service {
     return data;
   }
 
-  async update (id, data, params) {
+  async update (id: NullableId, data: Data, params?: Params): Promise<Data> {
     return data;
   }
 
-  async patch (id, data, params) {
+  async patch (id: NullableId, data: Data, params?: Params): Promise<Data> {
     return data;
   }
 
-  async remove (id, params) {
+  async remove (id: NullableId, params?: Params): Promise<Data> {
     return { id };
   }
 }
 
-module.exports = function (options) {
+export default function (options: ServiceOptions) {
   return new Service(options);
 };
-
-module.exports.Service = Service;

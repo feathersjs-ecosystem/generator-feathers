@@ -1,4 +1,4 @@
-const app = require('<%= relativeRoot %><%= libDirectory %>/app');
+import app from '<%= relativeRoot %><%= libDirectory %>/app';
 
 describe('\'<%= name %>\' service', () => {
   it('registered the service', () => {
