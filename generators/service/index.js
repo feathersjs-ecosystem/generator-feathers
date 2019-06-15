@@ -153,7 +153,7 @@ module.exports = class ServiceGenerator extends Generator {
     const serviceFolder = [ this.libDirectory, 'services', ...subfolder, kebabName ];
     const mainFile = this.destinationPath(... serviceFolder, config.ts ? `${kebabName}.service.ts` : `${kebabName}.service.js`);
     const modelTpl = config.ts ? `${adapter}${this.props.authentication ? '-user' : ''}.ts` : `${adapter}${this.props.authentication ? '-user' : ''}.js`;
-    const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
+    const hasModel = fs.existsSync(path.join(config.ts ? `${templatePath}-ts` : templatePath, 'model', modelTpl));
     const context = Object.assign({}, this.props, {
       libDirectory: this.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
