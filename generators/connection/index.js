@@ -1,3 +1,4 @@
+const path = require('path');
 const { snakeCase } = require('lodash');
 const url = require('url');
 const j = require('@feathersjs/tools').transform;
@@ -24,6 +25,28 @@ module.exports = class ConnectionGenerator extends Generator {
 
     if (configureMiddleware.length === 0) {
       throw new Error('Could not find .configure(middleware) call in app.js after which to insert database configuration. Did you modify app.js?');
+    }
+
+    appDeclaration.insertBefore(requireCall);
+    configureMiddleware.insertBefore(`app.configure(${adapter});`);
+
+    return ast.toSource();
+  }
+
+  _transformCodeTs (code) {
+    const { adapter } = this.props;
+
+    const ast = j(code);
+    const appDeclaration = ast.findDeclaration('app');
+    const configureMiddleware = ast.findConfigure('middleware');
+    const requireCall = `const ${adapter} = require('./${adapter}');`;
+
+    if (appDeclaration.length === 0) {
+      throw new Error('Could not find \'app\' variable declaration in app.ts to insert database configuration. Did you modify app.js?');
+    }
+
+    if (configureMiddleware.length === 0) {
+      throw new Error('Could not find .configure(middleware) call in app.ts after which to insert database configuration. Did you modify app.js?');
     }
 
     appDeclaration.insertBefore(requireCall);
@@ -289,28 +312,34 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   writing () {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
+    if (config.ts) {
+      this.sourceRoot(path.join(__dirname, 'templates-ts'));
+    }
     let template;
     const { database, adapter } = this.props;
     const context = Object.assign({}, this.props);
 
     if (database === 'rethinkdb') {
-      template = 'rethinkdb.js';
+      template = config.ts ? 'rethinkdb.ts' : 'rethinkdb.js';
     } else if (database === 'mssql' && adapter === 'sequelize') {
-      template = `${adapter}-mssql.js`;
+      template = config.ts ? `${adapter}-mssql.ts` : `${adapter}-mssql.js`;
     } else if (adapter && adapter !== 'nedb') {
-      template = `${adapter}.js`;
+      template = config.ts ? `${adapter}.ts` : `${adapter}.js`;
     }
 
     if (template) {
-      const dbFile = `${adapter}.js`;
+      const dbFile = config.ts ? `${adapter}.ts` : `${adapter}.js`;
       const templateExists = this.fs.exists(this.destinationPath(this.libDirectory, dbFile));
 
       // If the file doesn't exist yet, add it to the app.js
       if (!templateExists) {
-        const appjs = this.destinationPath(this.libDirectory, 'app.js');
+        const appjs = this.destinationPath(this.libDirectory, config.ts ? 'app.ts' : 'app.js');
 
         this.conflicter.force = true;
-        this.fs.write(appjs, this._transformCode(
+        this.fs.write(appjs, config.ts ? this._transformCodeTs(
+          this.fs.read(appjs).toString()
+        ) : this._transformCode(
           this.fs.read(appjs).toString()
         ));
       }
