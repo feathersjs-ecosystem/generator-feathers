@@ -4,7 +4,9 @@
 // 
 // See http://knexjs.org/
 // for more of what you can do here.
-module.exports = function (app) {
+import { Application } from '@feathersjs/feathers';
+
+export default function (app: Application) {
   const db = app.get('knexClient');
   const tableName = '<%= snakeName %>'
   db.schema.hasTable(tableName).then(exists => {
@@ -25,4 +27,4 @@ module.exports = function (app) {
   });
 
   return db;
-};
+}

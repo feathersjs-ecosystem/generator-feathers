@@ -1,7 +1,8 @@
-const NeDB = require('nedb');
-const path = require('path');
+import { Application } from '@feathersjs/feathers';
+import NeDB from 'nedb';
+import path from 'path';
 
-module.exports = function (app) {
+export default function (app: Application) {
   const dbPath = app.get('nedb');
   const Model = new NeDB({
     filename: path.join(dbPath, '<%= kebabName %>.db'),
@@ -11,4 +12,4 @@ module.exports = function (app) {
   Model.ensureIndex({ fieldName: 'email', unique: true });
 
   return Model;
-};
+}

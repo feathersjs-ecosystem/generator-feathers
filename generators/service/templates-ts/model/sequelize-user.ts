@@ -1,9 +1,10 @@
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
+import { Application } from '@feathersjs/feathers';
 const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
-module.exports = function (app) {
+export default function (app: Application) {
   const sequelizeClient = app.get('sequelizeClient');
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>', {
   <% if(authentication.strategies.indexOf('local') !== -1) { %>
@@ -35,4 +36,4 @@ module.exports = function (app) {
   };
 
   return <%= camelName %>;
-};
+}

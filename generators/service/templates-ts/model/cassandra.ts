@@ -1,6 +1,8 @@
 // See https://express-cassandra.readthedocs.io/en/latest/schema/
 // for more of what you can do here.
-module.exports = function (app) {
+import { Application } from '@feathersjs/feathers';
+
+export default function (app: Application) {
   const models = app.get('models');
   const <%= camelName %> = models.loadSchema('<%= camelName %>', {
     table_name: '<%= snakeName %>',
@@ -33,4 +35,4 @@ module.exports = function (app) {
   });
 
   return <%= camelName %>;
-};
+}

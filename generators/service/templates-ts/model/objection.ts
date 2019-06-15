@@ -1,6 +1,7 @@
 // See https://vincit.github.io/objection.js/#models
 // for more of what you can do here.
-const { Model } = require('objection');
+import { Application } from '@feathersjs/feathers';
+import { Model } from 'objection';
 
 class <%= camelName %> extends Model {
 
@@ -28,7 +29,7 @@ class <%= camelName %> extends Model {
   }
 }
 
-module.exports = function (app) {
+export default function (app: Application) {
   const db = app.get('knex');
 
   db.schema.hasTable('<%= snakeName %>').then(exists => {
@@ -46,4 +47,4 @@ module.exports = function (app) {
     .catch(e => console.error('Error creating <%= snakeName %> table', e)); // eslint-disable-line no-console
 
   return <%= camelName %>;
-};
+}

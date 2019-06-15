@@ -2,7 +2,9 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-module.exports = function (app) {
+import { Application } from '@feathersjs/feathers';
+
+export default function (app: Application) {
   const mongooseClient = app.get('mongooseClient');
   const <%= camelName %> = new mongooseClient.Schema({
   <% if(authentication.strategies.indexOf('local') !== -1) { %>
@@ -17,4 +19,4 @@ module.exports = function (app) {
   });
 
   return mongooseClient.model('<%= camelName %>', <%= camelName %>);
-};
+}
