@@ -69,6 +69,26 @@ module.exports = class AuthGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformCodeTs(code) {
+    const ast = j(code);
+    const appDeclaration = ast.findDeclaration('app');
+    const configureServices = ast.findConfigure('services');
+    const requireCall = 'import authentication from \'./authentication\';';
+
+    if (appDeclaration.length === 0) {
+      throw new Error('Could not find \'app\' variable declaration in app.ts to insert database configuration. Did you modify app.ts?');
+    }
+
+    if (configureServices.length === 0) {
+      throw new Error('Could not find .configure(services) call in app.ts after which to insert database configuration. Did you modify app.ts?');
+    }
+
+    appDeclaration.insertBefore(requireCall);
+    configureServices.insertBefore('app.configure(authentication);');
+
+    return ast.toSource();
+  }
+
   _writeConfiguration() {
     const config = Object.assign({}, this.defaultConfig);
 
@@ -146,9 +166,15 @@ module.exports = class AuthGenerator extends Generator {
       const appjs = this.destinationPath(this.libDirectory, config.ts ? 'app.ts' : 'app.js');
 
       this.conflicter.force = true;
-      this.fs.write(appjs, this._transformCode(
-        this.fs.read(appjs).toString()
-      ));
+      if (config.ts) {
+        this.fs.write(appjs, this._transformCodeTs(
+          this.fs.read(appjs).toString()
+        ));
+      } else {
+        this.fs.write(appjs, this._transformCode(
+          this.fs.read(appjs).toString()
+        ));
+      }
     }
 
     this.fs.copyTpl(

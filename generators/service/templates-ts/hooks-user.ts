@@ -1,9 +1,9 @@
-import feathersAuthentication from '@feathersjs/authentication';
+import * as feathersAuthentication from '@feathersjs/authentication';
 
 const { authenticate } = feathersAuthentication.hooks;
 
 <% if (authentication.strategies.indexOf('local') !== -1) { %>
-import local from '@feathersjs/authentication-local';
+import * as local from '@feathersjs/authentication-local';
 const { hashPassword, protect } = local.hooks;
 <% } %>
 
@@ -12,9 +12,9 @@ export default {
     all: [],
     find: [ authenticate('jwt') ],
     get: [ authenticate('jwt') ],
-    create: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword()<% } %> ],
-    update: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword(), <% } %> authenticate('jwt') ],
-    patch: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword(), <% } %> authenticate('jwt') ],
+    create: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword('password')<% } %> ],
+    update: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword('password'), <% } %> authenticate('jwt') ],
+    patch: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword('password'), <% } %> authenticate('jwt') ],
     remove: [ authenticate('jwt') ]
   },
 
