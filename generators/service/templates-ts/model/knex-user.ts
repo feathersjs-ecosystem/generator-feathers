@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 // <%= name %>-model.js - A KnexJS
 // 
 // See http://knexjs.org/
