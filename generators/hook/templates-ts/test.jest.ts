@@ -8,7 +8,7 @@ describe('\'<%= name %>\' hook', () => {
     app = feathers();
 
     app.use('/dummy', {
-      async get(id) {
+      async get(id: any) {
         return { id };
       }
     });
