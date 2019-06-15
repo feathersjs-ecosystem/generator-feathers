@@ -1,8 +1,9 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-const createService = require('feathers-mongodb');
-const hooks = require('./<%= kebabName %>.hooks');
+import { Application } from '@feathersjs/feathers';
+import createService from 'feathers-mongodb';
+import hooks from './<%= kebabName %>.hooks';
 
-module.exports = function (app) {
+export default function (app: Application) {
   const paginate = app.get('paginate');
   const mongoClient = app.get('mongoClient');
   const options = { paginate };
@@ -18,4 +19,4 @@ module.exports = function (app) {
   });
 
   service.hooks(hooks);
-};
+}

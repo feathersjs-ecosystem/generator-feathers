@@ -1,9 +1,10 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-const createService = require('<%= serviceModule %>');
-const createModel = require('<%= relativeRoot %>models/<%= modelName %>');
-const hooks = require('./<%= kebabName %>.hooks');
+import { Application } from '@feathersjs/feathers';
+import createService from '<%= serviceModule %>';
+import createModel from '<%= relativeRoot %>models/<%= modelName %>';
+import hooks from './<%= kebabName %>.hooks';
 
-module.exports = function (app) {
+export default function (app: Application) {
   const Model = createModel(app);
   const paginate = app.get('paginate');
 
@@ -20,5 +21,5 @@ module.exports = function (app) {
   const service = app.service('<%= path %>');
 
   service.hooks(hooks);
-};
+}
   

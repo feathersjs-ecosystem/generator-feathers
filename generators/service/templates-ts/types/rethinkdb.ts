@@ -1,8 +1,9 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-const createService = require('feathers-rethinkdb');
-const hooks = require('./<%= kebabName %>.hooks');
+import { Application } from '@feathersjs/feathers';
+import createService from 'feathers-rethinkdb';
+import hooks from './<%= kebabName %>.hooks';
 
-module.exports = function (app) {
+export default function (app: Application) {
   const Model = app.get('rethinkdbClient');
   const paginate = app.get('paginate');
 
@@ -19,4 +20,4 @@ module.exports = function (app) {
   const service = app.service('<%= path %>');
 
   service.hooks(hooks);
-};
+}
