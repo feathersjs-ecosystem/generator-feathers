@@ -55,6 +55,13 @@ module.exports = class ConnectionGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformModuleDeclarations () {
+    // TODO
+    // const filePath = this.destinationPath(this.libDirectory, 'declarations.d.ts');
+    // const ast = j(this.fs.read(filePath).toString());
+    // const moduleDeclarations = ast.find(j.TSModuleDeclaration);
+  }
+
   _getConfiguration () {
     const sqlPackages = {
       mysql: 'mysql2',
@@ -337,11 +344,17 @@ module.exports = class ConnectionGenerator extends Generator {
         const appjs = this.destinationPath(this.libDirectory, config.ts ? 'app.ts' : 'app.js');
 
         this.conflicter.force = true;
-        this.fs.write(appjs, config.ts ? this._transformCodeTs(
-          this.fs.read(appjs).toString()
-        ) : this._transformCode(
-          this.fs.read(appjs).toString()
-        ));
+
+        if (config.ts) {
+          this.fs.write(appjs, this._transformCodeTs(
+            this.fs.read(appjs).toString()
+          ));
+          this._transformModuleDeclarations();
+        } else {
+          this.fs.write(appjs, this._transformCode(
+            this.fs.read(appjs).toString()
+          ));
+        }
       }
 
       // Copy template only if connection generate is not composed
