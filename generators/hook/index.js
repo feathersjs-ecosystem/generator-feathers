@@ -4,12 +4,13 @@ const { kebabCase, camelCase, last } = require('lodash');
 const dir = require('node-dir');
 const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
+const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
 
 module.exports = class HookGenerator extends Generator {
   _listServices (...args) {
     const serviceDir = this.destinationPath(...args);
     const files = dir.files(serviceDir, { sync: true });
-    const services = files.filter(file => file.endsWith('.service.ts'))
+    const services = files.filter(file => file.endsWith(config.ts ? 'service.ts' : '.service.js'))
       .map(file => path.dirname(path.relative(serviceDir, file)));
     
     return services;
@@ -40,11 +41,11 @@ module.exports = class HookGenerator extends Generator {
     const nameParts = serviceName.split('/');
     const relativeRoot = '../'.repeat(nameParts.length + 1);
 
-    let hooksFile = this.destinationPath(this.libDirectory, 'services', ...nameParts, `${last(nameParts)}.hooks.ts`);
+    let hooksFile = this.destinationPath(this.libDirectory, 'services', ...nameParts, config.ts ? `${last(nameParts)}.hooks.ts` : `${last(nameParts)}.hooks.js`);
     let moduleName = relativeRoot + hookName;
 
     if (serviceName === '__app') {
-      hooksFile = this.destinationPath(this.libDirectory, 'app.hooks.ts');
+      hooksFile = this.destinationPath(this.libDirectory, config.ts ? 'app.hooks.ts' : 'app.hooks.js');
       moduleName = `./${hookName}`;
     }
 
@@ -149,14 +150,13 @@ module.exports = class HookGenerator extends Generator {
   }
 
   writing () {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     if (config.ts) {
       this.sourceRoot(path.join(__dirname, 'templates-ts'));
     }
     const context = Object.assign({
       libDirectory: this.libDirectory
     }, this.props);
-    const mainFile = this.destinationPath(this.libDirectory, 'hooks', `${context.kebabName}.ts`);
+    const mainFile = this.destinationPath(this.libDirectory, 'hooks', config.ts ? `${context.kebabName}.ts` : `${context.kebabName}.js`);
     const tester = this.pkg.devDependencies.jest ? 'jest' : 'mocha';
 
     if (!this.fs.exists(mainFile) && context.type) {
@@ -166,13 +166,13 @@ module.exports = class HookGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath('hook.ts'),
+      this.templatePath(config.ts ? 'hook.ts' : 'hook.js'),
       mainFile, context
     );
 
     this.fs.copyTpl(
-      this.templatePath(`test.${tester}.ts`),
-      this.destinationPath(this.testDirectory, 'hooks', `${context.kebabName}.test.ts`),
+      this.templatePath(config.ts ? `test.${tester}.ts` : `test.${tester}.js`),
+      this.destinationPath(this.testDirectory, 'hooks', config.ts ? `${context.kebabName}.test.ts` : `${context.kebabName}.test.js`),
       context
     );
   }
