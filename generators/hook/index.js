@@ -4,10 +4,10 @@ const { kebabCase, camelCase, last } = require('lodash');
 const dir = require('node-dir');
 const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
-const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
 
 module.exports = class HookGenerator extends Generator {
   _listServices (...args) {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const serviceDir = this.destinationPath(...args);
     const files = dir.files(serviceDir, { sync: true });
     const services = files.filter(file => file.endsWith(config.ts ? 'service.ts' : '.service.js'))
@@ -38,6 +38,7 @@ module.exports = class HookGenerator extends Generator {
   }
 
   _addToService (serviceName, hookName) {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const nameParts = serviceName.split('/');
     const relativeRoot = '../'.repeat(nameParts.length + 1);
 
@@ -150,6 +151,7 @@ module.exports = class HookGenerator extends Generator {
   }
 
   writing () {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     if (config.ts) {
       this.sourceRoot(path.join(__dirname, 'templates-ts'));
     }
