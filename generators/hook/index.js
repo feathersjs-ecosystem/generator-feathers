@@ -37,6 +37,34 @@ module.exports = class HookGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformHookFileTs (code, moduleName) {
+    const { type, methods, camelName } = this.props;
+    const hookImport = `import ${camelName} from '${moduleName}';`;
+
+    const ast = j(code);
+    const hookDefinitions = ast.find(j.ExportDefaultDeclaration);
+
+    if (hookDefinitions.length !== 1) {
+      throw new Error(`Could not find the hooks definition object while adding ${moduleName}`);
+    }
+
+    const imports = ast.find(j.ImportDeclaration);
+    if (imports.length === 0) {
+      const newImport = j(hookImport).find(j.ImportDeclaration).get().node;
+      hookDefinitions.insertBefore(newImport);
+    } else{
+      const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
+      const newImport = j(hookImport).find(j.ImportDeclaration).get().node;
+      lastImport.insertAfter(newImport);
+    }
+
+    methods.forEach(method => {
+      ast.insertHook(type, method, camelName);
+    });
+
+    return ast.toSource();
+  }
+
   _addToService (serviceName, hookName) {
     const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const nameParts = serviceName.split('/');
@@ -54,7 +82,7 @@ module.exports = class HookGenerator extends Generator {
       throw new Error(`Can not add hook to the ${serviceName} hooks file ${hooksFile}. It does not exist.`);
     }
 
-    const transformed = this._transformHookFile(this.fs.read(hooksFile), moduleName);
+    const transformed = config.ts ? this._transformHookFileTs(this.fs.read(hooksFile), moduleName) : this._transformHookFile(this.fs.read(hooksFile), moduleName);
 
     this.conflicter.force = true;
     this.fs.write(hooksFile, transformed);
@@ -178,4 +206,4 @@ module.exports = class HookGenerator extends Generator {
       context
     );
   }
-};
+}
