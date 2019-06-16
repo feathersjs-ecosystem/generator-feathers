@@ -9,7 +9,8 @@ export default function (app: Application) {
   const paginate = app.get('paginate');
 
   const options = {<% if (modelName) { %>
-    Model,<% } %>
+    Model,<% } %><%- adapter === 'knex' ? `
+    name: '${name}',` : '' %>
     paginate
   };
 

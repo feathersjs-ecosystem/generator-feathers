@@ -3,10 +3,11 @@
 // See http://knexjs.org/
 // for more of what you can do here.
 import { Application } from '@feathersjs/feathers';
+import Knex from 'knex';
 
 export default function (app: Application) {
-  const db = app.get('knexClient');
-  const tableName = '<%= snakeName %>'
+  const db: Knex = app.get('knexClient');
+  const tableName = '<%= snakeName %>';
   db.schema.hasTable(tableName).then(exists => {
     if(!exists) {
       db.schema.createTable(tableName, table => {
