@@ -206,4 +206,4 @@ module.exports = class HookGenerator extends Generator {
       context
     );
   }
-}
+};
