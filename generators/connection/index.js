@@ -39,7 +39,7 @@ module.exports = class ConnectionGenerator extends Generator {
     const ast = j(code);
     const appDeclaration = ast.findDeclaration('app');
     const configureMiddleware = ast.findConfigure('middleware');
-    const requireCall = `const ${adapter} = require('./${adapter}');`;
+    const requireCall = `import ${adapter} from './${adapter}';`;
 
     if (appDeclaration.length === 0) {
       throw new Error('Could not find \'app\' variable declaration in app.ts to insert database configuration. Did you modify app.js?');
