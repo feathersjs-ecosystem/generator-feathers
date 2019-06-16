@@ -1,6 +1,6 @@
 // Application hooks that run for every service
 import log from './hooks/log';
-
+// Don't remove this comment. It's needed to format import lines nicely.
 export default {
   before: {
     all: [ log() ],
