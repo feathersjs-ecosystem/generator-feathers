@@ -1,7 +1,8 @@
 import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '@feathersjs/feathers';
+import { App } from '../../app.interface';
 
-interface App {}
 interface Data {}
+
 interface ServiceOptions {}
 
 export class Service implements ServiceMethods<any>, SetupMethod {
