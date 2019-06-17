@@ -2,6 +2,7 @@
 declare module 'feathers-knex';
 declare module 'feathers-memory';
 declare module 'feathers-mongodb';
+declare module 'feathers-mongoose';
 declare module 'feathers-nedb';
 declare module 'mongodb-core';
 declare module 'nedb';
