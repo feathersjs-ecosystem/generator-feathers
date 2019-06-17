@@ -15,7 +15,7 @@ npm install -g yo
 Then install the feathers generator.
 
 ```bash
-npm install -g yo generator-feathers
+npm install -g yo generator-feathers-ts
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ mkdir my-new-app; cd my-new-app/
 Generate your app and follow the prompts.
 
 ```bash
-yo feathers
+yo feathers-ts
 ```
 
 Start your brand new app! 💥
@@ -42,22 +42,22 @@ npm start
 
 ```bash
 # short alias for generate new application
-yo feathers
+yo feathers-ts
 
 # set up authentication
-yo feathers:authentication
+yo feathers-ts:authentication
 
 # set up a database connection
-yo feathers:connection
+yo feathers-ts:connection
 
 # generate new hook
-yo feathers:hook
+yo feathers-ts:hook
 
 # generate new middleware
-yo feathers:middleware
+yo feathers-ts:middleware
 
 # generate new service
-yo feathers:service
+yo feathers-ts:service
 ```
 
 ## Production
@@ -74,7 +74,7 @@ then inside the repo's directory, run `npm link`. This sets up a global
 link to your local package for running tests (`npm test`) and generating
 new feathers apps/services/hooks/etc.
 
-When finished testing, optionally run `npm uninstall generator-feathers` to remove
+When finished testing, optionally run `npm uninstall generator-feathers-ts` to remove
 the link.
 
 ## License
