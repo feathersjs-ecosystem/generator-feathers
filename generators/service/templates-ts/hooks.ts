@@ -1,5 +1,5 @@
 <% if (requiresAuth) { %>
-import authentication from '@feathersjs/authentication';
+import * as authentication from '@feathersjs/authentication';
 const { authenticate } = authentication.hooks;
 <% } %>
 // Don't remove this comment. It's needed to format import lines nicely.
