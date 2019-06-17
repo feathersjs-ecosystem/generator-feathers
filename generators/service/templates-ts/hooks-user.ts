@@ -1,11 +1,9 @@
-import * as feathersAuthentication from '@feathersjs/authentication';
+import * as feathersAuthentication from '@feathersjs/authentication';<% if (authentication.strategies.indexOf('local') !== -1) { %>
+import * as local from '@feathersjs/authentication-local';<% } %>
+// Don't remove this comment. It's needed to format import lines nicely.
 
-const { authenticate } = feathersAuthentication.hooks;
-
-<% if (authentication.strategies.indexOf('local') !== -1) { %>
-import * as local from '@feathersjs/authentication-local';
-const { hashPassword, protect } = local.hooks;
-<% } %>
+const { authenticate } = feathersAuthentication.hooks;<% if (authentication.strategies.indexOf('local') !== -1) { %>
+const { hashPassword, protect } = local.hooks;<% } %>
 
 export default {
   before: {
