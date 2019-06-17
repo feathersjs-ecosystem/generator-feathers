@@ -10,11 +10,11 @@ import configuration from '@feathersjs/configuration';
 import express from '@feathersjs/express';
 <% if (hasProvider('socketio')) { %>import socketio from '@feathersjs/socketio';<% } %>
 <% if (hasProvider('primus')) { %>import primus from '@feathersjs/primus';<% } %>
-
 import middleware from './middleware';
 import services from './services';
 import appHooks from './app.hooks';
 import channels from './channels';
+// Don't remove this comment. It's needed to format import lines nicely.
 
 const app = express(feathers());
 
