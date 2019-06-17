@@ -233,5 +233,11 @@ module.exports = class ServiceGenerator extends Generator {
     if (serviceModule.charAt(0) !== '.') {
       this._packagerInstall([ serviceModule ], { save: true });
     }
+
+    if (config.ts) {
+      if (adapter === 'mongodb') {
+        this._packagerInstall(['@types/mongodb'], { saveDev: true });
+      }
+    }
   }
 };

@@ -7,7 +7,7 @@ export default function (app: Application) {
   const config = app.get('mongodb');
   const promise = MongoClient.connect(config, { useNewUrlParser: true }).then(client => {
     // For mongodb <= 2.2
-    if(client.collection) {
+    if((client as any).collection) {
       return client;
     }
 
