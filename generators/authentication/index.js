@@ -187,5 +187,8 @@ module.exports = class AuthGenerator extends Generator {
     this._packagerInstall(dependencies, {
       save: true
     });
+    if (config.ts) {
+      this._packagerInstall(['@types/jsonwebtoken'], { saveDev: true });
+    }
   }
 };
