@@ -1,8 +1,8 @@
-<% if (requiresAuth) { %>
-import * as authentication from '@feathersjs/authentication';
+<% if (requiresAuth) { %>import * as authentication from '@feathersjs/authentication';
+// Don't remove this comment. It's needed to format import lines nicely.
+
 const { authenticate } = authentication.hooks;
 <% } %>
-// Don't remove this comment. It's needed to format import lines nicely.
 export default {
   before: {
     all: [<% if (requiresAuth) { %> authenticate('jwt') <% } %>],
