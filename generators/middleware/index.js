@@ -1,4 +1,3 @@
-const path = require('path');
 const { kebabCase, camelCase } = require('lodash');
 const j = require('@feathersjs/tools').transform;
 const validate = require('validate-npm-package-name');
@@ -66,11 +65,8 @@ module.exports = class MiddlewareGenerator extends Generator {
 
   writing () {
     const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
-    if (config.ts) {
-      this.sourceRoot(path.join(__dirname, 'templates-ts'));
-    }
     const context = this.props;
-    const mainFile = this.destinationPath(this.libDirectory, 'middleware', config.ts ? `${context.kebabName}.ts` : `${context.kebabName}.js`);
+    const mainFile = this.srcDestinationPath(this.libDirectory, 'middleware', context.kebabName);
 
     // Do not run code transformations if the middleware file already exists
     if (!this.fs.exists(mainFile)) {
@@ -94,7 +90,7 @@ module.exports = class MiddlewareGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath(config.ts ? 'middleware.ts' : 'middleware.js'),
+      this.srcTemplatePath('middleware'),
       mainFile, context
     );
   }

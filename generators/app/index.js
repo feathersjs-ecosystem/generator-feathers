@@ -121,9 +121,6 @@ module.exports = class AppGenerator extends Generator {
 
   writing () {
     const props = this.props;
-    if (props.ts) {
-      this.sourceRoot(path.join(__dirname, 'templates-ts'));
-    }
     const pkg = this.pkg = makeConfig.package(this);
     const context = Object.assign({}, props, {
       hasProvider (name) {
@@ -146,14 +143,14 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath(props.ts ? 'app.ts' : 'app.js'),
-      this.destinationPath(props.src, props.ts ? 'app.ts' : 'app.js'),
+      this.srcTemplatePath('app'),
+      this.srcDestinationPath(this.libDirectory, 'app'),
       context
     );
 
     this.fs.copyTpl(
-      this.templatePath(props.ts ? `app.test.${props.tester}.ts` : `app.test.${props.tester}.js`),
-      this.destinationPath(this.testDirectory, props.ts ? 'app.test.ts' : 'app.test.js'),
+      this.srcTemplatePath(`app.test.${props.tester}`),
+      this.srcDestinationPath(this.testDirectory, 'app.test'),
       context
     );
 
