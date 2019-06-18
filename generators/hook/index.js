@@ -70,11 +70,11 @@ module.exports = class HookGenerator extends Generator {
     const nameParts = serviceName.split('/');
     const relativeRoot = '../'.repeat(nameParts.length + 1);
 
-    let hooksFile = this.destinationPath(this.libDirectory, 'services', ...nameParts, config.ts ? `${last(nameParts)}.hooks.ts` : `${last(nameParts)}.hooks.js`);
+    let hooksFile = this.srcDestinationPath(this.libDirectory, 'services', ...nameParts, `${last(nameParts)}.hooks`);
     let moduleName = relativeRoot + hookName;
 
     if (serviceName === '__app') {
-      hooksFile = this.destinationPath(this.libDirectory, config.ts ? 'app.hooks.ts' : 'app.hooks.js');
+      hooksFile = this.srcDestinationPath(this.libDirectory, 'app.hooks.ts');
       moduleName = `./${hookName}`;
     }
 
@@ -82,7 +82,8 @@ module.exports = class HookGenerator extends Generator {
       throw new Error(`Can not add hook to the ${serviceName} hooks file ${hooksFile}. It does not exist.`);
     }
 
-    const transformed = config.ts ? this._transformHookFileTs(this.fs.read(hooksFile), moduleName) : this._transformHookFile(this.fs.read(hooksFile), moduleName);
+    const transformed = config.ts ? this._transformHookFileTs(this.fs.read(hooksFile), moduleName)
+      : this._transformHookFile(this.fs.read(hooksFile), moduleName);
 
     this.conflicter.force = true;
     this.fs.write(hooksFile, transformed);
@@ -180,9 +181,6 @@ module.exports = class HookGenerator extends Generator {
 
   writing () {
     const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
-    if (config.ts) {
-      this.sourceRoot(path.join(__dirname, 'templates-ts'));
-    }
     const context = Object.assign({
       libDirectory: this.libDirectory
     }, this.props);
@@ -196,13 +194,13 @@ module.exports = class HookGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath(config.ts ? 'hook.ts' : 'hook.js'),
+      this.srcTemplatePath('hook'),
       mainFile, context
     );
 
     this.fs.copyTpl(
-      this.templatePath(config.ts ? `test.${tester}.ts` : `test.${tester}.js`),
-      this.destinationPath(this.testDirectory, 'hooks', config.ts ? `${context.kebabName}.test.ts` : `${context.kebabName}.test.js`),
+      this.srcTemplatePath(`test.${tester}`),
+      this.srcDestinationPath(this.testDirectory, 'hooks', `${context.kebabName}.test`),
       context
     );
   }

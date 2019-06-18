@@ -320,28 +320,26 @@ module.exports = class ConnectionGenerator extends Generator {
 
   writing () {
     const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
-    if (config.ts) {
-      this.sourceRoot(path.join(__dirname, 'templates-ts'));
-    }
-    let template;
     const { database, adapter } = this.props;
     const context = Object.assign({}, this.props);
+    
+    let template;
 
     if (database === 'rethinkdb') {
-      template = config.ts ? 'rethinkdb.ts' : 'rethinkdb.js';
+      template = 'rethinkdb';
     } else if (database === 'mssql' && adapter === 'sequelize') {
-      template = config.ts ? `${adapter}-mssql.ts` : `${adapter}-mssql.js`;
+      template = `${adapter}-mssql`;
     } else if (adapter && adapter !== 'nedb') {
-      template = config.ts ? `${adapter}.ts` : `${adapter}.js`;
+      template = `${adapter}`;
     }
 
     if (template) {
-      const dbFile = config.ts ? `${adapter}.ts` : `${adapter}.js`;
-      const templateExists = this.fs.exists(this.destinationPath(this.libDirectory, dbFile));
+      const dbFile = `${adapter}`;
+      const templateExists = this.fs.exists(this.srcDestinationPath(this.libDirectory, dbFile));
 
       // If the file doesn't exist yet, add it to the app.js
       if (!templateExists) {
-        const appjs = this.destinationPath(this.libDirectory, config.ts ? 'app.ts' : 'app.js');
+        const appjs = this.srcDestinationPath(this.libDirectory, 'app');
 
         this.conflicter.force = true;
 
@@ -361,8 +359,8 @@ module.exports = class ConnectionGenerator extends Generator {
       // from the service generator
       if(!templateExists || (templateExists && !this.props.service)) {
         this.fs.copyTpl(
-          this.templatePath(template),
-          this.destinationPath(this.libDirectory, dbFile),
+          this.srcTemplatePath(template),
+          this.srcDestinationPath(this.libDirectory, dbFile),
           context
         );
       }
