@@ -158,18 +158,17 @@ module.exports = class AuthGenerator extends Generator {
 
     // If the file doesn't exist yet, add it to the app.js
     if (!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'authentication'))) {
-      const appjs = this.srcDestinationPath(this.libDirectory, 'app');
+      const appSrc = this.srcDestinationPath(this.libDirectory, 'app');
 
       this.conflicter.force = true;
+      const code = this.fs.read(appSrc).toString();
+      let transformed;
       if (this.srcType === 'ts') {
-        this.fs.write(appjs, this._transformCodeTs(
-          this.fs.read(appjs).toString()
-        ));
+        transformed = this._transformCodeTs(code);
       } else {
-        this.fs.write(appjs, this._transformCode(
-          this.fs.read(appjs).toString()
-        ));
+        transformed = this._transformCode(code);
       }
+      this.fs.write(appSrc, transformed);
     }
 
     this.fs.copyTpl(
