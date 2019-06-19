@@ -1,4 +1,3 @@
-const path = require('path');
 const _ = require('lodash');
 const j = require('@feathersjs/tools').transform;
 const crypto = require('crypto');
@@ -118,10 +117,6 @@ module.exports = class AuthGenerator extends Generator {
   }
 
   writing() {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
-    if (config.ts) {
-      this.sourceRoot(path.join(__dirname, 'templates-ts'));
-    }
     const dependencies = [
       '@feathersjs/authentication',
       '@feathersjs/authentication-local',
@@ -150,7 +145,7 @@ module.exports = class AuthGenerator extends Generator {
       }
     });
 
-    if(!this.fs.exists(this.destinationPath(this.libDirectory, 'services', context.kebabEntity, config.ts ? `${context.kebabEntity}.service.ts` : `${context.kebabEntity}.service.js`))) {
+    if(!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service`))) {
       // Create the users service
       this.composeWith(require.resolve('../service'), {
         props: {
@@ -162,11 +157,11 @@ module.exports = class AuthGenerator extends Generator {
     }
 
     // If the file doesn't exist yet, add it to the app.js
-    if (!this.fs.exists(this.destinationPath(this.libDirectory, config.ts ? 'authentication.ts' : 'authentication.js'))) {
-      const appjs = this.destinationPath(this.libDirectory, config.ts ? 'app.ts' : 'app.js');
+    if (!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'authentication'))) {
+      const appjs = this.srcDestinationPath(this.libDirectory, 'app');
 
       this.conflicter.force = true;
-      if (config.ts) {
+      if (this.srcType === 'ts') {
         this.fs.write(appjs, this._transformCodeTs(
           this.fs.read(appjs).toString()
         ));
@@ -178,8 +173,8 @@ module.exports = class AuthGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath(config.ts ? 'authentication.ts' : 'authentication.js'),
-      this.destinationPath(this.libDirectory, config.ts ? 'authentication.ts' : 'authentication.js'),
+      this.srcTemplatePath('authentication'),
+      this.srcDestinationPath(this.libDirectory, 'authentication'),
       context
     );
 
@@ -187,7 +182,7 @@ module.exports = class AuthGenerator extends Generator {
     this._packagerInstall(dependencies, {
       save: true
     });
-    if (config.ts) {
+    if (this.srcType === 'ts') {
       this._packagerInstall(['@types/jsonwebtoken'], { saveDev: true });
     }
   }
