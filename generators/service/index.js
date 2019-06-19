@@ -149,7 +149,7 @@ module.exports = class ServiceGenerator extends Generator {
     const serviceFolder = [ this.libDirectory, 'services', ...subfolder, kebabName ];
     const mainFile = this.srcDestinationPath(... serviceFolder, `${kebabName}.service`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}`;
-    const hasModel = this.fs.exists(this.srcTemplatePath(modelTpl));
+    const hasModel = this.fs.exists(this.srcTemplatePath('model', modelTpl));
     const context = Object.assign({}, this.props, {
       libDirectory: this.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
