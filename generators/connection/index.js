@@ -1,4 +1,3 @@
-const path = require('path');
 const { snakeCase } = require('lodash');
 const url = require('url');
 const j = require('@feathersjs/tools').transform;
