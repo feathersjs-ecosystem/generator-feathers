@@ -55,6 +55,8 @@ describe('generator-feathers', function() {
     .inTmpDir(dir => (appDir = dir))
     .withPrompts({
       name: 'myapp',
+      language: process.env.GENERATOR_LANGUAGE || 'js',
+      tester: process.env.GENERATOR_TESTER || 'mocha',
       providers: ['rest', 'socketio'],
       src: 'src',
       packager: 'npm@>= 3.0.0'

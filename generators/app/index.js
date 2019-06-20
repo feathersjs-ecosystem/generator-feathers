@@ -41,10 +41,14 @@ module.exports = class AppGenerator extends Generator {
         '@feathersjs/primus'
       ]);
     const prompts = [{
-      type: 'confirm',
-      name: 'ts',
-      message: 'Use typescript',
-      default: false,
+      type: 'list',
+      name: 'language',
+      message: 'Do you want to use JavaScript or TypeScript?',
+      default: 'js',
+      choices: [
+        { name: 'JavaScript', value: 'js' },
+        { name: 'TypeScript', value: 'ts'  }
+      ],
     }, {
       name: 'name',
       message: 'Project name',

@@ -4,3 +4,8 @@ node_js:
   - 8
   - 10
 install: npm install
+env:
+  - GENERATOR_LANGUAGE=js
+  - GENERATOR_LANGUAGE=ts
+  - GENERATOR_TESTER=mocha
+  - GENERATOR_TESTER=jest
