@@ -1,8 +1,8 @@
 {
   "name": "generator-feathers",
   "description": "A Yeoman generator for a Feathers application",
-  "version": "4.0.0-pre.2-3",
-  "homepage": "https://github.com/feathersjs/generator-feathers",
+  "version": "4.0.0-pre.2",
+  "homepage": "https://github.com/ucokfm/generator-feathers-ts",
   "main": "generators/app/index.js",
   "license": "MIT",
   "keywords": [
