@@ -304,6 +304,5 @@ describe('generator-feathers', function() {
     it.skip('sequelize', () => testServiceGenerator('sequelize', 'sqlite', 'id'));
     it.skip('objection', () => testServiceGenerator('objection', 'sqlite', 'id'));
     it.skip('cassandra', () => testServiceGenerator('cassandra', 'cassandra', 'id'));
-    it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
   });
 });

@@ -24,7 +24,6 @@ module.exports = class ServiceGenerator extends Generator {
           { name: 'Mongoose',         value: 'mongoose'  },
           { name: 'Sequelize',        value: 'sequelize' },
           { name: 'KnexJS',           value: 'knex'      },
-          { name: 'RethinkDB',        value: 'rethinkdb' },
           { name: 'Objection',        value: 'objection' },
           { name: 'Cassandra',        value: 'cassandra' }
         ]
@@ -141,7 +140,6 @@ module.exports = class ServiceGenerator extends Generator {
       mongoose: 'feathers-mongoose',
       sequelize: 'feathers-sequelize',
       knex: 'feathers-knex',
-      rethinkdb: 'feathers-rethinkdb',
       objection: 'feathers-objection',
       cassandra: 'feathers-cassandra'
     };

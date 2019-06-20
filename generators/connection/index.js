@@ -182,7 +182,6 @@ module.exports = class ConnectionGenerator extends Generator {
           { name: 'NeDB', value: 'nedb' },
           // { name: 'Oracle', value: 'oracle' },
           { name: 'PostgreSQL', value: 'postgres' },
-          { name: 'RethinkDB', value: 'rethinkdb' },
           { name: 'SQLite', value: 'sqlite' },
           { name: 'SQL Server', value: 'mssql' },
           { name: 'Cassandra', value: 'cassandra' }
@@ -197,7 +196,6 @@ module.exports = class ConnectionGenerator extends Generator {
 
           switch (adapter) {
           case 'nedb':
-          case 'rethinkdb':
           case 'memory':
           case 'mongodb':
           case 'cassandra':
@@ -262,7 +260,6 @@ module.exports = class ConnectionGenerator extends Generator {
 
           switch (database) {
           case 'nedb':
-          case 'rethinkdb':
           case 'memory':
           case 'cassandra':
             return false;
@@ -283,7 +280,6 @@ module.exports = class ConnectionGenerator extends Generator {
             nedb: 'nedb://../data',
             // oracle: `oracle://root:password@localhost:1521/${databaseName}`,
             postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
-            rethinkdb: `rethinkdb://localhost:28015/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`,
             cassandra: `cassandra://localhost:9042/${databaseName}`
@@ -299,8 +295,6 @@ module.exports = class ConnectionGenerator extends Generator {
           if (connection) {
             if (connection.connection){
               setProps({ connectionString:connection.connection });
-            } else if (database === 'rethinkdb' && connection.db) {
-              setProps({ connectionString:`rethinkdb://${connection.servers[0].host}:${connection.servers[0].port}/${connection.db}` });
             } else {
               setProps({ connectionString:connection });
             }
@@ -324,9 +318,7 @@ module.exports = class ConnectionGenerator extends Generator {
     
     let template;
 
-    if (database === 'rethinkdb') {
-      template = 'rethinkdb';
-    } else if (database === 'mssql' && adapter === 'sequelize') {
+    if (database === 'mssql' && adapter === 'sequelize') {
       template = `${adapter}-mssql`;
     } else if (adapter && adapter !== 'nedb') {
       template = `${adapter}`;
@@ -387,7 +379,6 @@ module.exports = class ConnectionGenerator extends Generator {
       case 'mysql':
       // case 'oracle':
       case 'postgres': // eslint-disable-line no-fallthrough
-      case 'rethinkdb':
       case 'cassandra':
         this.log(`Make sure that your ${database} database is running, the username/role is correct, and "${connectionString}" is reachable and the database has been created.`);
         this.log('Your configuration can be found in the projects config/ folder.');
