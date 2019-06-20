@@ -114,9 +114,5 @@ describe('generator-feathers with jest', () => {
     // requires locally installed and running instance of Apache Cassandra
     // on a Mac this can be installed with homebrew, i.e. brew install cassandra
     it.skip('cassandra', () => testServiceGenerator('cassandra', 'cassandra', 'id'));
-    // same is true for rethinkdb. needs to be installed and running before test.
-    // you may have to run the test twice: once to initialize the DB, then
-    // another to see the test pass
-    it.skip('rethinkdb', () => testServiceGenerator('rethinkdb', 'id'));
   });
 });

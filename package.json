@@ -87,7 +87,6 @@
     "objection": "^1.4.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "rethinkdbdash": "^2.3.31",
     "sequelize": "^5.1.0",
     "serve-favicon": "^2.5.0",
     "sqlite3": "^4.0.4",
