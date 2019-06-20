@@ -44,7 +44,7 @@ module.exports = class AppGenerator extends Generator {
       type: 'confirm',
       name: 'ts',
       message: 'Use typescript',
-      default: true,
+      default: false,
     }, {
       name: 'name',
       message: 'Project name',
