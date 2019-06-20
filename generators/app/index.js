@@ -41,6 +41,11 @@ module.exports = class AppGenerator extends Generator {
         '@feathersjs/primus'
       ]);
     const prompts = [{
+      type: 'confirm',
+      name: 'ts',
+      message: 'Use typescript',
+      default: false,
+    }, {
       name: 'name',
       message: 'Project name',
       when: !this.pkg.name,
@@ -138,14 +143,14 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath('app.js'),
-      this.destinationPath(props.src, 'app.js'),
+      this.srcTemplatePath('app'),
+      this.srcDestinationPath(this.libDirectory, 'app'),
       context
     );
 
     this.fs.copyTpl(
-      this.templatePath(`app.test.${props.tester}.js`),
-      this.destinationPath(this.testDirectory, 'app.test.js'),
+      this.srcTemplatePath(`app.test.${props.tester}`),
+      this.srcDestinationPath(this.testDirectory, 'app.test'),
       context
     );
 
@@ -154,10 +159,25 @@ module.exports = class AppGenerator extends Generator {
       pkg
     );
 
-    this.fs.writeJSON(
-      this.destinationPath('.eslintrc.json'),
-      makeConfig.eslintrc(this)
-    );
+    if (props.ts) {
+      this.fs.writeJSON(
+        this.destinationPath('tsconfig.json'),
+        makeConfig.tsconfig(this)
+      );
+
+      if (props.tester === 'jest') {
+        this.fs.copyTpl(
+          this.templatePath('jest.config.js'),
+          this.destinationPath('jest.config.js'),
+          context
+        );
+      }
+    } else {
+      this.fs.writeJSON(
+        this.destinationPath('.eslintrc.json'),
+        makeConfig.eslintrc(this)
+      );
+    }
 
     this.fs.writeJSON(
       this.destinationPath(this.configDirectory, 'default.json'),
@@ -184,6 +204,26 @@ module.exports = class AppGenerator extends Generator {
     this._packagerInstall(this.dependencies, {
       save: true
     });
+
+    if (this.props.ts) {
+      const excluded = [
+        'eslint',
+        'nodemon@^1.18.7',
+      ];
+      this.devDependencies = this.devDependencies.concat([
+        '@types/compression',
+        '@types/cors',
+        '@types/helmet',
+        '@types/request-promise',
+        '@types/serve-favicon',
+        'shx',
+        'ts-node-dev',
+        'tslint',
+        'typescript',
+        `@types/${this.props.tester}`,
+        `ts-${this.props.tester}`,
+      ]).filter(item => !excluded.includes(item));
+    }
 
     this.devDependencies.push(this.props.tester);
 

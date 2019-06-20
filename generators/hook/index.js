@@ -7,9 +7,10 @@ const Generator = require('../../lib/generator');
 
 module.exports = class HookGenerator extends Generator {
   _listServices (...args) {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const serviceDir = this.destinationPath(...args);
     const files = dir.files(serviceDir, { sync: true });
-    const services = files.filter(file => file.endsWith('.service.js'))
+    const services = files.filter(file => file.endsWith(config.ts ? 'service.ts' : '.service.js'))
       .map(file => path.dirname(path.relative(serviceDir, file)));
     
     return services;
@@ -36,15 +37,44 @@ module.exports = class HookGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformHookFileTs (code, moduleName) {
+    const { type, methods, camelName } = this.props;
+    const hookImport = `import ${camelName} from '${moduleName}';`;
+
+    const ast = j(code);
+    const hookDefinitions = ast.find(j.ExportDefaultDeclaration);
+
+    if (hookDefinitions.length !== 1) {
+      throw new Error(`Could not find the hooks definition object while adding ${moduleName}`);
+    }
+
+    const imports = ast.find(j.ImportDeclaration);
+    if (imports.length === 0) {
+      const newImport = j(hookImport).find(j.ImportDeclaration).get().node;
+      hookDefinitions.insertBefore(newImport);
+    } else{
+      const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
+      const newImport = j(hookImport).find(j.ImportDeclaration).get().node;
+      lastImport.insertAfter(newImport);
+    }
+
+    methods.forEach(method => {
+      ast.insertHook(type, method, camelName);
+    });
+
+    return ast.toSource();
+  }
+
   _addToService (serviceName, hookName) {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const nameParts = serviceName.split('/');
     const relativeRoot = '../'.repeat(nameParts.length + 1);
 
-    let hooksFile = this.destinationPath(this.libDirectory, 'services', ...nameParts, `${last(nameParts)}.hooks.js`);
+    let hooksFile = this.srcDestinationPath(this.libDirectory, 'services', ...nameParts, `${last(nameParts)}.hooks`);
     let moduleName = relativeRoot + hookName;
 
     if (serviceName === '__app') {
-      hooksFile = this.destinationPath(this.libDirectory, 'app.hooks.js');
+      hooksFile = this.srcDestinationPath(this.libDirectory, 'app.hooks.ts');
       moduleName = `./${hookName}`;
     }
 
@@ -52,7 +82,8 @@ module.exports = class HookGenerator extends Generator {
       throw new Error(`Can not add hook to the ${serviceName} hooks file ${hooksFile}. It does not exist.`);
     }
 
-    const transformed = this._transformHookFile(this.fs.read(hooksFile), moduleName);
+    const transformed = config.ts ? this._transformHookFileTs(this.fs.read(hooksFile), moduleName)
+      : this._transformHookFile(this.fs.read(hooksFile), moduleName);
 
     this.conflicter.force = true;
     this.fs.write(hooksFile, transformed);
@@ -149,10 +180,11 @@ module.exports = class HookGenerator extends Generator {
   }
 
   writing () {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const context = Object.assign({
       libDirectory: this.libDirectory
     }, this.props);
-    const mainFile = this.destinationPath(this.libDirectory, 'hooks', `${context.kebabName}.js`);
+    const mainFile = this.destinationPath(this.libDirectory, 'hooks', config.ts ? `${context.kebabName}.ts` : `${context.kebabName}.js`);
     const tester = this.pkg.devDependencies.jest ? 'jest' : 'mocha';
 
     if (!this.fs.exists(mainFile) && context.type) {
@@ -162,13 +194,13 @@ module.exports = class HookGenerator extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath('hook.js'),
+      this.srcTemplatePath('hook'),
       mainFile, context
     );
 
     this.fs.copyTpl(
-      this.templatePath(`test.${tester}.js`),
-      this.destinationPath(this.testDirectory, 'hooks', `${context.kebabName}.test.js`),
+      this.srcTemplatePath(`test.${tester}`),
+      this.srcDestinationPath(this.testDirectory, 'hooks', `${context.kebabName}.test`),
       context
     );
   }

@@ -32,6 +32,35 @@ module.exports = class ConnectionGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformCodeTs (code) {
+    const { adapter } = this.props;
+
+    const ast = j(code);
+    const appDeclaration = ast.findDeclaration('app');
+    const configureMiddleware = ast.findConfigure('middleware');
+    const requireCall = `import ${adapter} from './${adapter}';`;
+
+    if (appDeclaration.length === 0) {
+      throw new Error('Could not find \'app\' variable declaration in app.ts to insert database configuration. Did you modify app.js?');
+    }
+
+    if (configureMiddleware.length === 0) {
+      throw new Error('Could not find .configure(middleware) call in app.ts after which to insert database configuration. Did you modify app.js?');
+    }
+
+    appDeclaration.insertBefore(requireCall);
+    configureMiddleware.insertBefore(`app.configure(${adapter});`);
+
+    return ast.toSource();
+  }
+
+  _transformModuleDeclarations () {
+    // TODO
+    // const filePath = this.destinationPath(this.libDirectory, 'declarations.d.ts');
+    // const ast = j(this.fs.read(filePath).toString());
+    // const moduleDeclarations = ast.find(j.TSModuleDeclaration);
+  }
+
   _getConfiguration () {
     const sqlPackages = {
       mysql: 'mysql2',
@@ -289,38 +318,48 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   writing () {
-    let template;
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const { database, adapter } = this.props;
     const context = Object.assign({}, this.props);
+    
+    let template;
 
     if (database === 'rethinkdb') {
-      template = 'rethinkdb.js';
+      template = 'rethinkdb';
     } else if (database === 'mssql' && adapter === 'sequelize') {
-      template = `${adapter}-mssql.js`;
+      template = `${adapter}-mssql`;
     } else if (adapter && adapter !== 'nedb') {
-      template = `${adapter}.js`;
+      template = `${adapter}`;
     }
 
     if (template) {
-      const dbFile = `${adapter}.js`;
-      const templateExists = this.fs.exists(this.destinationPath(this.libDirectory, dbFile));
+      const dbFile = `${adapter}`;
+      const templateExists = this.fs.exists(this.srcDestinationPath(this.libDirectory, dbFile));
 
       // If the file doesn't exist yet, add it to the app.js
       if (!templateExists) {
-        const appjs = this.destinationPath(this.libDirectory, 'app.js');
+        const appjs = this.srcDestinationPath(this.libDirectory, 'app');
 
         this.conflicter.force = true;
-        this.fs.write(appjs, this._transformCode(
-          this.fs.read(appjs).toString()
-        ));
+
+        if (config.ts) {
+          this.fs.write(appjs, this._transformCodeTs(
+            this.fs.read(appjs).toString()
+          ));
+          this._transformModuleDeclarations();
+        } else {
+          this.fs.write(appjs, this._transformCode(
+            this.fs.read(appjs).toString()
+          ));
+        }
       }
 
       // Copy template only if connection generate is not composed
       // from the service generator
       if(!templateExists || (templateExists && !this.props.service)) {
         this.fs.copyTpl(
-          this.templatePath(template),
-          this.destinationPath(this.libDirectory, dbFile),
+          this.srcTemplatePath(template),
+          this.srcDestinationPath(this.libDirectory, dbFile),
           context
         );
       }

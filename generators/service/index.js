@@ -1,11 +1,8 @@
 const _ = require('lodash');
-const fs = require('fs');
-const path = require('path');
 const j = require('@feathersjs/tools').transform;
 const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
 
-const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 
 module.exports = class ServiceGenerator extends Generator {
@@ -113,10 +110,31 @@ module.exports = class ServiceGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformCodeTs(code) {
+    const { kebabName, subfolder } = this.props;
+    const ast = j(code);
+    const folder = subfolder.concat(kebabName).join('/');
+    const camelName = _.camelCase(folder);
+    const serviceImport = `import ${camelName} from './${folder}/${kebabName}.service';`;
+    const serviceCode = `app.configure(${camelName});`;
+
+    const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
+    const newImport = j(serviceImport).find(j.ImportDeclaration).get().node;
+    
+    lastImport.insertAfter(newImport);
+
+    const blockStatement = ast.find(j.BlockStatement).get().node;
+    const newCode = j(serviceCode).find(j.ExpressionStatement).get().node;
+    blockStatement.body.push(newCode);
+
+    return ast.toSource();
+  }
+
   writing() {
+    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const { adapter, kebabName, subfolder } = this.props;
     const moduleMappings = {
-      generic: `./${kebabName}.class.js`,
+      generic: `./${kebabName}.class`,
       memory: 'feathers-memory',
       nedb: 'feathers-nedb',
       mongodb: 'feathers-mongodb',
@@ -129,9 +147,9 @@ module.exports = class ServiceGenerator extends Generator {
     };
     const serviceModule = moduleMappings[adapter];
     const serviceFolder = [ this.libDirectory, 'services', ...subfolder, kebabName ];
-    const mainFile = this.destinationPath(... serviceFolder, `${kebabName}.service.js`);
-    const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
-    const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
+    const mainFile = this.srcDestinationPath(... serviceFolder, `${kebabName}.service`);
+    const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}`;
+    const hasModel = this.fs.exists(this.srcTemplatePath('model', modelTpl));
     const context = Object.assign({}, this.props, {
       libDirectory: this.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
@@ -143,11 +161,17 @@ module.exports = class ServiceGenerator extends Generator {
 
     // Do not run code transformations if the service file already exists
     if (!this.fs.exists(mainFile)) {
-      const servicejs = this.destinationPath(this.libDirectory, 'services', 'index.js');
-      const transformed = this._transformCode(
-        this.fs.read(servicejs).toString()
-      );
-
+      const servicejs = this.srcDestinationPath(this.libDirectory, 'services', 'index');
+      let transformed;
+      if (config.ts) {
+        transformed = this._transformCodeTs(
+          this.fs.read(servicejs).toString()
+        );
+      } else {
+        transformed = this._transformCode(
+          this.fs.read(servicejs).toString()
+        );
+      }
       this.conflicter.force = true;
       this.fs.write(servicejs, transformed);
     }
@@ -161,8 +185,8 @@ module.exports = class ServiceGenerator extends Generator {
     } else if(adapter === 'generic') {
       // Copy the generic service class
       this.fs.copyTpl(
-        this.templatePath('class.js'),
-        this.destinationPath(... serviceFolder, `${kebabName}.class.js`),
+        this.srcTemplatePath('class'),
+        this.srcDestinationPath(... serviceFolder, `${kebabName}.class`),
         context
       );
     }
@@ -170,40 +194,48 @@ module.exports = class ServiceGenerator extends Generator {
     if (context.modelName) {
       // Copy the model
       this.fs.copyTpl(
-        this.templatePath('model', modelTpl),
-        this.destinationPath(this.libDirectory, 'models', `${context.modelName}.js`),
+        this.srcTemplatePath('model', modelTpl),
+        this.srcDestinationPath(this.libDirectory, 'models', context.modelName),
         context
       );
     }
 
     this.fs.copyTpl(
-      this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
-      this.destinationPath(... serviceFolder, `${kebabName}.hooks.js`),
+      this.srcTemplatePath(`hooks${this.props.authentication ? '-user' : ''}`),
+      this.srcDestinationPath(... serviceFolder, `${kebabName}.hooks`),
       context
     );
 
-    if (fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`))) {
+    if (this.fs.exists(this.srcTemplatePath('types', adapter))) {
       this.fs.copyTpl(
-        this.templatePath('types', `${adapter}.js`),
+        this.srcTemplatePath('types', adapter),
         mainFile,
         context
       );
     } else {
       this.fs.copyTpl(
-        this.templatePath('service.js'),
+        this.srcTemplatePath('service'),
         mainFile,
         context
       );
     }
 
     this.fs.copyTpl(
-      this.templatePath(`test.${tester}.js`),
-      this.destinationPath(this.testDirectory, 'services', ...subfolder, `${kebabName}.test.js`),
+      this.srcTemplatePath(`test.${tester}`),
+      this.srcDestinationPath(this.testDirectory, 'services', ...subfolder, `${kebabName}.test`),
       context
     );
 
     if (serviceModule.charAt(0) !== '.') {
       this._packagerInstall([ serviceModule ], { save: true });
+    }
+
+    if (config.ts) {
+      if (adapter === 'mongodb') {
+        this._packagerInstall(['@types/mongodb'], { saveDev: true });
+      } else if (adapter === 'mongoose') {
+        this._packagerInstall(['@types/mongoose'], { saveDev: true });
+      }
     }
   }
 };

@@ -68,6 +68,26 @@ module.exports = class AuthGenerator extends Generator {
     return ast.toSource();
   }
 
+  _transformCodeTs(code) {
+    const ast = j(code);
+    const appDeclaration = ast.findDeclaration('app');
+    const configureServices = ast.findConfigure('services');
+    const requireCall = 'import authentication from \'./authentication\';';
+
+    if (appDeclaration.length === 0) {
+      throw new Error('Could not find \'app\' variable declaration in app.ts to insert database configuration. Did you modify app.ts?');
+    }
+
+    if (configureServices.length === 0) {
+      throw new Error('Could not find .configure(services) call in app.ts after which to insert database configuration. Did you modify app.ts?');
+    }
+
+    appDeclaration.insertBefore(requireCall);
+    configureServices.insertBefore('app.configure(authentication);');
+
+    return ast.toSource();
+  }
+
   _writeConfiguration() {
     const config = Object.assign({}, this.defaultConfig);
 
@@ -125,7 +145,7 @@ module.exports = class AuthGenerator extends Generator {
       }
     });
 
-    if(!this.fs.exists(this.destinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service.js`))) {
+    if(!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service`))) {
       // Create the users service
       this.composeWith(require.resolve('../service'), {
         props: {
@@ -137,18 +157,23 @@ module.exports = class AuthGenerator extends Generator {
     }
 
     // If the file doesn't exist yet, add it to the app.js
-    if (!this.fs.exists(this.destinationPath(this.libDirectory, 'authentication.js'))) {
-      const appjs = this.destinationPath(this.libDirectory, 'app.js');
+    if (!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'authentication'))) {
+      const appSrc = this.srcDestinationPath(this.libDirectory, 'app');
 
       this.conflicter.force = true;
-      this.fs.write(appjs, this._transformCode(
-        this.fs.read(appjs).toString()
-      ));
+      const code = this.fs.read(appSrc).toString();
+      let transformed;
+      if (this.srcType === 'ts') {
+        transformed = this._transformCodeTs(code);
+      } else {
+        transformed = this._transformCode(code);
+      }
+      this.fs.write(appSrc, transformed);
     }
 
     this.fs.copyTpl(
-      this.templatePath('authentication.js'),
-      this.destinationPath(this.libDirectory, 'authentication.js'),
+      this.srcTemplatePath('authentication'),
+      this.srcDestinationPath(this.libDirectory, 'authentication'),
       context
     );
 
@@ -156,5 +181,8 @@ module.exports = class AuthGenerator extends Generator {
     this._packagerInstall(dependencies, {
       save: true
     });
+    if (this.srcType === 'ts') {
+      this._packagerInstall(['@types/jsonwebtoken'], { saveDev: true });
+    }
   }
 };
