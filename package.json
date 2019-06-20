@@ -1,8 +1,8 @@
 {
-  "name": "generator-feathers-ts",
+  "name": "generator-feathers",
   "description": "A Yeoman generator for a Feathers application",
   "version": "4.0.0-pre.2-3",
-  "homepage": "https://github.com/ucokfm/generator-feathers-ts",
+  "homepage": "https://github.com/feathersjs/generator-feathers",
   "main": "generators/app/index.js",
   "license": "MIT",
   "keywords": [
@@ -15,12 +15,12 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/ucokfm/generator-feathers-ts/blob/master/LICENSE"
+      "url": "https://github.com/feathersjs/generator-feathers/blob/master/LICENSE"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/ucokfm/generator-feathers-ts.git"
+    "url": "git://github.com/feathersjs/generator-feathers.git"
   },
   "author": {
     "name": "Feathers contributors",
@@ -29,7 +29,7 @@
   },
   "contributors": [],
   "bugs": {
-    "url": "https://github.com/ucokfm/generator-feathers-ts/issues"
+    "url": "https://github.com/feathersjs/generator-feathers/issues"
   },
   "engines": {
     "node": ">= 6.0.0"
