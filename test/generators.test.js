@@ -51,7 +51,7 @@ describe('generator-feathers', function() {
       });
   }
 
-  before(() => helpers.run(path.join(__dirname, '..', 'generators', 'app'))
+  beforeEach(() => helpers.run(path.join(__dirname, '..', 'generators', 'app'))
     .inTmpDir(dir => (appDir = dir))
     .withPrompts({
       name: 'myapp',
