@@ -2,8 +2,11 @@
 // for more of what you can do here.
 import { Application } from '@feathersjs/feathers';
 import { Model } from 'objection';
+import Knex from 'knex';
 
 class <%= camelName %> extends Model {
+  createdAt!: string;
+  updatedAt!: string;
 
   static get tableName() {
     return '<%= snakeName %>';
@@ -30,7 +33,7 @@ class <%= camelName %> extends Model {
 }
 
 export default function (app: Application) {
-  const db = app.get('knex');
+  const db: Knex = app.get('knex');
 
   db.schema.hasTable('<%= snakeName %>').then(exists => {
     if (!exists) {
