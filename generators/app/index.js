@@ -163,7 +163,7 @@ module.exports = class AppGenerator extends Generator {
       pkg
     );
 
-    if (props.ts) {
+    if (this.isTypescript) {
       this.fs.writeJSON(
         this.destinationPath('tsconfig.json'),
         makeConfig.tsconfig(this)
@@ -209,7 +209,7 @@ module.exports = class AppGenerator extends Generator {
       save: true
     });
 
-    if (this.props.ts) {
+    if (this.isTypescript) {
       const excluded = [
         'eslint',
         'nodemon@^1.18.7',
