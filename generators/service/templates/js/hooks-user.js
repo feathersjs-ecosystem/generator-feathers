@@ -9,9 +9,9 @@ module.exports = {
     all: [],
     find: [ authenticate('jwt') ],
     get: [ authenticate('jwt') ],
-    create: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword()<% } %> ],
-    update: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword(), <% } %> authenticate('jwt') ],
-    patch: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword(), <% } %> authenticate('jwt') ],
+    create: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword('password')<% } %> ],
+    update: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword('password'), <% } %> authenticate('jwt') ],
+    patch: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>hashPassword('password'), <% } %> authenticate('jwt') ],
     remove: [ authenticate('jwt') ]
   },
 
