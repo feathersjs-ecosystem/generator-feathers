@@ -1,12 +1,11 @@
 import { Application } from '@feathersjs/feathers';
-import Sequelize from 'sequelize';
+import { Sequelize } from 'sequelize';
 
 export default function (app: Application) {
   const connectionString = app.get('<%= database %>');
   const sequelize = new Sequelize(connectionString, {
     dialect: '<%= database %>',
     logging: false,
-    operatorsAliases: false,
     define: {
       freezeTableName: true
     }
@@ -22,7 +21,7 @@ export default function (app: Application) {
     const models = sequelize.models;
     Object.keys(models).forEach(name => {
       if ('associate' in models[name]) {
-        models[name].associate(models);
+        (models[name] as any).associate(models);
       }
     });
 
