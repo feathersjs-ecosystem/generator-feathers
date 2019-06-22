@@ -4,12 +4,6 @@ const crypto = require('crypto');
 const validate = require('validate-npm-package-name');
 
 const Generator = require('../../lib/generator');
-const OAUTH2_STRATEGY_MAPPINGS = {
-  auth0: 'passport-auth0',
-  google: 'passport-google-oauth20',
-  facebook: 'passport-facebook',
-  github: 'passport-github'
-};
 
 module.exports = class AuthGenerator extends Generator {
   prompting() {
@@ -18,7 +12,7 @@ module.exports = class AuthGenerator extends Generator {
     const prompts = [{
       type: 'checkbox',
       name: 'strategies',
-      message: 'What authentication providers do you want to use? Other PassportJS strategies not in this list can still be configured manually.',
+      message: 'What authentication providers do you want to use? (See API docs for all 180+ supported oAuth providers)',
       default: 'providers',
       choices: [{
         name: 'Username + Password (Local)',
@@ -91,7 +85,7 @@ module.exports = class AuthGenerator extends Generator {
   _writeConfiguration() {
     const config = Object.assign({}, this.defaultConfig);
 
-    config.authentication = {
+    const authentication = {
       'entity': 'user',
       'service': 'users',
       'secret': crypto.randomBytes(20).toString('base64'),
@@ -109,6 +103,17 @@ module.exports = class AuthGenerator extends Generator {
       }
     };
 
+    for (let strategy of this.props.strategies) {
+      if (strategy !== 'local') {
+        authentication.oauth = authentication.oauth || {};
+        authentication.oauth[strategy] = {
+          key: `<${strategy} oauth key>`,
+          secret: `<${strategy} oauth secret>`
+        };
+      }
+    }
+
+    config.authentication = authentication;
     this.conflicter.force = true;
     this.fs.writeJSON(
       this.destinationPath(this.configDirectory, 'default.json'),
@@ -127,23 +132,6 @@ module.exports = class AuthGenerator extends Generator {
       camelEntity: _.camelCase(this.props.entity),
       oauthProviders: []
     }, this.props);
-
-    // Set up strategies and add dependencies
-    this.props.strategies.forEach(strategy => {
-      const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
-
-      if (oauthProvider) {
-        dependencies.push('@feathersjs/authentication-oauth2');
-        dependencies.push(oauthProvider);
-        context.oauthProviders.push({
-          name: strategy,
-          strategyName: `${_.upperFirst(strategy)}Strategy`,
-          module: oauthProvider
-        });
-      } else {
-        dependencies.push(`@feathersjs/authentication-${strategy}`);
-      }
-    });
 
     if(!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service`))) {
       // Create the users service
