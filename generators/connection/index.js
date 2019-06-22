@@ -8,6 +8,7 @@ module.exports = class ConnectionGenerator extends Generator {
     super(args, opts);
 
     this.dependencies = [];
+    this.devDependencies = [];
   }
 
   _transformCode (code) {
@@ -78,6 +79,10 @@ module.exports = class ConnectionGenerator extends Generator {
     } else if (adapter === 'cassandra') {
       this.dependencies.push('express-cassandra');
       this.dependencies.push('cassanknex');
+    } else if (adapter === 'sequelize') {
+      if (this.srcType === 'ts') {
+        this.devDependencies.push('@types/validator');
+      }
     }
 
     switch (database) {
@@ -361,6 +366,10 @@ module.exports = class ConnectionGenerator extends Generator {
 
     this._packagerInstall(this.dependencies, {
       save: true
+    });
+
+    this._packagerInstall(this.devDependencies, {
+      saveDev: true
     });
   }
 

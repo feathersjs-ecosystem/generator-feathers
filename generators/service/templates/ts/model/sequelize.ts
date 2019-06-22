@@ -1,11 +1,10 @@
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
 import { Application } from '@feathersjs/feathers';
-import Sequelize from 'sequelize';
-const DataTypes = Sequelize.DataTypes;
+import { Sequelize, DataTypes } from 'sequelize';
 
 export default function (app: Application) {
-  const sequelizeClient = app.get('sequelizeClient');
+  const sequelizeClient: Sequelize = app.get('sequelizeClient');
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>', {
     text: {
       type: DataTypes.STRING,
@@ -13,14 +12,14 @@ export default function (app: Application) {
     }
   }, {
     hooks: {
-      beforeCount(options) {
+      beforeCount(options: any) {
         options.raw = true;
       }
     }
   });
 
   // eslint-disable-next-line no-unused-vars
-  <%= camelName %>.associate = function (models) {
+  (<%= camelName %> as any).associate = function (models: any) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
