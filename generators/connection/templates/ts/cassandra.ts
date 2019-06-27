@@ -9,14 +9,14 @@ export default function (app: Application) {
 
   app.set('models', models);
 
-  cassandraClient.connect(err => {
+  cassandraClient.connect((err: any) => {
     if (err) throw err;
 
     const cassanknex = require('cassanknex')({ connection: cassandraClient });
 
     FeathersCassandra.cassanknex(cassanknex);
 
-    cassanknex.on('ready', err => {
+    cassanknex.on('ready', (err: any) => {
       if (err) throw err;
     });
 

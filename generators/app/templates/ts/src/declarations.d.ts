@@ -1,4 +1,6 @@
 // List of packages that don't have typings yet
+declare module 'express-cassandra';
+declare module 'feathers-cassandra';
 declare module 'feathers-knex';
 declare module 'feathers-memory';
 declare module 'feathers-mongodb';
