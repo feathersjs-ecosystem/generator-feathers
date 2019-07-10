@@ -26,11 +26,11 @@ export default function (app: Application) {
     options: {
       timestamps: true
     }
-  }, function (err) {
+  }, function (err: any) {
     if (err) throw err;
   });
 
-  <%= camelName %>.syncDB(function (err) {
+  <%= camelName %>.syncDB(function (err: any) {
     if (err) throw err;
   });
 
