@@ -163,7 +163,7 @@ module.exports = class AppGenerator extends Generator {
       pkg
     );
 
-    if (props.ts) {
+    if (this.isTypescript) {
       this.fs.copyTpl(
         this.templatePath('app.interface.ts'),
         this.destinationPath(this.libDirectory, 'app.interface.ts'),
