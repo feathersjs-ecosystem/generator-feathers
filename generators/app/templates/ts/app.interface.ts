@@ -1,13 +1,3 @@
-import { Application, Service } from '@feathersjs/feathers';
+import { Application } from '@feathersjs/feathers';
 
-interface User {
-  id: number;
-  username: string;
-  password: string;
-}
-
-interface ServiceTypes {
-  users: Service<User>;
-}
-
-export type App = Application<ServiceTypes>;
+export type App = Application<{}>;

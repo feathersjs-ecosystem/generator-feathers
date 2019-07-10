@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.0.0-pre.3](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.3) (2019-06-22)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.2...v4.0.0-pre.3)
+
+**Merged pull requests:**
+
+- Fix generate authentication [\#432](https://github.com/feathersjs/generator-feathers/pull/432) ([daffl](https://github.com/daffl))
+- Update eslint to the latest version 🚀 [\#431](https://github.com/feathersjs/generator-feathers/pull/431) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Fix ts typings for generated objection model [\#430](https://github.com/feathersjs/generator-feathers/pull/430) ([ucokfm](https://github.com/ucokfm))
+- Fix typescript generator related files for sequelize [\#429](https://github.com/feathersjs/generator-feathers/pull/429) ([ucokfm](https://github.com/ucokfm))
+- Revert back name to generator-feathers [\#428](https://github.com/feathersjs/generator-feathers/pull/428) ([ucokfm](https://github.com/ucokfm))
+- Remove RethinkDB from database list [\#426](https://github.com/feathersjs/generator-feathers/pull/426) ([daffl](https://github.com/daffl))
+- TypeScript generator for v4 [\#424](https://github.com/feathersjs/generator-feathers/pull/424) ([daffl](https://github.com/daffl))
+
 ## [v4.0.0-pre.2](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.2) (2019-06-05)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.1...v4.0.0-pre.2)
 
