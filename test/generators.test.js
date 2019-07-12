@@ -39,15 +39,19 @@ function delay(ms) {
 }
 
 describe('generator-feathers', function() {
-  this.timeout(300000);
+  const tester = process.env.GENERATOR_TESTER || 'mocha';
 
   let appDir;
+  
+  this.timeout(300000);
 
   function runTest(expectedText) {
     return startAndWait('npm', ['test'], { cwd: appDir })
       .then(({ buffer }) => {
-        assert.ok(buffer.indexOf(expectedText) !== -1,
-          'Ran test with text: ' + expectedText);
+        if (tester === 'mocha') {
+          assert.ok(buffer.indexOf(expectedText) !== -1,
+            'Ran test with text: ' + expectedText);
+        }
       });
   }
 
@@ -56,7 +60,7 @@ describe('generator-feathers', function() {
     .withPrompts({
       name: 'myapp',
       language: process.env.GENERATOR_LANGUAGE || 'js',
-      tester: process.env.GENERATOR_TESTER || 'mocha',
+      tester,
       providers: ['rest', 'socketio'],
       src: 'src',
       packager: 'npm@>= 3.0.0'
