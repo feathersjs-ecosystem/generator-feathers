@@ -40,7 +40,7 @@ module.exports = function(generator) {
     }
   };
   if ('mocha' === props.tester) {
-    pkg.scripts['mocha'] = isTypescript ? 'ts-mocha "test/**/*.ts"' : 'mocha test/ --recursive --exit';
+    pkg.scripts['mocha'] = isTypescript ? 'ts-mocha "test/**/*.ts" --recursive --exit' : 'mocha test/ --recursive --exit';
   } else {
     pkg.scripts['jest'] = 'jest  --forceExit';
   }
