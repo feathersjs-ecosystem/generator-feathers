@@ -266,7 +266,7 @@ describe('generator-feathers', function() {
         })
         .withOptions({ skipInstall: false })
         .then(() => runTest(`'${adapter}' service`))
-        .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
+        .then(() => startAndWait('npm', ['start'], { cwd: appDir }, 'Feathers application started'))
         .then(delay(3000))
         .then(({ child }) => {
           const text = 'This is a test';
