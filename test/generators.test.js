@@ -39,15 +39,19 @@ function delay(ms) {
 }
 
 describe('generator-feathers', function() {
-  this.timeout(300000);
+  const tester = process.env.GENERATOR_TESTER || 'mocha';
 
   let appDir;
+  
+  this.timeout(300000);
 
   function runTest(expectedText) {
     return startAndWait('npm', ['test'], { cwd: appDir })
       .then(({ buffer }) => {
-        assert.ok(buffer.indexOf(expectedText) !== -1,
-          'Ran test with text: ' + expectedText);
+        if (tester === 'mocha') {
+          assert.ok(buffer.indexOf(expectedText) !== -1,
+            'Ran test with text: ' + expectedText);
+        }
       });
   }
 
@@ -55,6 +59,8 @@ describe('generator-feathers', function() {
     .inTmpDir(dir => (appDir = dir))
     .withPrompts({
       name: 'myapp',
+      language: process.env.GENERATOR_LANGUAGE || 'js',
+      tester,
       providers: ['rest', 'socketio'],
       src: 'src',
       packager: 'npm@>= 3.0.0'
@@ -120,36 +126,34 @@ describe('generator-feathers', function() {
       ).then(() => runTest('starts and shows the index page'));
     });
 
-    describe('mongodb', () => {
-      it('mongodb', () => {
-        const connectionString = 'mongodb://localhost:27017/testing';
+    it('mongodb', () => {
+      const connectionString = 'mongodb://localhost:27017/testing';
 
-        return runConnectionGenerator({
-          database: 'mongodb',
-          adapter: 'mongodb',
-          connectionString
-        }).then(() =>
-          assert.jsonFileContent(
-            path.join(appDir, 'config', 'default.json'),
-            { mongodb: connectionString }
-          )
-        ).then(() => runTest('starts and shows the index page'));
-      });
+      return runConnectionGenerator({
+        database: 'mongodb',
+        adapter: 'mongodb',
+        connectionString
+      }).then(() =>
+        assert.jsonFileContent(
+          path.join(appDir, 'config', 'default.json'),
+          { mongodb: connectionString }
+        )
+      ).then(() => runTest('starts and shows the index page'));
+    });
 
-      it('mongoose', () => {
-        const connectionString = 'mongodb://localhost:27017/testing';
+    it('mongoose', () => {
+      const connectionString = 'mongodb://localhost:27017/testing';
 
-        return runConnectionGenerator({
-          database: 'mongodb',
-          adapter: 'mongoose',
-          connectionString
-        }).then(() =>
-          assert.jsonFileContent(
-            path.join(appDir, 'config', 'default.json'),
-            { mongodb: connectionString }
-          )
-        ).then(() => runTest('starts and shows the index page'));
-      });
+      return runConnectionGenerator({
+        database: 'mongodb',
+        adapter: 'mongoose',
+        connectionString
+      }).then(() =>
+        assert.jsonFileContent(
+          path.join(appDir, 'config', 'default.json'),
+          { mongodb: connectionString }
+        )
+      ).then(() => runTest('starts and shows the index page'));
     });
 
     describe.skip('postgres', () => {
@@ -164,62 +168,60 @@ describe('generator-feathers', function() {
 
     });
 
-    describe('sqlite', () => {
-      it('knex', () => {
-        const connectionString = 'sqlite://data.sqlite';
+    it('knex', () => {
+      const connectionString = 'sqlite://data.sqlite';
 
-        return runConnectionGenerator({
-          database: 'sqlite',
-          adapter: 'knex',
-          connectionString
-        }).then(() =>
-          assert.jsonFileContent(
-            path.join(appDir, 'config', 'default.json'), {
-              sqlite: {
-                connection: {
-                  filename: 'data.sqlite'
-                },
-                client: 'sqlite3'
+      return runConnectionGenerator({
+        database: 'sqlite',
+        adapter: 'knex',
+        connectionString
+      }).then(() =>
+        assert.jsonFileContent(
+          path.join(appDir, 'config', 'default.json'), {
+            sqlite: {
+              connection: {
+                filename: 'data.sqlite'
+              },
+              client: 'sqlite3'
+            }
+          }
+        )
+      ).then(() => runTest('starts and shows the index page'));
+    });
+
+    it('sequelize', () => {
+      const connectionString = 'sqlite://data.sqlite';
+
+      return runConnectionGenerator({
+        database: 'sqlite',
+        adapter: 'sequelize',
+        connectionString
+      }).then(() =>
+        assert.jsonFileContent(
+          path.join(appDir, 'config', 'default.json'), {
+            sqlite: connectionString
+          }
+        )
+      ).then(() => runTest('starts and shows the index page'));
+    });
+
+    it('objection', () => {
+      return runConnectionGenerator({
+        database: 'sqlite',
+        adapter: 'objection',
+        connectionString: 'sqlite://data.sqlite'
+      }).then(() =>
+        assert.jsonFileContent(
+          path.join(appDir, 'config', 'default.json'), {
+            sqlite: {
+              client: 'sqlite3',
+              connection: {
+                filename: 'data.sqlite'
               }
             }
-          )
-        ).then(() => runTest('starts and shows the index page'));
-      });
-
-      it('sequelize', () => {
-        const connectionString = 'sqlite://data.sqlite';
-
-        return runConnectionGenerator({
-          database: 'sqlite',
-          adapter: 'sequelize',
-          connectionString
-        }).then(() =>
-          assert.jsonFileContent(
-            path.join(appDir, 'config', 'default.json'), {
-              sqlite: connectionString
-            }
-          )
-        ).then(() => runTest('starts and shows the index page'));
-      });
-
-      it('objection', () => {
-        return runConnectionGenerator({
-          database: 'sqlite',
-          adapter: 'objection',
-          connectionString: 'sqlite://data.sqlite'
-        }).then(() =>
-          assert.jsonFileContent(
-            path.join(appDir, 'config', 'default.json'), {
-              sqlite: {
-                client: 'sqlite3',
-                connection: {
-                  filename: 'data.sqlite'
-                }
-              }
-            }
-          )
-        ).then(() => runTest('starts and shows the index page'));
-      });
+          }
+        )
+      ).then(() => runTest('starts and shows the index page'));
     });
 
     it('cassandra', () => {
@@ -264,7 +266,7 @@ describe('generator-feathers', function() {
         })
         .withOptions({ skipInstall: false })
         .then(() => runTest(`'${adapter}' service`))
-        .then(() => startAndWait('node', ['src/'], { cwd: appDir }, 'Feathers application started'))
+        .then(() => startAndWait('npm', ['start'], { cwd: appDir }, 'Feathers application started'))
         .then(delay(3000))
         .then(({ child }) => {
           const text = 'This is a test';

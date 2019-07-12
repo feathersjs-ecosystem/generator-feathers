@@ -1,6 +1,9 @@
 language: node_js
 services: mongodb
-node_js:
-  - 8
-  - 10
+node_js: node
 install: npm install
+env:
+  - GENERATOR_LANGUAGE=js GENERATOR_TESTER=mocha
+  - GENERATOR_LANGUAGE=js GENERATOR_TESTER=jest
+  - GENERATOR_LANGUAGE=ts GENERATOR_TESTER=mocha
+  - GENERATOR_LANGUAGE=ts GENERATOR_TESTER=jest
