@@ -52,8 +52,8 @@ module.exports = class UpgradeGenerator extends Generator {
     );
 
     this.fs.copy(
-      this.templatePath('authentication.js'),
-      this.destinationPath(this.libDirectory, 'authentication.js')
+      this.srcTemplatePath('authentication'),
+      this.srcDestinationPath(this.libDirectory, 'authentication')
     );
     this.fs.writeJSON(this.destinationPath('config', 'default.json'), config);
     this.fs.writeJSON(this.destinationPath('package.json'), this.pkg);
