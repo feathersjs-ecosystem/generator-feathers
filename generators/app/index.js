@@ -133,8 +133,8 @@ module.exports = class AppGenerator extends Generator {
     });
 
     // Static content for the root folder (including dotfiles)
-    this.fs.copy(this.templatePath('static'), this.destinationPath());
-    this.fs.copy(this.templatePath('static', '.*'), this.destinationPath());
+    this.fs.copy(this.templatePath('..', 'static'), this.destinationPath());
+    this.fs.copy(this.templatePath('..', 'static', '.*'), this.destinationPath());
     // Static content for the directories.lib folder
     this.fs.copy(this.templatePath('src'), this.destinationPath(props.src));
     // This hack is necessary because NPM does not publish `.gitignore` files
