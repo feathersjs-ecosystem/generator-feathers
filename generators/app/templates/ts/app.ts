@@ -3,13 +3,15 @@ import favicon from 'serve-favicon';
 import compress from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
-import logger from './logger';
 
 import feathers from '@feathersjs/feathers';
 import configuration from '@feathersjs/configuration';
 import express from '@feathersjs/express';
 <% if (hasProvider('socketio')) { %>import socketio from '@feathersjs/socketio';<% } %>
 <% if (hasProvider('primus')) { %>import primus from '@feathersjs/primus';<% } %>
+
+import { Application } from './declarations';
+import logger from './logger';
 import middleware from './middleware';
 import services from './services';
 import appHooks from './app.hooks';
@@ -47,4 +49,4 @@ app.use(express.errorHandler({ logger } as any));
 
 app.hooks(appHooks);
 
-export default app;
+export default app as Application;

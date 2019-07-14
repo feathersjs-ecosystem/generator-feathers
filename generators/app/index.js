@@ -164,12 +164,6 @@ module.exports = class AppGenerator extends Generator {
     );
 
     if (this.isTypescript) {
-      this.fs.copyTpl(
-        this.templatePath('app.interface.ts'),
-        this.destinationPath(this.libDirectory, 'app.interface.ts'),
-        context
-      );
-
       this.fs.writeJSON(
         this.destinationPath('tsconfig.json'),
         makeConfig.tsconfig(this)

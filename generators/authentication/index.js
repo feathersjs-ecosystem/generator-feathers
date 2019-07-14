@@ -105,7 +105,9 @@ module.exports = class AuthGenerator extends Generator {
 
     for (let strategy of this.props.strategies) {
       if (strategy !== 'local') {
-        authentication.oauth = authentication.oauth || {};
+        authentication.oauth = authentication.oauth || {
+          redirect: '/'
+        };
         authentication.oauth[strategy] = {
           key: `<${strategy} oauth key>`,
           secret: `<${strategy} oauth secret>`

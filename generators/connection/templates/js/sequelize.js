@@ -5,7 +5,6 @@ module.exports = function (app) {
   const sequelize = new Sequelize(connectionString, {
     dialect: '<%= database %>',
     logging: false,
-    operatorsAliases: false,
     define: {
       freezeTableName: true
     }
