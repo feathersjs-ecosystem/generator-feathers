@@ -75,6 +75,7 @@ describe('generator-feathers', function() {
           password: 'supersecret'
         };
 
+        await new Promise(resolve => setTimeout(resolve, 2000));
         await axios.post('http://localhost:3030/users', user);
 
         const { data } = await axios.post('http://localhost:3030/authentication', {
