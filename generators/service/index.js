@@ -17,24 +17,27 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'What kind of service is it?',
         default: 'nedb',
         choices: [
-          { name: 'A custom service', value: 'generic'   },
-          { name: 'In Memory',        value: 'memory'    },
-          { name: 'NeDB',             value: 'nedb'      },
-          { name: 'MongoDB',          value: 'mongodb'   },
-          { name: 'Mongoose',         value: 'mongoose'  },
-          { name: 'Sequelize',        value: 'sequelize' },
-          { name: 'KnexJS',           value: 'knex'      },
-          { name: 'Objection',        value: 'objection' },
-          { name: 'Cassandra',        value: 'cassandra' }
+          { name: 'A custom service', value: 'generic' },
+          { name: 'In Memory', value: 'memory' },
+          { name: 'NeDB', value: 'nedb' },
+          { name: 'MongoDB', value: 'mongodb' },
+          { name: 'Mongoose', value: 'mongoose' },
+          { name: 'Sequelize', value: 'sequelize' },
+          { name: 'KnexJS', value: 'knex' },
+          { name: 'Objection', value: 'objection' },
+          { name: 'Cassandra', value: 'cassandra' }
         ]
       }, {
         name: 'name',
         message: 'What is the name of the service?',
         validate(input) {
-          switch(input.trim()) {
-          case '': return 'Service name can not be empty';
-          case 'authentication': return '`authentication` is a reserved service name';
-          default: return true;
+          switch (input.trim()) {
+          case '':
+            return 'Service name can not be empty';
+          case 'authentication':
+            return '`authentication` is a reserved service name';
+          default:
+            return true;
           }
         },
         when: !props.name
@@ -49,7 +52,7 @@ module.exports = class ServiceGenerator extends Generator {
           return `/${parts.concat(name).join('/')}`;
         },
         validate(input) {
-          if(input.trim() === '') {
+          if (input.trim() === '') {
             return 'Service path can not be empty';
           }
 
@@ -59,7 +62,7 @@ module.exports = class ServiceGenerator extends Generator {
         name: 'requiresAuth',
         message: 'Does the service require authentication?',
         type: 'confirm',
-        default: false,
+        default: true,
         when: !!(this.defaultConfig.authentication && !props.authentication)
       }
     ];
@@ -91,7 +94,7 @@ module.exports = class ServiceGenerator extends Generator {
     const serviceRequire = `const ${camelName} = require('./${folder}/${kebabName}.service.js');`;
     const serviceCode = `app.configure(${camelName});`;
 
-    if(mainExpression.length !== 1) {
+    if (mainExpression.length !== 1) {
       this.log
         .writeln()
         .conflict(`${this.libDirectory}/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`)
@@ -119,7 +122,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
     const newImport = j(serviceImport).find(j.ImportDeclaration).get().node;
-    
+
     lastImport.insertAfter(newImport);
 
     const blockStatement = ast.find(j.BlockStatement).get().node;
@@ -144,8 +147,8 @@ module.exports = class ServiceGenerator extends Generator {
       cassandra: 'feathers-cassandra'
     };
     const serviceModule = moduleMappings[adapter];
-    const serviceFolder = [ this.libDirectory, 'services', ...subfolder, kebabName ];
-    const mainFile = this.srcDestinationPath(... serviceFolder, `${kebabName}.service`);
+    const serviceFolder = [this.libDirectory, 'services', ...subfolder, kebabName];
+    const mainFile = this.srcDestinationPath(...serviceFolder, `${kebabName}.service`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}`;
     const hasModel = this.fs.exists(this.srcTemplatePath('model', modelTpl));
     const context = Object.assign({}, this.props, {
@@ -155,7 +158,7 @@ module.exports = class ServiceGenerator extends Generator {
       relativeRoot: '../'.repeat(subfolder.length + 2),
       serviceModule
     });
-    const tester = this.pkg.devDependencies.jest ? 'jest' : 'mocha';
+    const tester = this.props.tester || (this.pkg.devDependencies.jest ? 'jest' : 'mocha');
 
     // Do not run code transformations if the service file already exists
     if (!this.fs.exists(mainFile)) {
@@ -174,17 +177,20 @@ module.exports = class ServiceGenerator extends Generator {
       this.fs.write(servicejs, transformed);
     }
 
+    const requiresConnection = adapter !== 'generic' && adapter !== 'memory' &&
+      !this.fs.exists(this.srcDestinationPath(this.libDirectory, adapter));
+
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
-    if (adapter !== 'generic' && adapter !== 'memory') {
+    if (requiresConnection) {
       this.composeWith(require.resolve('../connection'), {
         props: { adapter, service: this.props.name }
       });
-    } else if(adapter === 'generic') {
+    } else if (adapter === 'generic') {
       // Copy the generic service class
       this.fs.copyTpl(
         this.srcTemplatePath('class'),
-        this.srcDestinationPath(... serviceFolder, `${kebabName}.class`),
+        this.srcDestinationPath(...serviceFolder, `${kebabName}.class`),
         context
       );
     }
@@ -200,7 +206,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     this.fs.copyTpl(
       this.srcTemplatePath(`hooks${this.props.authentication ? '-user' : ''}`),
-      this.srcDestinationPath(... serviceFolder, `${kebabName}.hooks`),
+      this.srcDestinationPath(...serviceFolder, `${kebabName}.hooks`),
       context
     );
 
@@ -225,14 +231,14 @@ module.exports = class ServiceGenerator extends Generator {
     );
 
     if (serviceModule.charAt(0) !== '.') {
-      this._packagerInstall([ serviceModule ], { save: true });
+      this._packagerInstall([serviceModule], { save: true });
     }
 
     if (config.ts) {
       const typeMap = {
-        mongodb: [ '@types/mongodb' ],
-        mongoose: [ '@types/mongoose' ],
-        nedb: [ '@types/nedb' ]
+        mongodb: ['@types/mongodb'],
+        mongoose: ['@types/mongoose'],
+        nedb: ['@types/nedb']
       };
 
       if (typeMap[adapter]) {

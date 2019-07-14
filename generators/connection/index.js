@@ -179,17 +179,11 @@ module.exports = class ConnectionGenerator extends Generator {
         type: 'list',
         name: 'database',
         message: 'Which database are you connecting to?',
-        default: 'nedb',
         choices: [
-          { name: 'Memory', value: 'memory' },
-          { name: 'MongoDB', value: 'mongodb' },
           { name: 'MySQL (MariaDB)', value: 'mysql' },
-          { name: 'NeDB', value: 'nedb' },
-          // { name: 'Oracle', value: 'oracle' },
           { name: 'PostgreSQL', value: 'postgres' },
           { name: 'SQLite', value: 'sqlite' },
-          { name: 'SQL Server', value: 'mssql' },
-          { name: 'Cassandra', value: 'cassandra' }
+          { name: 'SQL Server', value: 'mssql' }
         ],
         when (current) {
           const answers = getProps(current);
@@ -330,8 +324,7 @@ module.exports = class ConnectionGenerator extends Generator {
     }
 
     if (template) {
-      const dbFile = `${adapter}`;
-      const templateExists = this.fs.exists(this.srcDestinationPath(this.libDirectory, dbFile));
+      const templateExists = this.fs.exists(this.srcDestinationPath(this.libDirectory, adapter));
 
       // If the file doesn't exist yet, add it to the app.js
       if (!templateExists) {
@@ -356,7 +349,7 @@ module.exports = class ConnectionGenerator extends Generator {
       if(!templateExists || (templateExists && !this.props.service)) {
         this.fs.copyTpl(
           this.srcTemplatePath(template),
-          this.srcDestinationPath(this.libDirectory, dbFile),
+          this.srcDestinationPath(this.libDirectory, adapter),
           context
         );
       }
@@ -380,7 +373,6 @@ module.exports = class ConnectionGenerator extends Generator {
     // show this nice message.
     if (connectionString && !this.defaultConfig[database]) {
       this.log();
-      this.log(`Woot! We've set up your ${database} database connection!`);
 
       switch (database) {
       case 'mongodb':

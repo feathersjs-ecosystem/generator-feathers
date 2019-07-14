@@ -12,8 +12,7 @@ module.exports = class AuthGenerator extends Generator {
     const prompts = [{
       type: 'checkbox',
       name: 'strategies',
-      message: 'What authentication providers do you want to use? (See API docs for all 180+ supported oAuth providers)',
-      default: 'providers',
+      message: 'What authentication strategies do you want to use? (See API docs for all 180+ supported oAuth providers)',
       choices: [{
         name: 'Username + Password (Local)',
         value: 'local',
@@ -27,6 +26,9 @@ module.exports = class AuthGenerator extends Generator {
       }, {
         name: 'Facebook',
         value: 'facebook'
+      }, {
+        name: 'Twitter',
+        value: 'twitter'
       }, {
         name: 'GitHub',
         value: 'github'
@@ -139,6 +141,7 @@ module.exports = class AuthGenerator extends Generator {
       // Create the users service
       this.composeWith(require.resolve('../service'), {
         props: {
+          tester: context.tester,
           name: context.entity,
           path: `/${context.kebabEntity}`,
           authentication: context

@@ -26,7 +26,7 @@ module.exports = class AppGenerator extends Generator {
     ];
 
     this.devDependencies = [
-      'nodemon@^1.18.7',
+      'nodemon',
       'eslint',
       'request',
       'request-promise'
@@ -85,19 +85,19 @@ module.exports = class AppGenerator extends Generator {
       name: 'packager',
       type: 'list',
       message: 'Which package manager are you using (has to be installed globally)?',
-      default: 'npm@>= 3.0.0',
+      default: 'npm',
       choices: [
-        { name: 'npm',  value: 'npm@>= 3.0.0'   },
-        { name: 'Yarn', value: 'yarn@>= 0.18.0' }
+        { name: 'npm', value: 'npm'   },
+        { name: 'Yarn', value: 'yarn' }
       ]
     }, {
       type: 'checkbox',
       name: 'providers',
       message: 'What type of API are you making?',
       choices: [
-        { name: 'REST',                   value: 'rest',     checked: true },
+        { name: 'REST', value: 'rest',     checked: true },
         { name: 'Realtime via Socket.io', value: 'socketio', checked: true },
-        { name: 'Realtime via Primus',    value: 'primus',                 }
+        { name: 'Realtime via Primus', value: 'primus',                 }
       ],
       validate (input) {
         if (input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
@@ -113,9 +113,13 @@ module.exports = class AppGenerator extends Generator {
       default: 'mocha',
       choices: [
         { name: 'Mocha + assert', value: 'mocha' },
-        { name: 'Jest',           value: 'jest'  }
-      ],
-      pageSize: 7 // unnecessary; trying to get codeclimate to leave me alone :(
+        { name: 'Jest', value: 'jest'  }
+      ]
+    }, {
+      name: 'authentication',
+      message: 'This app uses authentication',
+      type: 'confirm',
+      default: true
     }];
 
     return this.prompt(prompts).then(props => {
@@ -192,6 +196,13 @@ module.exports = class AppGenerator extends Generator {
       this.destinationPath(this.configDirectory, 'production.json'),
       makeConfig.configProduction(this)
     );
+
+    if (props.authentication) {
+      // Create the users service
+      this.composeWith(require.resolve('../authentication'), {
+        props: { tester: props.tester }
+      });
+    }
   }
 
   install () {
