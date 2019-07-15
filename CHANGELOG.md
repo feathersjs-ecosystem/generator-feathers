@@ -1,5 +1,23 @@
 # Change Log
 
+## [v4.0.0-pre.4](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.4) (2019-07-12)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.3...v4.0.0-pre.4)
+
+**Merged pull requests:**
+
+- Fix upgrade command and update prerelease version numbers [\#444](https://github.com/feathersjs/generator-feathers/pull/444) ([daffl](https://github.com/daffl))
+- Unify static folder and remove adapter declarations that have types [\#443](https://github.com/feathersjs/generator-feathers/pull/443) ([daffl](https://github.com/daffl))
+- Bumps lighthouse accessibility score [\#441](https://github.com/feathersjs/generator-feathers/pull/441) ([bravo-kernel](https://github.com/bravo-kernel))
+- Update feathers-objection to the latest version 🚀 [\#440](https://github.com/feathersjs/generator-feathers/pull/440) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-mongoose to the latest version 🚀 [\#439](https://github.com/feathersjs/generator-feathers/pull/439) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-sequelize to the latest version 🚀 [\#438](https://github.com/feathersjs/generator-feathers/pull/438) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-knex to the latest version 🚀 [\#437](https://github.com/feathersjs/generator-feathers/pull/437) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-mongodb to the latest version 🚀 [\#436](https://github.com/feathersjs/generator-feathers/pull/436) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-nedb to the latest version 🚀 [\#435](https://github.com/feathersjs/generator-feathers/pull/435) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-memory to the latest version 🚀 [\#434](https://github.com/feathersjs/generator-feathers/pull/434) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Fix ts typings for cassandra [\#433](https://github.com/feathersjs/generator-feathers/pull/433) ([ucokfm](https://github.com/ucokfm))
+- Update CI build matrix to test with JS, TS, Mocha and Jest  [\#427](https://github.com/feathersjs/generator-feathers/pull/427) ([daffl](https://github.com/daffl))
+
 ## [v4.0.0-pre.3](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.3) (2019-06-22)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.2...v4.0.0-pre.3)
 

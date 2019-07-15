@@ -23,7 +23,7 @@ describe('Feathers application tests (with jest)', () => {
   it('starts and shows the index page', () => {
     expect.assertions(1);
     return rp(getUrl()).then(
-      body => expect(body.indexOf('<html>')).not.toBe(-1)
+      body => expect(body.indexOf('<html lang="en">')).not.toBe(-1)
     );
   });
 
