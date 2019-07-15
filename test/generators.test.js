@@ -85,14 +85,14 @@ describe('generator-feathers', function() {
         assert.ok(data.accessToken);
         assert.strictEqual(data.user.email, user.email);
 
-        child.kill();
+        child.kill('SIGINT');
       });
     });
   }
   
   runTest('memory');
   runTest('nedb');
-  runTest('mongoose');
+  // runTest('mongoose');
   // runTest('mongodb');
   // runTest('sequelize');
 });
