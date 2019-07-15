@@ -3,7 +3,7 @@ const helpers = require('yeoman-test');
 const assert = require('yeoman-assert');
 const axios = require('axios');
 
-const { startAndWait, startAndReturn } = require('./utils');
+const { startAndWait } = require('./utils');
 
 describe('generator-feathers', function() {
   const tester = process.env.GENERATOR_TESTER || 'mocha';
@@ -69,13 +69,12 @@ describe('generator-feathers', function() {
       });
 
       it('starts app, creates user and authenticates', async () => {
-        const handle = startAndReturn('npm', ['start'], { cwd: appDir });
+        const { child } = await startAndWait('npm', ['start'], { cwd: appDir }, 'Feathers application started');
         const user = {
           email: 'hello@feathersjs.com',
           password: 'supersecret'
         };
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
         await axios.post('http://localhost:3030/users', user);
 
         const { data } = await axios.post('http://localhost:3030/authentication', {
@@ -86,7 +85,7 @@ describe('generator-feathers', function() {
         assert.ok(data.accessToken);
         assert.strictEqual(data.user.email, user.email);
 
-        handle.kill('SIGHUP');
+        child.kill('SIGHUP');
       });
     });
   }

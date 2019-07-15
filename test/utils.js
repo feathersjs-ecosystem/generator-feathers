@@ -1,9 +1,5 @@
 const cp = require('child_process');
 
-exports.startAndReturn = (cmd, args, options) => {
-  return cp.spawn(cmd, args, options);
-};
-
 // Start a process and wait either for it to exit
 // or to display a certain text
 exports.startAndWait = (cmd, args, options, text) => {
