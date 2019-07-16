@@ -92,7 +92,7 @@ describe('generator-feathers', function() {
   
   runTest('memory');
   runTest('nedb');
-  // runTest('mongoose');
+  runTest('mongoose');
   // runTest('mongodb');
   // runTest('sequelize');
 });
