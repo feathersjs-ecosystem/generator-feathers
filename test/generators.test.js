@@ -85,7 +85,7 @@ describe('generator-feathers', function() {
         assert.ok(data.accessToken);
         assert.strictEqual(data.user.email, user.email);
 
-        child.kill('SIGINT');
+        child.kill('SIGTERM');
       });
     });
   }
