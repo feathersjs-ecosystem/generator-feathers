@@ -86,13 +86,14 @@ describe('generator-feathers', function() {
         assert.strictEqual(data.user.email, user.email);
 
         child.kill('SIGTERM');
+        await new Promise(resolve => child.on('exit', () => resolve()));
       });
     });
   }
   
   runTest('memory');
   runTest('nedb');
-  runTest('mongoose');
+  // runTest('mongoose');
   // runTest('mongodb');
   // runTest('sequelize');
 });
