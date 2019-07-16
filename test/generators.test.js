@@ -9,6 +9,7 @@ describe('generator-feathers', function() {
   const tester = process.env.GENERATOR_TESTER || 'mocha';
 
   let appDir;
+  let testPort = 3030;
   
   this.timeout(300000);
 
@@ -68,16 +69,24 @@ describe('generator-feathers', function() {
           });
       });
 
-      it('starts app, creates user and authenticates', async () => {
-        const { child } = await startAndWait('npm', ['start'], { cwd: appDir }, 'Feathers application started');
+      it.skip('starts app, creates user and authenticates', async () => {
+        const port = ++testPort;
+        const { child } = await startAndWait('npm', ['start'], {
+          cwd: appDir,
+          env: {
+            ...process.env,
+            NODE_ENV: 'production',
+            port
+          }
+        }, 'Feathers application started');
         const user = {
           email: 'hello@feathersjs.com',
           password: 'supersecret'
         };
 
-        await axios.post('http://localhost:3030/users', user);
+        await axios.post(`http://localhost:${port}/users`, user);
 
-        const { data } = await axios.post('http://localhost:3030/authentication', {
+        const { data } = await axios.post(`http://localhost:${port}/authentication`, {
           ...user,
           strategy: 'local'
         });
@@ -93,7 +102,7 @@ describe('generator-feathers', function() {
   
   runTest('memory');
   runTest('nedb');
-  // runTest('mongoose');
+  runTest('mongoose');
   // runTest('mongodb');
   // runTest('sequelize');
 });
