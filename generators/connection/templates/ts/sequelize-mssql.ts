@@ -1,6 +1,6 @@
-import { Application } from '@feathersjs/feathers';
 import url from 'url';
 import Sequelize from 'sequelize';
+import { Application } from './declarations';
 
 export default function (app: Application) {
   const connectionString = app.get('mssql');

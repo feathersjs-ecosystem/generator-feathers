@@ -1,5 +1,5 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-import { Application } from '@feathersjs/feathers';
+import { Application } from '../../declarations';
 import createService from '<%= serviceModule %>';
 import createModel from '<%= relativeRoot %>models/<%= modelName %>';
 import hooks from './<%= kebabName %>.hooks';

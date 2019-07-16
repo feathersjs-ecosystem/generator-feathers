@@ -1,6 +1,6 @@
-import { Application } from '@feathersjs/feathers';
 import { parseConnectionString as parse } from 'mongodb-core';
 import { MongoClient } from 'mongodb';
+import { Application } from './declarations';
 const logger = require('./logger');
 
 export default function (app: Application) {

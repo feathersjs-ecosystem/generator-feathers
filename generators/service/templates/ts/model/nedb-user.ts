@@ -1,4 +1,4 @@
-import { Application } from '@feathersjs/feathers';
+import { Application } from '../../declarations';
 import NeDB from 'nedb';
 import path from 'path';
 

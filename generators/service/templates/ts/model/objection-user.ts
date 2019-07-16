@@ -1,6 +1,6 @@
 // See https://vincit.github.io/objection.js/#models
 // for more of what you can do here.
-import { Application } from '@feathersjs/feathers';
+import { Application } from '../../declarations';
 import { Model } from 'objection';
 import Knex from 'knex';
 

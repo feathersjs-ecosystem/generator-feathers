@@ -1,6 +1,6 @@
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
-import { Application } from '@feathersjs/feathers';
+import { Application } from '../../declarations';
 import { Sequelize, DataTypes } from 'sequelize';
 
 export default function (app: Application) {

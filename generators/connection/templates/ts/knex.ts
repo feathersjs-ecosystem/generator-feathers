@@ -1,5 +1,5 @@
-import { Application } from '@feathersjs/feathers';
 import knex from 'knex';
+import { Application } from './declarations';
 
 export default function (app: Application) {
   const { client, connection } = app.get('<%= database %>');
