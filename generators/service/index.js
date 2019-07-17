@@ -80,7 +80,8 @@ module.exports = class ServiceGenerator extends Generator {
         subfolder: parts,
         snakeName: _.snakeCase(name),
         kebabName: validate(name).validForNewPackages ? name : _.kebabCase(name),
-        camelName: _.camelCase(name)
+        camelName: _.camelCase(name),
+        className: _.capitalize(_.camelCase(name))
       });
     });
   }
@@ -185,14 +186,14 @@ module.exports = class ServiceGenerator extends Generator {
       this.composeWith(require.resolve('../connection'), {
         props: { adapter, service: this.props.name }
       });
-    } else if (adapter === 'generic') {
-      // Copy the generic service class
-      this.fs.copyTpl(
-        this.srcTemplatePath('class'),
-        this.srcDestinationPath(...serviceFolder, `${kebabName}.class`),
-        context
-      );
     }
+    
+    // Copy the service class
+    this.fs.copyTpl(
+      this.srcTemplatePath('types', adapter),
+      this.srcDestinationPath(...serviceFolder, `${kebabName}.class`),
+      context
+    );
 
     if (context.modelName) {
       // Copy the model
@@ -209,19 +210,11 @@ module.exports = class ServiceGenerator extends Generator {
       context
     );
 
-    if (this.fs.exists(this.srcTemplatePath('types', adapter))) {
-      this.fs.copyTpl(
-        this.srcTemplatePath('types', adapter),
-        mainFile,
-        context
-      );
-    } else {
-      this.fs.copyTpl(
-        this.srcTemplatePath('service'),
-        mainFile,
-        context
-      );
-    }
+    this.fs.copyTpl(
+      this.srcTemplatePath('service'),
+      mainFile,
+      context
+    );
 
     this.fs.copyTpl(
       this.srcTemplatePath(`test.${this.testLibrary}`),

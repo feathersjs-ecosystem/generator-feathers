@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-class Service {
+exports.<%= className %> = class <%= className %> {
   constructor (options) {
     this.options = options || {};
   }
@@ -34,9 +34,3 @@ class Service {
     return { id };
   }
 }
-
-module.exports = function (options) {
-  return new Service(options);
-};
-
-module.exports.Service = Service;

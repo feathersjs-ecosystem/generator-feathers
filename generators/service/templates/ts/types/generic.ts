@@ -5,7 +5,7 @@ interface Data {}
 
 interface ServiceOptions {}
 
-export class Service implements ServiceMethods<any>, SetupMethod {
+export class <%= className %> implements ServiceMethods<any>, SetupMethod {
   app!: App;
 
   constructor (private options: ServiceOptions = {}) {
@@ -45,7 +45,3 @@ export class Service implements ServiceMethods<any>, SetupMethod {
     return { id };
   }
 }
-
-export default function (options: ServiceOptions) {
-  return new Service(options);
-};

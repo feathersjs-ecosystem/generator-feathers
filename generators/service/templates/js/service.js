@@ -1,5 +1,5 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-const createService = require('<%= serviceModule %>');<% if(modelName) { %>
+const { <%= className %> } = require('./<%= kebabName %>.class');<% if(modelName) { %>
 const createModel = require('<%= relativeRoot %>models/<%= modelName %>');<% } %>
 const hooks = require('./<%= kebabName %>.hooks');
 
@@ -13,7 +13,7 @@ module.exports = function (app) {
   };
 
   // Initialize our service with any options it requires
-  app.use('/<%= path %>', createService(options));
+  app.use('/<%= path %>', new <%= className %>(options));
 
   // Get our initialized service so that we can register hooks
   const service = app.service('<%= path %>');
