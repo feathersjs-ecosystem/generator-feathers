@@ -1,4 +1,7 @@
-export default function(app: any) {
+import { HookContext } from '@feathersjs/feathers';
+import { Application } from './declarations';
+
+export default function(app: Application) {
   if(typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
     return;
@@ -37,7 +40,7 @@ export default function(app: any) {
   });
 
   // eslint-disable-next-line no-unused-vars
-  app.publish((data: any, hook: any) => {
+  app.publish((data: any, hook: HookContext) => {
     // Here you can add event publishers to channels set up in `channels.js`
     // To publish only for a specific event use `app.publish(eventname, () => {})`
 

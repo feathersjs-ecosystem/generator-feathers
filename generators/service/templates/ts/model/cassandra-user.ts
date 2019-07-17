@@ -1,6 +1,6 @@
 // See https://express-cassandra.readthedocs.io/en/latest/schema/
 // for more of what you can do here.
-import { Application } from '@feathersjs/feathers';
+import { Application } from '../declarations';
 
 export default function (app: Application) {
   const models = app.get('models');
@@ -17,7 +17,7 @@ export default function (app: Application) {
         }
       },
     <% } %><% authentication.oauthProviders.forEach(provider => { %>
-      <%= provider.name %>Id: 'text',
+      <%= provider %>Id: 'text',
     <% }); %>
     },
     key: ['id'],

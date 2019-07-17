@@ -1,5 +1,5 @@
-import { Application } from '@feathersjs/feathers';
 import { Sequelize } from 'sequelize';
+import { Application } from './declarations';
 
 export default function (app: Application) {
   const connectionString = app.get('<%= database %>');

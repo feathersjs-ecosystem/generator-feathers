@@ -1,5 +1,5 @@
 import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '@feathersjs/feathers';
-import { App } from '../../app.interface';
+import { App } from '../../declarations';
 
 interface Data {}
 

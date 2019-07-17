@@ -12,8 +12,7 @@ module.exports = class AuthGenerator extends Generator {
     const prompts = [{
       type: 'checkbox',
       name: 'strategies',
-      message: 'What authentication providers do you want to use? (See API docs for all 180+ supported oAuth providers)',
-      default: 'providers',
+      message: 'What authentication strategies do you want to use? (See API docs for all 180+ supported oAuth providers)',
       choices: [{
         name: 'Username + Password (Local)',
         value: 'local',
@@ -28,6 +27,9 @@ module.exports = class AuthGenerator extends Generator {
         name: 'Facebook',
         value: 'facebook'
       }, {
+        name: 'Twitter',
+        value: 'twitter'
+      }, {
         name: 'GitHub',
         value: 'github'
       }]
@@ -39,6 +41,7 @@ module.exports = class AuthGenerator extends Generator {
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props);
+      this.props.oauthProviders = this.props.strategies.filter(s => s !== 'local');
     });
   }
 
@@ -103,14 +106,14 @@ module.exports = class AuthGenerator extends Generator {
       }
     };
 
-    for (let strategy of this.props.strategies) {
-      if (strategy !== 'local') {
-        authentication.oauth = authentication.oauth || {};
-        authentication.oauth[strategy] = {
-          key: `<${strategy} oauth key>`,
-          secret: `<${strategy} oauth secret>`
-        };
-      }
+    for (let strategy of this.props.oauthProviders) {
+      authentication.oauth = authentication.oauth || {
+        redirect: '/'
+      };
+      authentication.oauth[strategy] = {
+        key: `<${strategy} oauth key>`,
+        secret: `<${strategy} oauth secret>`
+      };
     }
 
     config.authentication = authentication;
@@ -130,13 +133,14 @@ module.exports = class AuthGenerator extends Generator {
     const context = Object.assign({
       kebabEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.kebabCase(this.props.entity),
       camelEntity: _.camelCase(this.props.entity),
-      oauthProviders: []
+      libDirectory: this.libDirectory
     }, this.props);
 
     if(!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service`))) {
       // Create the users service
       this.composeWith(require.resolve('../service'), {
         props: {
+          tester: context.tester,
           name: context.entity,
           path: `/${context.kebabEntity}`,
           authentication: context
@@ -162,6 +166,12 @@ module.exports = class AuthGenerator extends Generator {
     this.fs.copyTpl(
       this.srcTemplatePath('authentication'),
       this.srcDestinationPath(this.libDirectory, 'authentication'),
+      context
+    );
+
+    this.fs.copyTpl(
+      this.srcTemplatePath(`test.${this.testLibrary}`),
+      this.srcDestinationPath(this.testDirectory, 'authentication.test'),
       context
     );
 

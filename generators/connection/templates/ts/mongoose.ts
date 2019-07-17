@@ -1,5 +1,5 @@
-import { Application } from '@feathersjs/feathers';
 import mongoose from 'mongoose';
+import { Application } from './declarations';
 import logger from './logger';
 
 export default function (app: Application) {

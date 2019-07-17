@@ -1,8 +1,8 @@
 // See https://vincit.github.io/objection.js/#models
 // for more of what you can do here.
-import { Application } from '@feathersjs/feathers';
 import { Model } from 'objection';
 import Knex from 'knex';
+import { Application } from '../declarations';
 
 class <%= camelName %> extends Model {
   createdAt!: string;

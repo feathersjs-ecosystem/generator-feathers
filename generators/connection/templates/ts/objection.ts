@@ -1,5 +1,5 @@
-import { Application } from '@feathersjs/feathers';
 const { Model } = require('objection');
+import { Application } from './declarations';
 
 export default function (app: Application) {
   const { client, connection } = app.get('<%= database %>');

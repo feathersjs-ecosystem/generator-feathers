@@ -1,7 +1,7 @@
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
-import { Application } from '@feathersjs/feathers';
 import { Sequelize, DataTypes } from 'sequelize';
+import { Application } from '../declarations';
 
 export default function (app: Application) {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
@@ -18,7 +18,7 @@ export default function (app: Application) {
     },
   <% } %>
   <% authentication.oauthProviders.forEach(provider => { %>
-    <%= provider.name %>Id: { type: Sequelize.STRING },
+    <%= provider %>Id: { type: DataTypes.STRING },
   <% }); %>
   }, {
     hooks: {

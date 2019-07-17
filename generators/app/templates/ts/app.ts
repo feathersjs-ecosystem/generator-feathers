@@ -3,20 +3,22 @@ import favicon from 'serve-favicon';
 import compress from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
-import logger from './logger';
 
 import feathers from '@feathersjs/feathers';
 import configuration from '@feathersjs/configuration';
 import express from '@feathersjs/express';
 <% if (hasProvider('socketio')) { %>import socketio from '@feathersjs/socketio';<% } %>
 <% if (hasProvider('primus')) { %>import primus from '@feathersjs/primus';<% } %>
+
+import { Application } from './declarations';
+import logger from './logger';
 import middleware from './middleware';
 import services from './services';
 import appHooks from './app.hooks';
 import channels from './channels';
 // Don't remove this comment. It's needed to format import lines nicely.
 
-const app = express(feathers());
+const app: Application = express(feathers());
 
 // Load app configuration
 app.configure(configuration());

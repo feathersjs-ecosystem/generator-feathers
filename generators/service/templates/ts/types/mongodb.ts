@@ -1,5 +1,5 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-import { Application } from '@feathersjs/feathers';
+import { Application } from '../../declarations';
 import createService from 'feathers-mongodb';
 import hooks from './<%= kebabName %>.hooks';
 

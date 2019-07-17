@@ -10,7 +10,7 @@ module.exports = function (app) {
     password: { type: String },
   <% } %>
   <% authentication.oauthProviders.forEach(provider => { %>
-    <%= provider.name %>Id: { type: String },
+    <%= provider %>Id: { type: String },
   <% }); %>
   }, {
     timestamps: true

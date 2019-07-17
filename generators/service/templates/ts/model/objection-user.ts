@@ -1,8 +1,8 @@
 // See https://vincit.github.io/objection.js/#models
 // for more of what you can do here.
-import { Application } from '@feathersjs/feathers';
 import { Model } from 'objection';
 import Knex from 'knex';
+import { Application } from '../declarations';
 
 class <%= camelName %> extends Model {
   createdAt!: string;
@@ -22,7 +22,7 @@ class <%= camelName %> extends Model {
         email: { type: ['string', 'null'] },
         password: { type: 'string' },
       <% } %><% authentication.oauthProviders.forEach(provider => { %>
-        <%= provider.name %>Id: { type: 'string' },
+        <%= provider %>Id: { type: 'string' },
       <% }); %>
       }
     };
@@ -49,7 +49,7 @@ export default function (app: Application) {
         table.string('password');
       <% } %>
       <% authentication.oauthProviders.forEach(provider => { %>
-        table.string('<%= provider.name %>Id');
+        table.string('<%= provider %>Id');
       <% }); %>
         table.timestamp('createdAt');
         table.timestamp('updatedAt');
