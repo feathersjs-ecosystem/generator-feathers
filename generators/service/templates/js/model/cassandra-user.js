@@ -6,7 +6,7 @@ module.exports = function (app) {
     table_name: '<%= snakeName %>',
     fields: {
       id: 'int',
-    <% if(authentication.strategies.indexOf('local') !== -1) { %>
+    <% if(authentication.strategies.includes('local')) { %>
       email: 'text',
       password: {
         type: 'text',

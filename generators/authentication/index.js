@@ -132,7 +132,8 @@ module.exports = class AuthGenerator extends Generator {
     ];
     const context = Object.assign({
       kebabEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.kebabCase(this.props.entity),
-      camelEntity: _.camelCase(this.props.entity)
+      camelEntity: _.camelCase(this.props.entity),
+      libDirectory: this.libDirectory
     }, this.props);
 
     if(!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service`))) {
@@ -165,6 +166,12 @@ module.exports = class AuthGenerator extends Generator {
     this.fs.copyTpl(
       this.srcTemplatePath('authentication'),
       this.srcDestinationPath(this.libDirectory, 'authentication'),
+      context
+    );
+
+    this.fs.copyTpl(
+      this.srcTemplatePath(`test.${this.testLibrary}`),
+      this.srcDestinationPath(this.testDirectory, 'authentication.test'),
       context
     );
 
