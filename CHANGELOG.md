@@ -1,5 +1,19 @@
 # Change Log
 
+## [v4.0.0-pre.5](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.5) (2019-07-17)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.4...v4.0.0-pre.5)
+
+**Closed issues:**
+
+- An in-range update of helmet is breaking the build 🚨 [\#447](https://github.com/feathersjs/generator-feathers/issues/447)
+
+**Merged pull requests:**
+
+- Generate extended classes for every adapter type [\#448](https://github.com/feathersjs/generator-feathers/pull/448) ([daffl](https://github.com/daffl))
+- Generate authentication with application and update TypeScript app [\#446](https://github.com/feathersjs/generator-feathers/pull/446) ([daffl](https://github.com/daffl))
+- Remove logging application hook [\#445](https://github.com/feathersjs/generator-feathers/pull/445) ([daffl](https://github.com/daffl))
+- \[Do not merge\] More lighthouse improvements [\#442](https://github.com/feathersjs/generator-feathers/pull/442) ([bravo-kernel](https://github.com/bravo-kernel))
+
 ## [v4.0.0-pre.4](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.4) (2019-07-12)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.3...v4.0.0-pre.4)
 
