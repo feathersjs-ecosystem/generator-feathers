@@ -1,17 +1,16 @@
 import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '@feathersjs/feathers';
-import { App } from '../../declarations';
+import { Application } from '../../declarations';
 
 interface Data {}
 
 interface ServiceOptions {}
 
-export class <%= className %> implements ServiceMethods<any>, SetupMethod {
-  app!: App;
+export class <%= className %> implements ServiceMethods<Data> {
+  app: Application;
+  options: ServiceOptions;
 
-  constructor (private options: ServiceOptions = {}) {
-  }
-
-  setup (app: App) {
+  constructor (options: ServiceOptions = {}, app: Application) {
+    this.options = options;
     this.app = app;
   }
 

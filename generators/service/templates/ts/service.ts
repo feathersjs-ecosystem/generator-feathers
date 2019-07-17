@@ -22,7 +22,7 @@ export default function (app: Application) {
   };
 
   // Initialize our service with any options it requires
-  app.use('/<%= path %>', new <%= className %>(options));
+  app.use('/<%= path %>', new <%= className %>(options, app));
 
   // Get our initialized service so that we can register hooks
   const service = app.service('<%= path %>');
