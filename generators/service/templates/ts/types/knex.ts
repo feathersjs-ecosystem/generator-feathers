@@ -1,25 +1,11 @@
-// Initializes the `<%= name %>` service on path `/<%= path %>`
-import { Application } from '../../declarations';
-import createService from '<%= serviceModule %>';
-import createModel from '<%= relativeRoot %>models/<%= modelName %>';
-import hooks from './<%= kebabName %>.hooks';
+const { Service, KnexServiceOptions } = require('feathers-knex');
+import { Application } from '<%= relativeRoot %>declarations';
 
-export default function (app: Application) {
-  const Model = createModel(app);
-  const paginate = app.get('paginate');
-
-  const options = {
-    name: '<%= snakeName %>',
-    Model,
-    paginate
-  };
-
-  // Initialize our service with any options it requires
-  app.use('/<%= path %>', createService(options));
-
-  // Get our initialized service so that we can register hooks and filters
-  const service = app.service('<%= path %>');
-
-  service.hooks(hooks);
+export class <%= className %> extends Service {
+  constructor(options: Partial<KnexServiceOptions>, app: Application) {
+    super({
+      ...options,
+      name: '<%= snakeName %>'
+    });
+  }
 }
-  

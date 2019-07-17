@@ -1,11 +1,13 @@
-import { Application } from './declarations';
+import { ServiceAddons } from '@feathersjs/feathers';
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
 import { expressOauth } from '@feathersjs/authentication-oauth';
 
+import { Application } from './declarations';
+
 declare module './declarations' {
   interface ServiceTypes {
-    authentication: AuthenticationService;
+    'authentication': AuthenticationService & ServiceAddons<any>;
   }
 }
 
