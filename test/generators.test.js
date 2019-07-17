@@ -21,64 +21,63 @@ describe('generator-feathers', function() {
       });
   }
 
-  function runTest (adapter) {
-    describe(`with ${adapter} and authentication`, () => {
-      const prompts = {
-        name: 'myapp',
-        language: process.env.GENERATOR_LANGUAGE || 'js',
-        authentication: true,
-        providers: ['rest', 'socketio'],
-        packager: 'npm',
-        src: 'src',
-        tester,
-        adapter,
-        strategies: ['local']
-      };
+  const runTest = adapter => () => {
+    const prompts = {
+      name: 'myapp',
+      language: process.env.GENERATOR_LANGUAGE || 'js',
+      authentication: true,
+      providers: ['rest', 'socketio'],
+      packager: 'npm',
+      src: 'src',
+      tester,
+      adapter,
+      strategies: ['local']
+    };
 
-      if (adapter === 'sequelize' || adapter === 'knex') {
-        prompts.database = 'sqlite';
-      }
+    if (adapter === 'sequelize' || adapter === 'knex') {
+      prompts.database = 'sqlite';
+    }
 
-      before(() => helpers.run(path.join(__dirname, '..', 'generators', 'app'))
-        .inTmpDir(dir => (appDir = dir))
-        .withPrompts(prompts)
-        .withOptions({
-          skipInstall: false
+    before(() => helpers.run(path.join(__dirname, '..', 'generators', 'app'))
+      .inTmpDir(dir => (appDir = dir))
+      .withPrompts(prompts)
+      .withOptions({
+        skipInstall: false
+      })
+    );
+
+    it('basic app tests', () => npmTest('starts and shows the index page'));
+
+    it('feathers:hook', async () => {
+      await helpers.run(path.join(__dirname, '../generators/hook'))
+        .inTmpDir(function() {
+          process.chdir(appDir);
         })
-      );
+        .withPrompts({
+          name: 'removeId',
+          type: 'before',
+          services: []
+        });
 
-      it('basic app tests', () => npmTest('starts and shows the index page'));
-
-      it('feathers:hook', () => {
-        return helpers.run(path.join(__dirname, '../generators/hook'))
-          .inTmpDir(function() {
-            process.chdir(appDir);
-          })
-          .withPrompts({
-            name: 'removeId',
-            type: 'before',
-            services: []
-          })
-          .then(() => npmTest('\'removeId\' hook'));
-      });
-
-      it('feathers:middleware', () => {
-        return helpers.run(path.join(__dirname, '../generators/middleware'))
-          .inTmpDir(function() {
-            process.chdir(appDir);
-          })
-          .withPrompts({
-            name: 'testmiddleware',
-            path: '*'
-          });
-      });
+      await npmTest('\'removeId\' hook');
     });
-  }
+
+    it('feathers:middleware', async () => {
+      await helpers.run(path.join(__dirname, '../generators/middleware'))
+        .inTmpDir(function() {
+          process.chdir(appDir);
+        })
+        .withPrompts({
+          name: 'testmiddleware',
+          path: '*'
+        });
+    });
+  };
   
-  runTest('memory');
-  runTest('nedb');
-  runTest('mongoose');
-  runTest('mongodb');
-  runTest('sequelize');
-  runTest('knex');
+  describe('with memory adapter', runTest('memory'));
+  describe('with nedb adapter', runTest('nedb'));
+  describe.skip('with mongodb adapter', runTest('mongodb'));
+  describe('with mongoose adapter', runTest('mongoose'));
+  describe('with sequelize adapter', runTest('sequelize'));
+  describe('with knex adapter', runTest('knex'));
 });
