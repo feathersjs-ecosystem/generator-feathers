@@ -65,7 +65,6 @@
     "@feathersjs/feathers": "^4.3.0-pre.1",
     "@feathersjs/primus": "^4.3.0-pre.1",
     "@feathersjs/socketio": "^4.3.0-pre.1",
-    "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",

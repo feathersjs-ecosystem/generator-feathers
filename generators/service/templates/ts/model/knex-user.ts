@@ -8,6 +8,7 @@ import Knex from 'knex';
 export default function (app: Application) {
   const db: Knex = app.get('knexClient');
   const tableName = '<%= snakeName %>';
+  
   db.schema.hasTable(tableName).then(exists => {
     if(!exists) {
       db.schema.createTable(tableName, table => {

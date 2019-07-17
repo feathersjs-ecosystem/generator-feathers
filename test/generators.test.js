@@ -1,7 +1,6 @@
 const path = require('path');
 const helpers = require('yeoman-test');
 const assert = require('yeoman-assert');
-const axios = require('axios');
 
 const { startAndWait } = require('./utils');
 
@@ -9,7 +8,6 @@ describe('generator-feathers', function() {
   const tester = process.env.GENERATOR_TESTER || 'mocha';
 
   let appDir;
-  let testPort = 3030;
   
   this.timeout(300000);
 
@@ -24,20 +22,26 @@ describe('generator-feathers', function() {
   }
 
   function runTest (adapter) {
-    describe(`with ${adapter} users service`, () => {
+    describe(`with ${adapter} and authentication`, () => {
+      const prompts = {
+        name: 'myapp',
+        language: process.env.GENERATOR_LANGUAGE || 'js',
+        authentication: true,
+        providers: ['rest', 'socketio'],
+        packager: 'npm',
+        src: 'src',
+        tester,
+        adapter,
+        strategies: ['local']
+      };
+
+      if (adapter === 'sequelize' || adapter === 'knex') {
+        prompts.database = 'sqlite';
+      }
+
       before(() => helpers.run(path.join(__dirname, '..', 'generators', 'app'))
         .inTmpDir(dir => (appDir = dir))
-        .withPrompts({
-          name: 'myapp',
-          language: process.env.GENERATOR_LANGUAGE || 'js',
-          authentication: true,
-          providers: ['rest', 'socketio'],
-          packager: 'npm',
-          src: 'src',
-          tester,
-          adapter,
-          strategies: ['local']
-        })
+        .withPrompts(prompts)
         .withOptions({
           skipInstall: false
         })
@@ -68,41 +72,13 @@ describe('generator-feathers', function() {
             path: '*'
           });
       });
-
-      it.skip('starts app, creates user and authenticates', async () => {
-        const port = ++testPort;
-        const { child } = await startAndWait('npm', ['start'], {
-          cwd: appDir,
-          env: {
-            ...process.env,
-            NODE_ENV: 'production',
-            port
-          }
-        }, 'Feathers application started');
-        const user = {
-          email: 'hello@feathersjs.com',
-          password: 'supersecret'
-        };
-
-        await axios.post(`http://localhost:${port}/users`, user);
-
-        const { data } = await axios.post(`http://localhost:${port}/authentication`, {
-          ...user,
-          strategy: 'local'
-        });
-
-        assert.ok(data.accessToken);
-        assert.strictEqual(data.user.email, user.email);
-
-        child.kill('SIGTERM');
-        await new Promise(resolve => child.on('exit', () => resolve()));
-      });
     });
   }
   
   runTest('memory');
   runTest('nedb');
-  // runTest('mongoose');
-  // runTest('mongodb');
-  // runTest('sequelize');
+  runTest('mongoose');
+  runTest('mongodb');
+  runTest('sequelize');
+  runTest('knex');
 });
