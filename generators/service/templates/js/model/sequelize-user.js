@@ -18,7 +18,7 @@ module.exports = function (app) {
     },
   <% } %>
   <% authentication.oauthProviders.forEach(provider => { %>
-    <%= provider.name %>Id: { type: Sequelize.STRING },
+    <%= provider %>Id: { type: Sequelize.STRING },
   <% }); %>
   }, {
     hooks: {

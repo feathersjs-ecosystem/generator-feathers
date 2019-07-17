@@ -2,7 +2,7 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-import { Application } from '../../declarations';
+import { Application } from '../declarations';
 
 export default function (app: Application) {
   const mongooseClient = app.get('mongooseClient');
@@ -12,7 +12,7 @@ export default function (app: Application) {
     password: { type: String },
   <% } %>
   <% authentication.oauthProviders.forEach(provider => { %>
-    <%= provider.name %>Id: { type: String },
+    <%= provider %>Id: { type: String },
   <% }); %>
   }, {
     timestamps: true

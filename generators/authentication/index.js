@@ -41,6 +41,7 @@ module.exports = class AuthGenerator extends Generator {
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props);
+      this.props.oauthProviders = this.props.strategies.filter(s => s !== 'local');
     });
   }
 
@@ -105,16 +106,14 @@ module.exports = class AuthGenerator extends Generator {
       }
     };
 
-    for (let strategy of this.props.strategies) {
-      if (strategy !== 'local') {
-        authentication.oauth = authentication.oauth || {
-          redirect: '/'
-        };
-        authentication.oauth[strategy] = {
-          key: `<${strategy} oauth key>`,
-          secret: `<${strategy} oauth secret>`
-        };
-      }
+    for (let strategy of this.props.oauthProviders) {
+      authentication.oauth = authentication.oauth || {
+        redirect: '/'
+      };
+      authentication.oauth[strategy] = {
+        key: `<${strategy} oauth key>`,
+        secret: `<${strategy} oauth secret>`
+      };
     }
 
     config.authentication = authentication;
@@ -133,8 +132,7 @@ module.exports = class AuthGenerator extends Generator {
     ];
     const context = Object.assign({
       kebabEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.kebabCase(this.props.entity),
-      camelEntity: _.camelCase(this.props.entity),
-      oauthProviders: []
+      camelEntity: _.camelCase(this.props.entity)
     }, this.props);
 
     if(!this.fs.exists(this.srcDestinationPath(this.libDirectory, 'services', context.kebabEntity, `${context.kebabEntity}.service`))) {

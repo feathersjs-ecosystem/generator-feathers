@@ -16,7 +16,7 @@ module.exports = function (app) {
         table.string('password');
       <% } %>
       <% authentication.oauthProviders.forEach(provider => { %>
-        table.string('<%= provider.name %>Id');
+        table.string('<%= provider %>Id');
       <% }); %>
       })
         .then(() => console.log(`Created ${tableName} table`))

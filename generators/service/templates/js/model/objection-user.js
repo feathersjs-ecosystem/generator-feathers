@@ -18,7 +18,7 @@ class <%= camelName %> extends Model {
         email: { type: ['string', 'null'] },
         password: 'string',
       <% } %><% authentication.oauthProviders.forEach(provider => { %>
-        <%= provider.name %>Id: { type: 'string' },
+        <%= provider %>Id: { type: 'string' },
       <% }); %>
       }
     };
@@ -45,7 +45,7 @@ module.exports = function (app) {
         table.string('password');
       <% } %>
       <% authentication.oauthProviders.forEach(provider => { %>
-        table.string('<%= provider.name %>Id');
+        table.string('<%= provider %>Id');
       <% }); %>
         table.timestamp('createdAt');
         table.timestamp('updatedAt');

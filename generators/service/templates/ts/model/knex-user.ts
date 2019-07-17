@@ -2,7 +2,7 @@
 // 
 // See http://knexjs.org/
 // for more of what you can do here.
-import { Application } from '../../declarations';
+import { Application } from '../declarations';
 import Knex from 'knex';
 
 export default function (app: Application) {
@@ -17,7 +17,7 @@ export default function (app: Application) {
         table.string('password');
       <% } %>
       <% authentication.oauthProviders.forEach(provider => { %>
-        table.string('<%= provider.name %>Id');
+        table.string('<%= provider %>Id');
       <% }); %>
       })
         .then(() => console.log(`Created ${tableName} table`))

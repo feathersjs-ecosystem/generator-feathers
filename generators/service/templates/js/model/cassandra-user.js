@@ -15,7 +15,7 @@ module.exports = function (app) {
         }
       },
     <% } %><% authentication.oauthProviders.forEach(provider => { %>
-      <%= provider.name %>Id: 'text',
+      <%= provider %>Id: 'text',
     <% }); %>
     },
     key: ['id'],
