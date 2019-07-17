@@ -7,6 +7,7 @@ declare module 'express-cassandra';
 declare module 'feathers-cassandra';
 declare module 'mongodb-core';
 
-export type Application = ExpressFeathers<{
-  [key: string]: Service<any>;
-}>;
+// A mapping of service names to types. Will be extended in service files.
+export interface ServiceTypes {}
+// The application instance type that will be used everywhere else
+export type Application = ExpressFeathers<ServiceTypes>;
