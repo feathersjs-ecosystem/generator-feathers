@@ -1,4 +1,4 @@
-const rp = require('request-promise');
+const axios = require('axios');
 const url = require('url');
 const app = require('../<%= src %>/app');
 
@@ -11,47 +11,55 @@ const getUrl = pathname => url.format({
 });
 
 describe('Feathers application tests (with jest)', () => {
+  let server;
+
   beforeAll(done => {
-    this.server = app.listen(port);
-    this.server.once('listening', () => done());
+    server = app.listen(port);
+    server.once('listening', () => done());
   });
 
   afterAll(done => {
-    this.server.close(done);
+    server.close(done);
   });
 
-  it('starts and shows the index page', () => {
+  it('starts and shows the index page', async () => {
     expect.assertions(1);
-    return rp(getUrl()).then(
-      body => expect(body.indexOf('<html lang="en">')).not.toBe(-1)
-    );
+
+    const { data } = await axios.get(getUrl());
+
+    expect(data.indexOf('<html lang="en">')).to.not.be(-1);
   });
 
   describe('404', () => {
-    it('shows a 404 HTML page', () => {
+    it('shows a 404 HTML page', async () => {
       expect.assertions(2);
-      return rp({
-        url: getUrl('path/to/nowhere'),
-        headers: {
-          'Accept': 'text/html'
-        }
-      }).catch(res => {
-        expect(res.statusCode).toBe(404);
-        expect(res.error.indexOf('<html>')).not.toBe(-1);
-      });
+      try {
+        await axios.get(getUrl('path/to/nowhere'), {
+          headers: {
+            'Accept': 'text/html'
+          }
+        });
+      } catch (error) {
+        const { response } = error;
+
+        expect(response.status).toBe(404);
+        expect(response.data.indexOf('<html>')).not.toBe(-1);
+      }
     });
 
-    it('shows a 404 JSON error without stack trace', () => {
+    it('shows a 404 JSON error without stack trace', async () => {
       expect.assertions(4);
-      return rp({
-        url: getUrl('path/to/nowhere'),
-        json: true
-      }).catch(res => {
-        expect(res.statusCode).toBe(404);
-        expect(res.error.code).toBe(404);
-        expect(res.error.message).toBe('Page not found');
-        expect(res.error.name).toBe('NotFound');
-      });
+      
+      try {
+        await axios.get(getUrl('path/to/nowhere'));
+      } catch (error) {
+        const { response } = error;
+
+        expect(response.status).toBe(404);
+        expect(response.data.code).toBe(404);
+        expect(response.data.message).toBe('Page not found');
+        expect(response.data.name).toBe('NotFound');
+      }
     });
   });
 });

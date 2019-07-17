@@ -28,8 +28,7 @@ module.exports = class AppGenerator extends Generator {
     this.devDependencies = [
       'nodemon',
       'eslint',
-      'request',
-      'request-promise'
+      'axios'
     ];
   }
 
@@ -229,7 +228,6 @@ module.exports = class AppGenerator extends Generator {
         '@types/compression',
         '@types/cors',
         '@types/helmet',
-        '@types/request-promise',
         '@types/serve-favicon',
         'shx',
         'ts-node-dev',
