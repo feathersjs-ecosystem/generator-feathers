@@ -33,7 +33,7 @@ module.exports = function(generator) {
       [packager]: version
     },
     'scripts': {
-      test: `${packager} run eslint && NODE_ENV= ${packager} run ${props.tester}`,
+      test: `${packager} run eslint && ${packager} run ${props.tester}`,
       eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
       dev: isTypescript ? `ts-node-dev --no-notify ${lib}/` : `nodemon ${lib}/`,
       start: isTypescript ? 'shx rm -rf lib/ && tsc && node lib/' : `node ${lib}/`
@@ -46,7 +46,7 @@ module.exports = function(generator) {
   }
 
   if (isTypescript) {
-    pkg.scripts['test'] = `NODE_ENV= ${packager} run ${props.tester}`;
+    pkg.scripts['test'] = `${packager} run ${props.tester}`;
     delete pkg.scripts['eslint'];
   }
 
