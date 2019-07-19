@@ -3,7 +3,7 @@ import { Server } from 'http';
 import url from 'url';
 import axios from 'axios';
 
-import app from '../src/app';
+import app from '../<%= src %>/app';
 
 const port = app.get('port') || 8998;
 const getUrl = (pathname?: string) => url.format({
