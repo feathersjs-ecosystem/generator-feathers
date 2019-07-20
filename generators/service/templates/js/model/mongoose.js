@@ -11,5 +11,11 @@ module.exports = function (app) {
     timestamps: true
   });
 
-  return mongooseClient.model('<%= camelName %>', <%= camelName %>);
+  // This is necessary to avoid model compilation errors in watch mode
+  // see https://github.com/Automattic/mongoose/issues/1251
+  try {
+    return mongooseClient.model('<%= camelName %>');
+  } catch (e) {
+    return mongooseClient.model('<%= camelName %>', <%= camelName %>);
+  }
 };
