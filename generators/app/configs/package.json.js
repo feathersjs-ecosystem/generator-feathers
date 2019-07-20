@@ -1,3 +1,4 @@
+const p = require('path');
 const semver = require('semver');
 
 module.exports = function(generator) {
@@ -35,10 +36,11 @@ module.exports = function(generator) {
     'scripts': {
       test: `${packager} run eslint && ${packager} run ${props.tester}`,
       eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
-      dev: isTypescript ? `ts-node-dev --no-notify ${lib}/` : `nodemon ${lib}/`,
-      start: isTypescript ? 'shx rm -rf lib/ && tsc && node lib/' : `node ${lib}/`
+      dev: `nodemon ${lib}/`,
+      start: `node ${lib}/`
     }
   };
+
   if ('mocha' === props.tester) {
     pkg.scripts['mocha'] = isTypescript ? 'ts-mocha "test/**/*.ts" --recursive --exit' : 'mocha test/ --recursive --exit';
   } else {
@@ -46,8 +48,15 @@ module.exports = function(generator) {
   }
 
   if (isTypescript) {
-    pkg.scripts['test'] = `${packager} run ${props.tester}`;
-    delete pkg.scripts['eslint'];
+    pkg.scripts = {
+      ...pkg.scripts,
+      compile: 'shx rm -rf lib/ && tsc',
+      dev: `ts-node-dev --no-notify ${lib}/`,
+      test: `${packager} run compile && ${packager} run ${props.tester}`,
+      start: `${packager} run compile && node lib/`
+    };
+
+    delete pkg.scripts.eslint;
   }
 
   return pkg;
