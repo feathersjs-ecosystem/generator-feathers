@@ -228,6 +228,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     if (config.ts) {
       const typeMap = {
+        sequelize: [ '@types/bluebird' ],
         mongodb: ['@types/mongodb'],
         mongoose: ['@types/mongoose'],
         nedb: ['@types/nedb']
