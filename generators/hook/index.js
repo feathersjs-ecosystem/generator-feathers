@@ -74,7 +74,7 @@ module.exports = class HookGenerator extends Generator {
     let moduleName = relativeRoot + hookName;
 
     if (serviceName === '__app') {
-      hooksFile = this.srcDestinationPath(this.libDirectory, 'app.hooks.ts');
+      hooksFile = this.srcDestinationPath(this.libDirectory, 'app.hooks');
       moduleName = `./${hookName}`;
     }
 
