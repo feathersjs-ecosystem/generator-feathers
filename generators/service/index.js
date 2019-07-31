@@ -81,7 +81,7 @@ module.exports = class ServiceGenerator extends Generator {
         snakeName: _.snakeCase(name),
         kebabName: validate(name).validForNewPackages ? name : _.kebabCase(name),
         camelName: _.camelCase(name),
-        className: _.capitalize(_.camelCase(name))
+        className: _.upperFirst(_.camelCase(name))
       });
     });
   }
