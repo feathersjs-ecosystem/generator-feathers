@@ -86,8 +86,8 @@ module.exports = class AppGenerator extends Generator {
       message: 'Which package manager are you using (has to be installed globally)?',
       default: 'npm',
       choices: [
-        { name: 'npm', value: 'npm'   },
-        { name: 'Yarn', value: 'yarn' }
+        { name: 'npm', value: 'npm@>= 3.0.0'   },
+        { name: 'Yarn', value: 'yarn@>= 0.18.0' }
       ]
     }, {
       type: 'checkbox',
