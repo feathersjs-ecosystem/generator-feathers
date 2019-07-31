@@ -1,5 +1,25 @@
 # Change Log
 
+## [v4.0.0-pre.6](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.6) (2019-07-31)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.5...v4.0.0-pre.6)
+
+**Closed issues:**
+
+- An in-range update of sequelize is breaking the build 🚨 [\#457](https://github.com/feathersjs/generator-feathers/issues/457)
+- Model naming doesn't match Mongoose documentation/practices [\#416](https://github.com/feathersjs/generator-feathers/issues/416)
+
+**Merged pull requests:**
+
+- Update all dependencies and store Sequelize sync [\#458](https://github.com/feathersjs/generator-feathers/pull/458) ([daffl](https://github.com/daffl))
+- Add packager version in choices value [\#456](https://github.com/feathersjs/generator-feathers/pull/456) ([ucokfm](https://github.com/ucokfm))
+- Handle Mongoose model intitialization errors [\#455](https://github.com/feathersjs/generator-feathers/pull/455) ([daffl](https://github.com/daffl))
+- Add compile step to TS tests [\#454](https://github.com/feathersjs/generator-feathers/pull/454) ([daffl](https://github.com/daffl))
+- Fix duplicate extension for app hook generator [\#453](https://github.com/feathersjs/generator-feathers/pull/453) ([bisubus](https://github.com/bisubus))
+- Start git-ignoring .vscode/settings.json [\#452](https://github.com/feathersjs/generator-feathers/pull/452) ([bravo-kernel](https://github.com/bravo-kernel))
+- Fix custom src folder in tsconfig and tests [\#451](https://github.com/feathersjs/generator-feathers/pull/451) ([vonagam](https://github.com/vonagam))
+- Fix import in types/knex.ts [\#450](https://github.com/feathersjs/generator-feathers/pull/450) ([ucokfm](https://github.com/ucokfm))
+- Remove unnecessary test script environment variable [\#449](https://github.com/feathersjs/generator-feathers/pull/449) ([daffl](https://github.com/daffl))
+
 ## [v4.0.0-pre.5](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.5) (2019-07-17)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.4...v4.0.0-pre.5)
 
