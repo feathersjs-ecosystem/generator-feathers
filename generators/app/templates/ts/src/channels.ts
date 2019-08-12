@@ -1,5 +1,5 @@
 import { HookContext } from '@feathersjs/feathers';
-import { Application } from './declarations';
+import { Application } from './app.interface';
 
 export default function(app: Application) {
   if(typeof app.channel !== 'function') {

@@ -1,7 +1,7 @@
 // @ts-ignore
 import { parseConnectionString as parse } from 'mongodb-core';
 import { MongoClient } from 'mongodb';
-import { Application } from './declarations';
+import { Application } from './app.interface';
 const logger = require('./logger');
 
 export default function (app: Application) {

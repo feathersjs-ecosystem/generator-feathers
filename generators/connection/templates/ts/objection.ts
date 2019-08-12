@@ -1,5 +1,5 @@
 const { Model } = require('objection');
-import { Application } from './declarations';
+import { Application } from './app.interface';
 
 export default function (app: Application) {
   const { client, connection } = app.get('<%= database %>');

@@ -2,7 +2,7 @@
 // for more of what you can do here.
 import { Model } from 'objection';
 import Knex from 'knex';
-import { Application } from '../declarations';
+import { Application } from '../app.interface';
 
 class <%= camelName %> extends Model {
   createdAt!: string;

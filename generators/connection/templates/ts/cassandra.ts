@@ -1,6 +1,6 @@
 import ExpressCassandra from 'express-cassandra';
 import FeathersCassandra from 'feathers-cassandra';
-import { Application } from './declarations';
+import { Application } from './app.interface';
 
 export default function (app: Application) {
   const connectionInfo = app.get('<%= database %>');

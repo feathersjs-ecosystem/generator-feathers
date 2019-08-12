@@ -1,6 +1,6 @@
 import { Db } from 'mongodb';
 import { Service, MongoDBServiceOptions } from 'feathers-mongodb';
-import { Application } from '<%= relativeRoot %>declarations';
+import { Application } from '<%= relativeRoot %>app.interface';
 
 export class <%= className %> extends Service {
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {

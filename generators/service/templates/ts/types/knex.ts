@@ -1,5 +1,5 @@
 import { Service, KnexServiceOptions } from 'feathers-knex';
-import { Application } from '<%= relativeRoot %>declarations';
+import { Application } from '<%= relativeRoot %>app.interface';
 
 export class <%= className %> extends Service {
   constructor(options: Partial<KnexServiceOptions>, app: Application) {

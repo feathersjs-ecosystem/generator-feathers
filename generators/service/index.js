@@ -175,6 +175,29 @@ module.exports = class ServiceGenerator extends Generator {
       }
       this.conflicter.force = true;
       this.fs.write(servicejs, transformed);
+
+      // Updating app.interface.ts
+      if (config.ts) {
+        const appInterfaceFile = this.srcDestinationPath(this.libDirectory, 'app.interface');
+        const code = this.fs.read(appInterfaceFile).toString();
+        const { kebabName, subfolder, className } = this.props;
+        const ast = j(code);
+        const folder = subfolder.concat(kebabName).join('/');
+
+        const importCode = `import { ${className} } from './services/${folder}/${kebabName}.class';`;
+        const serviceTypeCode = `'${kebabName}': Service<${className}>`;
+
+        const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
+        const newImport = j(importCode).find(j.ImportDeclaration).get().node;
+        lastImport.insertAfter(newImport);
+
+        const firstExport = ast.find(j.ExportNamedDeclaration).at(0);
+        const interfaceDeclaration = firstExport.find(j.Declaration).get().node;
+        const newServiceType = j(serviceTypeCode).nodes()[0];
+        interfaceDeclaration.body.properties.push(newServiceType);
+
+        this.fs.write(appInterfaceFile, ast.toSource());
+      }
     }
 
     const requiresConnection = adapter !== 'generic' && adapter !== 'memory' &&

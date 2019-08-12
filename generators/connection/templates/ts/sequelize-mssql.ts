@@ -1,6 +1,6 @@
 import url from 'url';
 import Sequelize from 'sequelize';
-import { Application } from './declarations';
+import { Application } from './app.interface';
 
 export default function (app: Application) {
   const connectionString = app.get('mssql');

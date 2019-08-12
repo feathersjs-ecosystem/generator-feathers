@@ -10,7 +10,7 @@ import express from '@feathersjs/express';
 <% if (hasProvider('socketio')) { %>import socketio from '@feathersjs/socketio';<% } %>
 <% if (hasProvider('primus')) { %>import primus from '@feathersjs/primus';<% } %>
 
-import { Application } from './declarations';
+import { Application } from './app.interface';
 import logger from './logger';
 import middleware from './middleware';
 import services from './services';

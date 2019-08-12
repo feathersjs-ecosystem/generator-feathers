@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Application } from './declarations';
+import { Application } from './app.interface';
 import logger from './logger';
 
 export default function (app: Application) {

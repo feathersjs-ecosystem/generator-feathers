@@ -1,16 +1,8 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
-import { ServiceAddons } from '@feathersjs/feathers';
-import { Application } from '<%= relativeRoot %>declarations';
+import { Application } from '<%= relativeRoot %>app.interface';
 import { <%= className %> } from './<%= kebabName %>.class';<% if(modelName) { %>
 import createModel from '<%= relativeRoot %>models/<%= modelName %>';<% } %>
 import hooks from './<%= kebabName %>.hooks';
-
-// Add this service to the service type index
-declare module '<%= relativeRoot %>declarations' {
-  interface ServiceTypes {
-    '<%= path %>': <%= className %> & ServiceAddons<any>;
-  }
-}
 
 export default function (app: Application) {
   <% if (modelName) { %>const Model = createModel(app);<% } %>

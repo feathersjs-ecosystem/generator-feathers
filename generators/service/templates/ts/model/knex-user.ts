@@ -2,7 +2,7 @@
 // 
 // See http://knexjs.org/
 // for more of what you can do here.
-import { Application } from '../declarations';
+import { Application } from '../app.interface';
 import Knex from 'knex';
 
 export default function (app: Application) {

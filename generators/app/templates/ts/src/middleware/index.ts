@@ -1,4 +1,4 @@
-import { Application } from '../declarations';
+import { Application } from '../app.interface';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application) {

@@ -1,6 +1,6 @@
 import NeDB from 'nedb';
 import path from 'path';
-import { Application } from '../declarations';
+import { Application } from '../app.interface';
 
 export default function (app: Application) {
   const dbPath = app.get('nedb');

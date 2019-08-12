@@ -182,5 +182,26 @@ module.exports = class AuthGenerator extends Generator {
     if (this.srcType === 'ts') {
       this._packagerInstall(['@types/jsonwebtoken'], { saveDev: true });
     }
+
+    // Updating app.interface.ts
+    if (this.srcType === 'ts') {
+      const appInterfaceFile = this.srcDestinationPath(this.libDirectory, 'app.interface');
+      const code = this.fs.read(appInterfaceFile).toString();
+      const ast = j(code);
+
+      const importCode = 'import { AuthenticationService } from \'@feathersjs/authentication\';';
+      const serviceTypeCode = '\'authentication\': AuthenticationService';
+
+      const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
+      const newImport = j(importCode).find(j.ImportDeclaration).get().node;
+      lastImport.insertAfter(newImport);
+
+      const firstExport = ast.find(j.ExportNamedDeclaration).at(0);
+      const interfaceDeclaration = firstExport.find(j.Declaration).get().node;
+      const newServiceType = j(serviceTypeCode).nodes()[0];
+      interfaceDeclaration.body.properties.push(newServiceType);
+
+      this.fs.write(appInterfaceFile, ast.toSource());
+    }
   }
 };

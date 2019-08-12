@@ -2,7 +2,7 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-import { Application } from '../declarations';
+import { Application } from '../app.interface';
 
 export default function (app: Application) {
   const mongooseClient = app.get('mongooseClient');
