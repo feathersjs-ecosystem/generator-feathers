@@ -1,6 +1,6 @@
 // See https://express-cassandra.readthedocs.io/en/latest/schema/
 // for more of what you can do here.
-module.exports = function (app) {
+module.exports = app => {
   const models = app.get('models');
   const <%= camelName %> = models.loadSchema('<%= camelName %>', {
     table_name: '<%= snakeName %>',

@@ -2,7 +2,7 @@ import ExpressCassandra from 'express-cassandra';
 import FeathersCassandra from 'feathers-cassandra';
 import { Application } from './declarations';
 
-export default function (app: Application) {
+export default (app: Application) => {
   const connectionInfo = app.get('<%= database %>');
   const models = ExpressCassandra.createClient(connectionInfo);
   const cassandraClient = models.orm.get_system_client();

@@ -3,7 +3,7 @@
 const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
-module.exports = function (app) {
+module.exports = app => {
   const sequelizeClient = app.get('sequelizeClient');
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>', {
   <% if(authentication.strategies.indexOf('local') !== -1) { %>

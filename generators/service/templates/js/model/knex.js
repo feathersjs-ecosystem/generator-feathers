@@ -4,7 +4,7 @@
 // 
 // See http://knexjs.org/
 // for more of what you can do here.
-module.exports = function (app) {
+module.exports = app => {
   const db = app.get('knexClient');
   const tableName = '<%= snakeName %>';
   db.schema.hasTable(tableName).then(exists => {

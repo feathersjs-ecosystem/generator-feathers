@@ -2,7 +2,7 @@
 // for more of what you can do here.
 import { Application } from '../declarations';
 
-export default function (app: Application) {
+export default (app: Application) => {
   const models = app.get('models');
   const <%= camelName %> = models.loadSchema('<%= camelName %>', {
     table_name: '<%= snakeName %>',

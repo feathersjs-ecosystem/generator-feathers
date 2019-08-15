@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const logger = require('./logger');
 
-module.exports = function (app) {
+module.exports = app => {
   mongoose.connect(
     app.get('mongodb'),
     { useCreateIndex: true, useNewUrlParser: true }

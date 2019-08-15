@@ -33,7 +33,7 @@ class <%= camelName %> extends Model {
   }
 }
 
-module.exports = function (app) {
+module.exports = app => {
   const db = app.get('knex');
 
   db.schema.hasTable('<%= snakeName %>').then(exists => {

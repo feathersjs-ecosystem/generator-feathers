@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 import { Application } from './declarations';
 
-export default function (app: Application) {
+export default (app: Application) => {
   const connectionString = app.get('<%= database %>');
   const sequelize = new Sequelize(connectionString, {
     dialect: '<%= database %>',

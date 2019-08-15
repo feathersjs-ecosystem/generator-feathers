@@ -2,7 +2,7 @@ import url from 'url';
 import Sequelize from 'sequelize';
 import { Application } from './declarations';
 
-export default function (app: Application) {
+export default (app: Application) => {
   const connectionString = app.get('mssql');
   const connection = url.parse(connectionString);
   const database = connection.path.substring(1, connection.path.length);

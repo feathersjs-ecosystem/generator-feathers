@@ -1,7 +1,7 @@
 const { Model } = require('objection');
 import { Application } from './declarations';
 
-export default function (app: Application) {
+export default (app: Application) => {
   const { client, connection } = app.get('<%= database %>');
   const knex = require('knex')({ client, connection, useNullAsDefault: false });
 

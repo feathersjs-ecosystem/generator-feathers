@@ -11,7 +11,7 @@ declare module './declarations' {
   }
 }
 
-export default function(app: Application) {
+export default (app: Application) => {
   const authentication = new AuthenticationService(app);
 
   authentication.register('jwt', new JWTStrategy());

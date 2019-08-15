@@ -4,7 +4,7 @@ import { MongoClient } from 'mongodb';
 import { Application } from './declarations';
 const logger = require('./logger');
 
-export default function (app: Application) {
+export default (app: Application) => {
   const config = app.get('mongodb');
   const promise = MongoClient.connect(config, { useNewUrlParser: true }).then(client => {
     const dbName = parse(config, () => {});

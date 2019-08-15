@@ -3,7 +3,7 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import { Application } from '../declarations';
 
-export default function (app: Application) {
+export default (app: Application) => {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>', {
   <% if(authentication.strategies.indexOf('local') !== -1) { %>

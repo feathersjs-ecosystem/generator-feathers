@@ -3,7 +3,7 @@ const { <%= className %> } = require('./<%= kebabName %>.class');<% if(modelName
 const createModel = require('<%= relativeRoot %>models/<%= modelName %>');<% } %>
 const hooks = require('./<%= kebabName %>.hooks');
 
-module.exports = function (app) {
+module.exports = app => {
   <% if (modelName) { %>const Model = createModel(app);<% } %>
   const paginate = app.get('paginate');
 
