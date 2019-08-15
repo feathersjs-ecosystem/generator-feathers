@@ -196,6 +196,11 @@ module.exports = class AppGenerator extends Generator {
       makeConfig.configProduction(this)
     );
 
+    this.fs.writeJSON(
+      this.destinationPath(this.configDirectory, 'test.json'),
+      makeConfig.configTest(this)
+    );
+
     if (props.authentication) {
       // Create the users service
       this.composeWith(require.resolve('../authentication'), {
