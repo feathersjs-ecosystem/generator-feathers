@@ -56,10 +56,11 @@ describe('generator-feathers', function() {
         .withPrompts({
           name: 'removeId',
           type: 'before',
-          services: []
+          services: [ 'users' ],
+          methods: [ 'create' ]
         });
 
-      await npmTest('\'removeId\' hook');
+      await npmTest('starts and shows the index page');
     });
 
     it('feathers:middleware', async () => {
