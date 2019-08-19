@@ -1,5 +1,19 @@
 # Change Log
 
+## [v4.0.0-pre.7](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.7) (2019-08-19)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.6...v4.0.0-pre.7)
+
+**Closed issues:**
+
+- An in-range update of sequelize is breaking the build 🚨 [\#461](https://github.com/feathersjs/generator-feathers/issues/461)
+- An in-range update of feathers-objection is breaking the build 🚨 [\#460](https://github.com/feathersjs/generator-feathers/issues/460)
+- An in-range update of feathers-mongoose is breaking the build 🚨 [\#459](https://github.com/feathersjs/generator-feathers/issues/459)
+
+**Merged pull requests:**
+
+- Remove hook test files [\#465](https://github.com/feathersjs/generator-feathers/pull/465) ([daffl](https://github.com/daffl))
+- fix: create test.json when generate app [\#464](https://github.com/feathersjs/generator-feathers/pull/464) ([ucokfm](https://github.com/ucokfm))
+
 ## [v4.0.0-pre.6](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.6) (2019-07-31)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.5...v4.0.0-pre.6)
 
