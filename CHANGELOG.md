@@ -1,5 +1,12 @@
 # Change Log
 
+## [v4.0.0](https://github.com/feathersjs/generator-feathers/tree/v4.0.0) (2019-08-27)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.7...v4.0.0)
+
+**Merged pull requests:**
+
+- Final tweaks for readme, index page and Google auth [\#466](https://github.com/feathersjs/generator-feathers/pull/466) ([daffl](https://github.com/daffl))
+
 ## [v4.0.0-pre.7](https://github.com/feathersjs/generator-feathers/tree/v4.0.0-pre.7) (2019-08-19)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.6...v4.0.0-pre.7)
 
