@@ -106,15 +106,27 @@ module.exports = class AuthGenerator extends Generator {
       }
     };
 
-    for (let strategy of this.props.oauthProviders) {
+    const { oauthProviders = [] } = this.props;
+    
+    if (oauthProviders.length) {
       authentication.oauth = authentication.oauth || {
         redirect: '/'
       };
-      authentication.oauth[strategy] = {
-        key: `<${strategy} oauth key>`,
-        secret: `<${strategy} oauth secret>`
-      };
+
+      for (let strategy of this.props.oauthProviders) {
+        const strategyConfig = {
+          key: `<${strategy} oauth key>`,
+          secret: `<${strategy} oauth secret>`
+        };
+
+        if (strategy === 'google') {
+          strategyConfig.scope = [ 'email', 'profile', 'openid' ];
+        }
+
+        authentication.oauth[strategy] = strategyConfig;
+      }
     }
+
 
     config.authentication = authentication;
     this.conflicter.force = true;
