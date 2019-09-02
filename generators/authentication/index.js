@@ -118,9 +118,15 @@ module.exports = class AuthGenerator extends Generator {
           key: `<${strategy} oauth key>`,
           secret: `<${strategy} oauth secret>`
         };
-
-        if (strategy === 'google') {
-          strategyConfig.scope = [ 'email', 'profile', 'openid' ];
+        
+        switch (strategy) {
+          case 'google':
+            strategyConfig.scope = [ 'email', 'profile', 'openid' ];
+          break;
+            
+          case 'auth0':
+            strategyConfig.subdomain = `<${strategy} subdomain>`;
+          break;
         }
 
         authentication.oauth[strategy] = strategyConfig;
