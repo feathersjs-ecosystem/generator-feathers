@@ -122,11 +122,11 @@ module.exports = class AuthGenerator extends Generator {
         switch (strategy) {
         case 'google':
           strategyConfig.scope = [ 'email', 'profile', 'openid' ];
-        break;
+          break;
 
         case 'auth0':
           strategyConfig.subdomain = `<${strategy} subdomain>`;
-        break;
+          break;
         }
 
         authentication.oauth[strategy] = strategyConfig;
