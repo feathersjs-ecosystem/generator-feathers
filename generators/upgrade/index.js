@@ -40,22 +40,34 @@ module.exports = class UpgradeGenerator extends Generator {
       }
     });
 
+    oldPackages.forEach(name => {
+      delete this.pkg.dependencies[name];
+    });
+    
     this.conflicter.force = true;
     
-    this.fs.copy(
-      this.destinationPath(this.libDirectory, 'authentication.js'),
-      this.destinationPath(this.libDirectory, 'authentication.backup.js')
-    );
-    this.fs.copy(
-      this.destinationPath('config', 'default.json'),
-      this.destinationPath('config', 'default.backup.json')
-    );
+    const authFile = this.destinationPath(this.libDirectory, 'authentication.js');
 
-    this.fs.copy(
-      this.srcTemplatePath('authentication'),
-      this.srcDestinationPath(this.libDirectory, 'authentication')
-    );
-    this.fs.writeJSON(this.destinationPath('config', 'default.json'), config);
+    if (this.fs.exists(authFile)) {
+      this.fs.copy(authFile,
+        this.destinationPath(this.libDirectory, 'authentication.backup.js')
+      );
+
+      this.fs.copy(
+        this.srcTemplatePath('authentication'),
+        this.srcDestinationPath(this.libDirectory, 'authentication')
+      );
+    }
+
+    if (this.fs.exists(this.destinationPath('config', 'default.json'))) {
+      this.fs.copy(
+        this.destinationPath('config', 'default.json'),
+        this.destinationPath('config', 'default.backup.json')
+      );
+
+      this.fs.writeJSON(this.destinationPath('config', 'default.json'), config);
+    }
+
     this.fs.writeJSON(this.destinationPath('package.json'), this.pkg);
     this._packagerInstall(dependencies, {
       save: true
