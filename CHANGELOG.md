@@ -1,5 +1,13 @@
 # Change Log
 
+## [v4.0.1](https://github.com/feathersjs/generator-feathers/tree/v4.0.1) (2019-09-04)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0...v4.0.1)
+
+**Merged pull requests:**
+
+- Handle special cases in the upgrade generator [\#468](https://github.com/feathersjs/generator-feathers/pull/468) ([daffl](https://github.com/daffl))
+- Authentication auth0 strategy should include subdomain [\#467](https://github.com/feathersjs/generator-feathers/pull/467) ([compwright](https://github.com/compwright))
+
 ## [v4.0.0](https://github.com/feathersjs/generator-feathers/tree/v4.0.0) (2019-08-27)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0-pre.7...v4.0.0)
 
