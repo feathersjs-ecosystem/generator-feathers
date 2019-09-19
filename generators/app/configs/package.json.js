@@ -55,6 +55,7 @@ module.exports = function(generator) {
       test: `${packager} run compile && ${packager} run ${props.tester}`,
       start: `${packager} run compile && node lib/`
     };
+    pkg.types = 'lib/';
 
     delete pkg.scripts.eslint;
   }
