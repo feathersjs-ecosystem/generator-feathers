@@ -1,5 +1,19 @@
 # Change Log
 
+## [v4.1.0](https://github.com/feathersjs/generator-feathers/tree/v4.1.0) (2019-09-19)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.1...v4.1.0)
+
+**Closed issues:**
+
+- Support different config ext [\#470](https://github.com/feathersjs/generator-feathers/issues/470)
+- An in-range update of sequelize is breaking the build 🚨 [\#469](https://github.com/feathersjs/generator-feathers/issues/469)
+
+**Merged pull requests:**
+
+- Use package.json to dettermine language [\#474](https://github.com/feathersjs/generator-feathers/pull/474) ([daffl](https://github.com/daffl))
+- Add Objection adapter to automated tests [\#473](https://github.com/feathersjs/generator-feathers/pull/473) ([daffl](https://github.com/daffl))
+- Fix Application import in objection service [\#471](https://github.com/feathersjs/generator-feathers/pull/471) ([vonagam](https://github.com/vonagam))
+
 ## [v4.0.1](https://github.com/feathersjs/generator-feathers/tree/v4.0.1) (2019-09-04)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.0...v4.0.1)
 
