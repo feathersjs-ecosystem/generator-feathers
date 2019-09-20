@@ -9,9 +9,6 @@ module.exports = function(generator) {
       max: 50
     }
   };
-  if (props.language === 'ts') {
-    config.ts = true;
-  }
 
   return config;
 };

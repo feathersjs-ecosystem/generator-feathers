@@ -9,26 +9,7 @@ const oldPackages = [
 
 module.exports = class UpgradeGenerator extends Generator {
   writing() {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const dependencies = [ '@feathersjs/authentication-oauth' ];
-    
-    config.authentication = {
-      'entity': 'user',
-      'service': 'users',
-      'secret': crypto.randomBytes(20).toString('base64'),
-      'authStrategies': ['jwt', 'local'],
-      'jwtOptions': {
-        'header': { 'typ': 'access' },
-        'audience': 'https://yourdomain.com',
-        'issuer': 'feathers',
-        'algorithm': 'HS256',
-        'expiresIn': '1d'
-      },
-      'local': {
-        'usernameField': 'email',
-        'passwordField': 'password'
-      }
-    };
 
     Object.keys(this.pkg.dependencies).forEach(name => {
       const isCore = name.startsWith('@feathersjs/') && !oldPackages.includes(name);
@@ -59,13 +40,35 @@ module.exports = class UpgradeGenerator extends Generator {
       );
     }
 
-    if (this.fs.exists(this.destinationPath('config', 'default.json'))) {
+    const configFile = this.destinationPath('config', 'default.json');
+
+    if (this.fs.exists(configFile)) {
+      const config = this.fs.readJSON(configFile);
+    
+      config.authentication = {
+        'entity': 'user',
+        'service': 'users',
+        'secret': crypto.randomBytes(20).toString('base64'),
+        'authStrategies': ['jwt', 'local'],
+        'jwtOptions': {
+          'header': { 'typ': 'access' },
+          'audience': 'https://yourdomain.com',
+          'issuer': 'feathers',
+          'algorithm': 'HS256',
+          'expiresIn': '1d'
+        },
+        'local': {
+          'usernameField': 'email',
+          'passwordField': 'password'
+        }
+      };
+
       this.fs.copy(
-        this.destinationPath('config', 'default.json'),
+        configFile,
         this.destinationPath('config', 'default.backup.json')
       );
 
-      this.fs.writeJSON(this.destinationPath('config', 'default.json'), config);
+      this.fs.writeJSON(configFile, config);
     }
 
     this.fs.writeJSON(this.destinationPath('package.json'), this.pkg);

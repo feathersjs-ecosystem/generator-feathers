@@ -7,10 +7,10 @@ const Generator = require('../../lib/generator');
 
 module.exports = class HookGenerator extends Generator {
   _listServices (...args) {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const serviceDir = this.destinationPath(...args);
     const files = dir.files(serviceDir, { sync: true });
-    const services = files.filter(file => file.endsWith(config.ts ? 'service.ts' : '.service.js'))
+    const isTs = this.isTypescript;
+    const services = files.filter(file => file.endsWith(isTs ? 'service.ts' : '.service.js'))
       .map(file => path.dirname(path.relative(serviceDir, file)));
     
     return services;
@@ -66,7 +66,6 @@ module.exports = class HookGenerator extends Generator {
   }
 
   _addToService (serviceName, hookName) {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const nameParts = serviceName.split('/');
     const relativeRoot = '../'.repeat(nameParts.length + 1);
 
@@ -82,7 +81,7 @@ module.exports = class HookGenerator extends Generator {
       throw new Error(`Can not add hook to the ${serviceName} hooks file ${hooksFile}. It does not exist.`);
     }
 
-    const transformed = config.ts ? this._transformHookFileTs(this.fs.read(hooksFile), moduleName)
+    const transformed = this.isTypescript ? this._transformHookFileTs(this.fs.read(hooksFile), moduleName)
       : this._transformHookFile(this.fs.read(hooksFile), moduleName);
 
     this.conflicter.force = true;
@@ -180,11 +179,10 @@ module.exports = class HookGenerator extends Generator {
   }
 
   writing () {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const context = Object.assign({
       libDirectory: this.libDirectory
     }, this.props);
-    const mainFile = this.destinationPath(this.libDirectory, 'hooks', config.ts ? `${context.kebabName}.ts` : `${context.kebabName}.js`);
+    const mainFile = this.srcDestinationPath(this.libDirectory, 'hooks', context.kebabName);
 
     if (!this.fs.exists(mainFile) && context.type) {
       this.props.services.forEach(serviceName =>

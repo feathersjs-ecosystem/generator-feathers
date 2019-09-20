@@ -134,7 +134,6 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing() {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const { adapter, kebabName, subfolder } = this.props;
     const moduleMappings = {
       generic: `./${kebabName}.class`,
@@ -164,7 +163,7 @@ module.exports = class ServiceGenerator extends Generator {
     if (!this.fs.exists(mainFile)) {
       const servicejs = this.srcDestinationPath(this.libDirectory, 'services', 'index');
       let transformed;
-      if (config.ts) {
+      if (this.isTypescript) {
         transformed = this._transformCodeTs(
           this.fs.read(servicejs).toString()
         );
@@ -226,7 +225,7 @@ module.exports = class ServiceGenerator extends Generator {
       this._packagerInstall([serviceModule], { save: true });
     }
 
-    if (config.ts) {
+    if (this.isTypescript) {
       const typeMap = {
         sequelize: [ '@types/bluebird' ],
         mongodb: ['@types/mongodb'],
