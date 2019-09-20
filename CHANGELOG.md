@@ -1,11 +1,23 @@
 # Change Log
 
+## [v4.1.1](https://github.com/feathersjs/generator-feathers/tree/v4.1.1) (2019-09-20)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.0...v4.1.1)
+
+**Closed issues:**
+
+- Failed to a generate hook [\#472](https://github.com/feathersjs/generator-feathers/issues/472)
+- Support different config ext [\#470](https://github.com/feathersjs/generator-feathers/issues/470)
+
+**Merged pull requests:**
+
+- Fix type error in authentication tests [\#476](https://github.com/feathersjs/generator-feathers/pull/476) ([daffl](https://github.com/daffl))
+- Change all references of language checks to not rely on config files [\#475](https://github.com/feathersjs/generator-feathers/pull/475) ([daffl](https://github.com/daffl))
+
 ## [v4.1.0](https://github.com/feathersjs/generator-feathers/tree/v4.1.0) (2019-09-19)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.0.1...v4.1.0)
 
 **Closed issues:**
 
-- Support different config ext [\#470](https://github.com/feathersjs/generator-feathers/issues/470)
 - An in-range update of sequelize is breaking the build 🚨 [\#469](https://github.com/feathersjs/generator-feathers/issues/469)
 
 **Merged pull requests:**
