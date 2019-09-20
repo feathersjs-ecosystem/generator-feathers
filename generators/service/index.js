@@ -134,7 +134,6 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing() {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const { adapter, kebabName, subfolder } = this.props;
     const moduleMappings = {
       generic: `./${kebabName}.class`,
