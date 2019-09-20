@@ -64,13 +64,12 @@ module.exports = class MiddlewareGenerator extends Generator {
   }
 
   writing () {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const context = this.props;
     const mainFile = this.srcDestinationPath(this.libDirectory, 'middleware', context.kebabName);
 
     // Do not run code transformations if the middleware file already exists
     if (!this.fs.exists(mainFile)) {
-      if (config.ts) {
+      if (this.isTypescript) {
         const middlewarets = this.destinationPath(this.libDirectory, 'middleware', 'index.ts');
         const transformed = this._transformCodeTs(
           this.fs.read(middlewarets).toString()

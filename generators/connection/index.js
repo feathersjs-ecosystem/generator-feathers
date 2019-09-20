@@ -311,7 +311,6 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   writing () {
-    const config = this.fs.readJSON(this.destinationPath('config', 'default.json'));
     const { database, adapter } = this.props;
     const context = Object.assign({}, this.props);
     
@@ -332,7 +331,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
         this.conflicter.force = true;
 
-        if (config.ts) {
+        if (this.isTypescript) {
           this.fs.write(appjs, this._transformCodeTs(
             this.fs.read(appjs).toString()
           ));
