@@ -23,7 +23,7 @@ describe('authentication', () => {
       const { user, accessToken } = await app.service('authentication').create({
         strategy: 'local',
         ...userInfo
-      });
+      }, {});
       
       expect(accessToken).toBeTruthy();
       expect(user).toBeTruthy();
