@@ -33,4 +33,4 @@ exports.<%= className %> = class <%= className %> {
   async remove (id, params) {
     return { id };
   }
-}
+};
