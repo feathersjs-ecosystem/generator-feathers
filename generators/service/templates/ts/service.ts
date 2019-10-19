@@ -13,12 +13,9 @@ declare module '<%= relativeRoot %>declarations' {
 }
 
 export default function (app: Application) {
-  <% if (modelName) { %>const Model = createModel(app);<% } %>
-  const paginate = app.get('paginate');
-
   const options = {<% if (modelName) { %>
-    Model,<% } %>
-    paginate
+    Model: createModel(app),<% } %>
+    paginate: app.get('paginate')
   };
 
   // Initialize our service with any options it requires

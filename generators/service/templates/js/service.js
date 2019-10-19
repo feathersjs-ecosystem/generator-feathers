@@ -4,12 +4,9 @@ const createModel = require('<%= relativeRoot %>models/<%= modelName %>');<% } %
 const hooks = require('./<%= kebabName %>.hooks');
 
 module.exports = function (app) {
-  <% if (modelName) { %>const Model = createModel(app);<% } %>
-  const paginate = app.get('paginate');
-
   const options = {<% if (modelName) { %>
-    Model,<% } %>
-    paginate
+    Model: createModel(app),<% } %>
+    paginate: app.get('paginate')
   };
 
   // Initialize our service with any options it requires
