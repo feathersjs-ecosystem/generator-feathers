@@ -1,5 +1,32 @@
 # Change Log
 
+## [v4.1.2](https://github.com/feathersjs/generator-feathers/tree/v4.1.2) (2019-10-23)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.1...v4.1.2)
+
+**Closed issues:**
+
+- An in-range update of mongodb is breaking the build 🚨 [\#493](https://github.com/feathersjs/generator-feathers/issues/493)
+- An in-range update of @feathersjs/authentication-oauth is breaking the build 🚨 [\#491](https://github.com/feathersjs/generator-feathers/issues/491)
+- An in-range update of @feathersjs/authentication-local is breaking the build 🚨 [\#490](https://github.com/feathersjs/generator-feathers/issues/490)
+- An in-range update of @feathersjs/configuration is breaking the build 🚨 [\#489](https://github.com/feathersjs/generator-feathers/issues/489)
+- An in-range update of @feathersjs/authentication is breaking the build 🚨 [\#488](https://github.com/feathersjs/generator-feathers/issues/488)
+- An in-range update of @feathersjs/socketio is breaking the build 🚨 [\#487](https://github.com/feathersjs/generator-feathers/issues/487)
+- An in-range update of @feathersjs/primus is breaking the build 🚨 [\#486](https://github.com/feathersjs/generator-feathers/issues/486)
+- An in-range update of @feathersjs/express is breaking the build 🚨 [\#485](https://github.com/feathersjs/generator-feathers/issues/485)
+- An in-range update of @feathersjs/feathers is breaking the build 🚨 [\#484](https://github.com/feathersjs/generator-feathers/issues/484)
+- An in-range update of @feathersjs/errors is breaking the build 🚨 [\#483](https://github.com/feathersjs/generator-feathers/issues/483)
+- An in-range update of feathers-objection is breaking the build 🚨 [\#482](https://github.com/feathersjs/generator-feathers/issues/482)
+- An in-range update of @feathersjs/feathers is breaking the build 🚨 [\#478](https://github.com/feathersjs/generator-feathers/issues/478)
+
+**Merged pull requests:**
+
+- Fixes app ignoring configured hostname [\#495](https://github.com/feathersjs/generator-feathers/pull/495) ([Deprofets](https://github.com/Deprofets))
+- Initialize service model and pagination in a single object [\#494](https://github.com/feathersjs/generator-feathers/pull/494) ([daffl](https://github.com/daffl))
+- Update all dependencies [\#492](https://github.com/feathersjs/generator-feathers/pull/492) ([daffl](https://github.com/daffl))
+- Add missing semi [\#481](https://github.com/feathersjs/generator-feathers/pull/481) ([wolfgangwalther](https://github.com/wolfgangwalther))
+- Update feathers-mongodb to the latest version 🚀 [\#479](https://github.com/feathersjs/generator-feathers/pull/479) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update feathers-knex to the latest version 🚀 [\#477](https://github.com/feathersjs/generator-feathers/pull/477) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v4.1.1](https://github.com/feathersjs/generator-feathers/tree/v4.1.1) (2019-09-20)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.0...v4.1.1)
 
