@@ -18,6 +18,7 @@ module.exports = class AppGenerator extends Generator {
       '@feathersjs/errors',
       '@feathersjs/configuration',
       '@feathersjs/express',
+      '@feathersjs/transport-commons',
       'serve-favicon',
       'compression',
       'helmet',
