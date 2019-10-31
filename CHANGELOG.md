@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.1.3](https://github.com/feathersjs/generator-feathers/tree/v4.1.3) (2019-10-31)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.2...v4.1.3)
+
+**Closed issues:**
+
+- An in-range update of @feathersjs/errors is breaking the build 🚨 [\#496](https://github.com/feathersjs/generator-feathers/issues/496)
+- parseConnectionString returns undefined [\#480](https://github.com/feathersjs/generator-feathers/issues/480)
+
+**Merged pull requests:**
+
+- Update MongoDB intialization [\#498](https://github.com/feathersjs/generator-feathers/pull/498) ([daffl](https://github.com/daffl))
+- Move transport-commons and remove unnecessary imports [\#497](https://github.com/feathersjs/generator-feathers/pull/497) ([daffl](https://github.com/daffl))
+
 ## [v4.1.2](https://github.com/feathersjs/generator-feathers/tree/v4.1.2) (2019-10-23)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.1...v4.1.2)
 
