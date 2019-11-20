@@ -85,7 +85,7 @@
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.5",
     "nedb": "^1.8.0",
-    "nodemon": "^1.19.3",
+    "nodemon": "^2.0.0",
     "objection": "^1.6.11",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
