@@ -79,6 +79,10 @@ module.exports = class ConnectionGenerator extends Generator {
     } else if (adapter === 'cassandra') {
       this.dependencies.push('express-cassandra');
       this.dependencies.push('cassanknex');
+    } else if (adapter === 'sequelize') {	
+      if (this.srcType === 'ts') {	
+        this.devDependencies.push('@types/validator');	
+      }	
     }
 
     switch (database) {
