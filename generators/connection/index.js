@@ -81,7 +81,7 @@ module.exports = class ConnectionGenerator extends Generator {
       this.dependencies.push('cassanknex');
     } else if (adapter === 'sequelize') {	
       if (this.srcType === 'ts') {	
-        this.devDependencies.push('@types/validator');	
+        this.devDependencies.push('@types/validator@^10.0.0');	
       }	
     }
 
