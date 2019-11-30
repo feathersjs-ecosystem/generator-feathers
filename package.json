@@ -86,7 +86,7 @@
     "mongoose": "^5.7.12",
     "nedb": "^1.8.0",
     "nodemon": "^2.0.0",
-    "objection": "^1.6.11",
+    "objection": "^2.0.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "sequelize": "^5.21.2",
