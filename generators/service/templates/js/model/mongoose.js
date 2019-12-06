@@ -3,19 +3,20 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
+  const modelName = '<%= camelName %>';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
-  const <%= camelName %> = new Schema({
+  const schema = new Schema({
     text: { type: String, required: true }
   }, {
     timestamps: true
   });
 
   // This is necessary to avoid model compilation errors in watch mode
-  // see https://github.com/Automattic/mongoose/issues/1251
-  try {
-    return mongooseClient.model('<%= camelName %>');
-  } catch (e) {
-    return mongooseClient.model('<%= camelName %>', <%= camelName %>);
+  // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
+  if (mongooseClient.modelNames().includes(modelName)) {
+    mongooseClient.deleteModel(modelName);
   }
+  return mongooseClient.model(modelName, schema);
+  
 };
