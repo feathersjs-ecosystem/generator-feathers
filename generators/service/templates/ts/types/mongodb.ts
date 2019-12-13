@@ -5,11 +5,11 @@ import { Application } from '<%= relativeRoot %>declarations';
 export class <%= className %> extends Service {
   constructor(options: Partial<MongoDBServiceOptions>, app: Application) {
     super(options);
-    
+
     const client: Promise<Db> = app.get('mongoClient');
-    
+
     client.then(db => {
-      this.Model = db. collection('users');
+      this.Model = db.collection('<%= kebabName %>');
     });
   }
 };
