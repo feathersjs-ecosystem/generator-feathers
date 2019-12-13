@@ -5,11 +5,10 @@ import axios from 'axios';
 
 import app from '../<%= src %>/app';
 
-const hostname = app.get('host') || 'localhost';
 const port = app.get('port') || 8998;
 const getUrl = (pathname?: string) => url.format({
+  hostname: app.get('host') || 'localhost',
   protocol: 'http',
-  hostname,
   port,
   pathname
 });
@@ -18,7 +17,7 @@ describe('Feathers application tests', () => {
   let server: Server;
 
   before(function(done) {
-    server = app.listen(port, hostname);
+    server = app.listen(port);
     server.once('listening', () => done());
   });
 
