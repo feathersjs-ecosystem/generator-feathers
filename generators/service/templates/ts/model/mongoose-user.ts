@@ -5,10 +5,11 @@
 import { Application } from '../declarations';
 
 export default function (app: Application) {
+  const modelName = '<%= camelName %>';
   const mongooseClient = app.get('mongooseClient');
-  const <%= camelName %> = new mongooseClient.Schema({
+  const schema = new mongooseClient.Schema({
   <% if(authentication.strategies.indexOf('local') !== -1) { %>
-    email: {type: String, unique: true, lowercase: true},
+    email: { type: String, unique: true, lowercase: true },
     password: { type: String },
   <% } %>
   <% authentication.oauthProviders.forEach(provider => { %>
@@ -18,5 +19,10 @@ export default function (app: Application) {
     timestamps: true
   });
 
-  return mongooseClient.model('<%= camelName %>', <%= camelName %>);
+  // This is necessary to avoid model compilation errors in watch mode
+  // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
+  if (mongooseClient.modelNames().includes(modelName)) {
+    mongooseClient.deleteModel(modelName);
+  }
+  return mongooseClient.model(modelName, schema);
 }
