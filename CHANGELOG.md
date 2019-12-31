@@ -1,5 +1,12 @@
 # Change Log
 
+## [v4.1.5](https://github.com/feathersjs/generator-feathers/tree/v4.1.5) (2019-12-31)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.4...v4.1.5)
+
+**Merged pull requests:**
+
+- Update semver to the latest version 🚀 [\#521](https://github.com/feathersjs/generator-feathers/pull/521) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v4.1.4](https://github.com/feathersjs/generator-feathers/tree/v4.1.4) (2019-12-13)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.3...v4.1.4)
 
