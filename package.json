@@ -81,7 +81,7 @@
     "feathers-sequelize": "^6.1.0",
     "helmet": "^3.21.2",
     "jshint": "^2.10.3",
-    "mocha": "^6.2.2",
+    "mocha": "^7.0.1",
     "mongodb": "^3.3.5",
     "mongoose": "^5.7.13",
     "nedb": "^1.8.0",
