@@ -14,6 +14,7 @@ module.exports = function(generator) {
     description: props.description,
     version: '0.0.0',
     homepage: '',
+    private: true,
     main: lib,
     keywords: [
       'feathers'
