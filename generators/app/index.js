@@ -28,7 +28,6 @@ module.exports = class AppGenerator extends Generator {
 
     this.devDependencies = [
       'nodemon',
-      'eslint',
       'axios'
     ];
   }
@@ -122,8 +121,31 @@ module.exports = class AppGenerator extends Generator {
       default: true
     }];
 
+    const jsPrompts = [{
+      type: 'list',
+      name: 'linter',
+      message: 'Which coding style do you want do use?',
+      default: 'eslint',
+      choices: [
+        { name: 'ESLint', value: 'eslint' },
+        { name: 'StandardJS', value: 'standard'  }
+      ],
+    }];
+
     return this.prompt(prompts).then(props => {
-      this.props = Object.assign(this.props, props);
+      props = Object.assign({}, this.props, props, {
+        linter: 'eslint'
+      });
+
+      if (props.language === 'js') {
+        return this.prompt(jsPrompts).then(jsProps => {
+          return Object.assign({}, props, jsProps);
+        });
+      } else {
+        return props;
+      }
+    }).then(props => {
+      this.props = Object.assign({}, this.props, props);
     });
   }
 
@@ -180,7 +202,7 @@ module.exports = class AppGenerator extends Generator {
           context
         );
       }
-    } else {
+    } else if (props.linter === 'eslint') {
       this.fs.writeJSON(
         this.destinationPath('.eslintrc.json'),
         makeConfig.eslintrc(this)
@@ -227,7 +249,6 @@ module.exports = class AppGenerator extends Generator {
 
     if (this.isTypescript) {
       const excluded = [
-        'eslint',
         'nodemon@^1.18.7',
       ];
       this.devDependencies = this.devDependencies.concat([
@@ -242,6 +263,8 @@ module.exports = class AppGenerator extends Generator {
         `@types/${this.props.tester}`,
         `ts-${this.props.tester}`,
       ]).filter(item => !excluded.includes(item));
+    } else {
+      this.devDependencies.push(this.props.linter);
     }
 
     this.devDependencies.push(this.props.tester);
@@ -249,5 +272,18 @@ module.exports = class AppGenerator extends Generator {
     this._packagerInstall(this.devDependencies, {
       saveDev: true
     });
+
+  }
+
+  end () {
+    if (!this.isTypescript) {
+      const [ packager, ] = this.props.packager.split('@');
+
+      if (packager === 'yarn') {
+        this.spawnCommand(packager, ['run', 'lint', '--fix']);
+      } else {
+        this.spawnCommand(packager, ['run', 'lint', '--', '--fix']);
+      }
+    }
   }
 };
