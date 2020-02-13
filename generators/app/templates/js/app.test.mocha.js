@@ -1,4 +1,4 @@
-const assert = require('assert');
+const assert = require('assert').strict;
 const axios = require('axios');
 const url = require('url');
 const app = require('../<%= src %>/app');
