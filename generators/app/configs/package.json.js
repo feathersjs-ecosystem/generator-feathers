@@ -9,6 +9,11 @@ module.exports = function(generator) {
   const lib = props.src;
   const [ packager, version ] = props.packager.split('@');
   const isTypescript = props.language === 'ts';
+  const lintScripts = {
+    eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
+    standard: 'standard'
+  }
+
   const pkg = {
     name: props.name,
     description: props.description,
@@ -34,11 +39,15 @@ module.exports = function(generator) {
       node: `^${major}.0.0`,
       [packager]: version
     },
-    'scripts': {
-      test: `${packager} run eslint && ${packager} run ${props.tester}`,
-      eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
+    scripts: {
+      test: `${packager} run lint && ${packager} run ${props.tester}`,
+      lint: lintScripts[props.linter],
       dev: `nodemon ${lib}/`,
       start: `node ${lib}/`
+    },
+    standard: {
+      env: [props.tester],
+      ignore: []
     }
   };
 
@@ -58,7 +67,7 @@ module.exports = function(generator) {
     };
     pkg.types = 'lib/';
 
-    delete pkg.scripts.eslint;
+    delete pkg.scripts.lint;
   }
 
   return pkg;
