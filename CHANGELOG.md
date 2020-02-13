@@ -1,5 +1,20 @@
 # Change Log
 
+## [v4.2.0](https://github.com/feathersjs/generator-feathers/tree/v4.2.0) (2020-02-13)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.5...v4.2.0)
+
+**Closed issues:**
+
+- An in-range update of mongoose is breaking the build 🚨 [\#526](https://github.com/feathersjs/generator-feathers/issues/526)
+
+**Merged pull requests:**
+
+- Update all dependencies [\#527](https://github.com/feathersjs/generator-feathers/pull/527) ([daffl](https://github.com/daffl))
+- Fix lint errors picked up by StandardJS [\#525](https://github.com/feathersjs/generator-feathers/pull/525) ([jntesteves](https://github.com/jntesteves))
+- Add prompt to choose linter between ESLint and StandardJS [\#524](https://github.com/feathersjs/generator-feathers/pull/524) ([jntesteves](https://github.com/jntesteves))
+- fix: set private field true in package.json [\#523](https://github.com/feathersjs/generator-feathers/pull/523) ([ucokfm](https://github.com/ucokfm))
+- Update mocha to the latest version 🚀 [\#522](https://github.com/feathersjs/generator-feathers/pull/522) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v4.1.5](https://github.com/feathersjs/generator-feathers/tree/v4.1.5) (2019-12-31)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.4...v4.1.5)
 
