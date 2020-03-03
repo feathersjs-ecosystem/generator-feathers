@@ -124,7 +124,7 @@ module.exports = class AppGenerator extends Generator {
     const jsPrompts = [{
       type: 'list',
       name: 'linter',
-      message: 'Which coding style do you want do use?',
+      message: 'Which coding style do you want to use?',
       default: 'eslint',
       choices: [
         { name: 'ESLint', value: 'eslint' },
