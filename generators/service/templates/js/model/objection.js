@@ -2,7 +2,7 @@
 // for more of what you can do here.
 const { Model } = require('objection');
 
-class <%= camelName %> extends Model {
+class <%= className %> extends Model {
 
   static get tableName() {
     return '<%= snakeName %>';
@@ -45,5 +45,5 @@ module.exports = function (app) {
   })
     .catch(e => console.error('Error creating <%= snakeName %> table', e)); // eslint-disable-line no-console
 
-  return <%= camelName %>;
+  return <%= className %>;
 };

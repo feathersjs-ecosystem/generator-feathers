@@ -4,7 +4,7 @@ import { Model } from 'objection';
 import Knex from 'knex';
 import { Application } from '../declarations';
 
-class <%= camelName %> extends Model {
+class <%= className %> extends Model {
   createdAt!: string;
   updatedAt!: string;
 
@@ -49,5 +49,5 @@ export default function (app: Application): Model {
   })
     .catch(e => console.error('Error creating <%= snakeName %> table', e)); // eslint-disable-line no-console
 
-  return <%= camelName %>;
+  return <%= className %>;
 }
