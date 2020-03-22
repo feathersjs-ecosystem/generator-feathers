@@ -251,7 +251,7 @@ module.exports = class AppGenerator extends Generator {
 
     if (this.isTypescript) {
       const excluded = [
-        'nodemon@^1.18.7',
+        'nodemon',
       ];
       this.devDependencies = this.devDependencies.concat([
         '@types/compression',
