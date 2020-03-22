@@ -44,6 +44,10 @@ module.exports = generator => {
     config.extends = [
       'plugin:@typescript-eslint/recommended'
     ];
+
+    // rules
+    config.rules['@typescript-eslint/no-explicit-any'] = 'off';
+    config.rules['@typescript-eslint/no-empty-interface'] = 'off';
   } else {
     delete config.plugins;
   }
