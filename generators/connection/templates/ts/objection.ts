@@ -1,5 +1,5 @@
 import { Model } from 'objection';
-import * as knex from 'knex';
+import knex from 'knex';
 import { Application } from './declarations';
 
 export default function (app: Application): void {
