@@ -1,5 +1,6 @@
 const ExpressCassandra = require('express-cassandra');
 const FeathersCassandra = require('feathers-cassandra');
+const Cassanknex = require('cassanknex');
 
 module.exports = function (app) {
   const connectionInfo = app.get('<%= database %>');
@@ -11,7 +12,7 @@ module.exports = function (app) {
   cassandraClient.connect(err => {
     if (err) throw err;
 
-    const cassanknex = require('cassanknex')({ connection: cassandraClient });
+    const cassanknex = Cassanknex({ connection: cassandraClient });
 
     FeathersCassandra.cassanknex(cassanknex);
 

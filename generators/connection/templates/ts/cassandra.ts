@@ -1,5 +1,6 @@
 import ExpressCassandra from 'express-cassandra';
 import FeathersCassandra from 'feathers-cassandra';
+import Cassanknex from 'cassanknex';
 import { Application } from './declarations';
 
 export default function (app: Application): void {
@@ -12,7 +13,7 @@ export default function (app: Application): void {
   cassandraClient.connect((err: any) => {
     if (err) throw err;
 
-    const cassanknex = require('cassanknex')({ connection: cassandraClient });
+    const cassanknex = Cassanknex({ connection: cassandraClient });
 
     FeathersCassandra.cassanknex(cassanknex);
 

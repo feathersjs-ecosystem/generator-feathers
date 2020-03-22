@@ -1,10 +1,11 @@
 const { Model } = require('objection');
+const knex = require('knex');
 
 module.exports = function (app) {
   const { client, connection } = app.get('<%= database %>');
-  const knex = require('knex')({ client, connection, useNullAsDefault: false });
+  const db = knex({ client, connection, useNullAsDefault: false });
 
-  Model.knex(knex);
+  Model.knex(db);
 
-  app.set('knex', knex);
+  app.set('knex', db);
 };
