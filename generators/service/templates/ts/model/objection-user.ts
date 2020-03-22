@@ -37,7 +37,7 @@ class <%= className %> extends Model {
   }
 }
 
-export default function (app: Application): Model {
+export default function (app: Application): <%= className %> {
   const db: Knex = app.get('knex');
 
   db.schema.hasTable('<%= snakeName %>').then(exists => {
