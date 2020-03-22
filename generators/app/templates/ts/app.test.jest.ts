@@ -6,7 +6,7 @@ import axios from 'axios';
 import app from '../<%= src %>/app';
 
 const port = app.get('port') || 8998;
-const getUrl = (pathname?: string) => url.format({
+const getUrl = (pathname?: string): string => url.format({
   hostname: app.get('host') || 'localhost',
   protocol: 'http',
   port,
