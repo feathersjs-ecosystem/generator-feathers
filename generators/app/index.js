@@ -287,14 +287,14 @@ module.exports = class AppGenerator extends Generator {
   }
 
   end () {
-    if (!this.isTypescript) {
-      const [ packager, ] = this.props.packager.split('@');
+    if (this.isTypescript && this.props.linter !== 'eslint') return;
+    
+    const [ packager, ] = this.props.packager.split('@');
 
-      if (packager === 'yarn') {
-        this.spawnCommand(packager, ['run', 'lint', '--fix']);
-      } else {
-        this.spawnCommand(packager, ['run', 'lint', '--', '--fix']);
-      }
+    if (packager === 'yarn') {
+      this.spawnCommand(packager, ['run', 'lint', '--fix']);
+    } else {
+      this.spawnCommand(packager, ['run', 'lint', '--', '--fix']);
     }
   }
 };
