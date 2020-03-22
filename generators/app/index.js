@@ -202,7 +202,9 @@ module.exports = class AppGenerator extends Generator {
           context
         );
       }
-    } else if (props.linter === 'eslint') {
+    }
+    
+    if (props.linter === 'eslint') {
       this.fs.writeJSON(
         this.destinationPath('.eslintrc.json'),
         makeConfig.eslintrc(this)
@@ -258,11 +260,20 @@ module.exports = class AppGenerator extends Generator {
         '@types/serve-favicon',
         'shx',
         'ts-node-dev',
-        'tslint',
         'typescript',
         `@types/${this.props.tester}`,
         `ts-${this.props.tester}`,
       ]).filter(item => !excluded.includes(item));
+
+      if (this.props.linter === 'eslint') {
+        this.devDependencies = this.devDependencies.concat([
+          this.props.linter,
+          '@typescript-eslint/eslint-plugin',
+          '@typescript-eslint/parser',
+        ]);
+      } else {
+        this.devDependencies.push('tslint');
+      }
     } else {
       this.devDependencies.push(this.props.linter);
     }
