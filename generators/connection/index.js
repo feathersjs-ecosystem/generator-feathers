@@ -88,9 +88,6 @@ module.exports = class ConnectionGenerator extends Generator {
     switch (database) {
     case 'nedb':
       this.dependencies.push('nedb');
-      if (this.srcType === 'ts') {
-        this.devDependencies.push('@types/nedb');
-      }
       return connectionString.substring(7, connectionString.length);
 
     case 'memory':
