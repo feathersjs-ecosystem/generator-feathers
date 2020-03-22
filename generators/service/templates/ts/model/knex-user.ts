@@ -5,7 +5,7 @@
 import { Application } from '../declarations';
 import Knex from 'knex';
 
-export default function (app: Application) {
+export default function (app: Application): Knex {
   const db: Knex = app.get('knexClient');
   const tableName = '<%= snakeName %>';
   
