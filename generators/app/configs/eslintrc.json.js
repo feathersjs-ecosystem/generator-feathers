@@ -1,11 +1,17 @@
 module.exports = generator => {
   const { props } = generator;
   const isTypescript = props.language === 'ts';
+
   const config = {
     env: {
       es6: true,
       node: true
     },
+    parserOptions: {
+      ecmaVersion: 2018
+    },
+    plugins: null,
+    extends: ['eslint:recommended'],
     rules: {
       'indent': [
         'error',
@@ -39,10 +45,7 @@ module.exports = generator => {
       'plugin:@typescript-eslint/recommended'
     ];
   } else {
-    config.parserOptions = {
-      ecmaVersion: 2018
-    };
-    config.extends = 'eslint:recommended';
+    delete config.plugins;
   }
   
   return config;
