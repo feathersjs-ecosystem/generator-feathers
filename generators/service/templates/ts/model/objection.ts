@@ -32,7 +32,7 @@ class <%= camelName %> extends Model {
   }
 }
 
-export default function (app: Application) {
+export default function (app: Application): Model {
   const db: Knex = app.get('knex');
 
   db.schema.hasTable('<%= snakeName %>').then(exists => {
