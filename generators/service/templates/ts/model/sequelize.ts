@@ -19,7 +19,7 @@ export default function (app: Application): typeof Model {
     }
   });
 
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (<%= camelName %> as any).associate = function (models: any): void {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
