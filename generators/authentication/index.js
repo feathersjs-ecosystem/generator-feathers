@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const j = require('@feathersjs/tools').transform;
+const { transform, ts } = require('@feathersjs/tools');
 const crypto = require('crypto');
 const validate = require('validate-npm-package-name');
 
@@ -46,7 +46,7 @@ module.exports = class AuthGenerator extends Generator {
   }
 
   _transformCode(code) {
-    const ast = j(code);
+    const ast = transform(code);
     const appDeclaration = ast.findDeclaration('app');
     const configureServices = ast.findConfigure('services');
     const requireCall = 'const authentication = require(\'./authentication\');';
@@ -66,7 +66,9 @@ module.exports = class AuthGenerator extends Generator {
   }
 
   _transformCodeTs(code) {
-    const ast = j(code);
+    const ast = transform(code, {
+      parser: ts
+    });
     const appDeclaration = ast.findDeclaration('app');
     const configureServices = ast.findConfigure('services');
     const requireCall = 'import authentication from \'./authentication\';';
@@ -85,12 +87,12 @@ module.exports = class AuthGenerator extends Generator {
     return ast.toSource();
   }
 
-  _writeConfiguration() {
+  _writeConfiguration(context) {
     const config = Object.assign({}, this.defaultConfig);
 
     const authentication = {
-      'entity': 'user',
-      'service': 'users',
+      'entity': context.singularEntity,
+      'service': context.camelEntity,
       'secret': crypto.randomBytes(20).toString('base64'),
       'authStrategies': ['jwt', 'local'],
       'jwtOptions': {
@@ -151,6 +153,7 @@ module.exports = class AuthGenerator extends Generator {
     const context = Object.assign({
       kebabEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.kebabCase(this.props.entity),
       camelEntity: _.camelCase(this.props.entity),
+      singularEntity: _.camelCase(this.props.entity).replace(/s$/, ''),
       libDirectory: this.libDirectory
     }, this.props);
 
