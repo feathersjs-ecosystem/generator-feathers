@@ -10,9 +10,11 @@ module.exports = function(generator) {
   const [ packager, version ] = props.packager.split('@');
   const isTypescript = props.language === 'ts';
   const lintScripts = {
-    eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
+    eslint: !isTypescript ? 
+      `eslint ${lib}/. test/. --config .eslintrc.json --fix` :
+      `eslint ${lib}/. test/. --config .eslintrc.json --ext .ts --fix`,
     standard: 'standard'
-  }
+  };
 
   const pkg = {
     name: props.name,
@@ -62,12 +64,14 @@ module.exports = function(generator) {
       ...pkg.scripts,
       compile: 'shx rm -rf lib/ && tsc',
       dev: `ts-node-dev --no-notify ${lib}/`,
-      test: `${packager} run compile && ${packager} run ${props.tester}`,
+      test: (props.linter === 'eslint') ?
+        `${packager} run lint && ${packager} run compile && ${packager} run ${props.tester}` : 
+        `${packager} run compile && ${packager} run ${props.tester}`,
       start: `${packager} run compile && node lib/`
     };
     pkg.types = 'lib/';
 
-    delete pkg.scripts.lint;
+    if (props.linter === 'standard') delete pkg.scripts.lint;
   }
 
   return pkg;

@@ -1,18 +1,18 @@
 // See https://vincit.github.io/objection.js/#models
 // for more of what you can do here.
-import { Model } from 'objection';
+import { Model, JSONSchema } from 'objection';
 import Knex from 'knex';
 import { Application } from '../declarations';
 
-class <%= camelName %> extends Model {
+class <%= className %> extends Model {
   createdAt!: string;
   updatedAt!: string;
 
-  static get tableName() {
+  static get tableName(): string {
     return '<%= snakeName %>';
   }
 
-  static get jsonSchema() {
+  static get jsonSchema(): JSONSchema {
     return {
       type: 'object',
       required: ['text'],
@@ -23,16 +23,16 @@ class <%= camelName %> extends Model {
     };
   }
 
-  $beforeInsert() {
+  $beforeInsert(): void {
     this.createdAt = this.updatedAt = new Date().toISOString();
   }
 
-  $beforeUpdate() {
+  $beforeUpdate(): void {
     this.updatedAt = new Date().toISOString();
   }
 }
 
-export default function (app: Application) {
+export default function (app: Application): typeof <%= className %> {
   const db: Knex = app.get('knex');
 
   db.schema.hasTable('<%= snakeName %>').then(exists => {
@@ -49,5 +49,5 @@ export default function (app: Application) {
   })
     .catch(e => console.error('Error creating <%= snakeName %> table', e)); // eslint-disable-line no-console
 
-  return <%= camelName %>;
+  return <%= className %>;
 }

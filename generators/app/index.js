@@ -202,7 +202,9 @@ module.exports = class AppGenerator extends Generator {
           context
         );
       }
-    } else if (props.linter === 'eslint') {
+    }
+    
+    if (props.linter === 'eslint') {
       this.fs.writeJSON(
         this.destinationPath('.eslintrc.json'),
         makeConfig.eslintrc(this)
@@ -249,7 +251,7 @@ module.exports = class AppGenerator extends Generator {
 
     if (this.isTypescript) {
       const excluded = [
-        'nodemon@^1.18.7',
+        'nodemon',
       ];
       this.devDependencies = this.devDependencies.concat([
         '@types/compression',
@@ -258,11 +260,16 @@ module.exports = class AppGenerator extends Generator {
         '@types/serve-favicon',
         'shx',
         'ts-node-dev',
-        'tslint',
         'typescript',
         `@types/${this.props.tester}`,
         `ts-${this.props.tester}`,
       ]).filter(item => !excluded.includes(item));
+
+      this.devDependencies = this.devDependencies.concat([
+        this.props.linter,
+        '@typescript-eslint/eslint-plugin',
+        '@typescript-eslint/parser',
+      ]);
     } else {
       this.devDependencies.push(this.props.linter);
     }
@@ -276,14 +283,14 @@ module.exports = class AppGenerator extends Generator {
   }
 
   end () {
-    if (!this.isTypescript) {
-      const [ packager, ] = this.props.packager.split('@');
+    if (this.isTypescript && this.props.linter !== 'eslint') return;
+    
+    const [ packager, ] = this.props.packager.split('@');
 
-      if (packager === 'yarn') {
-        this.spawnCommand(packager, ['run', 'lint', '--fix']);
-      } else {
-        this.spawnCommand(packager, ['run', 'lint', '--', '--fix']);
-      }
+    if (packager === 'yarn') {
+      this.spawnCommand(packager, ['run', 'lint', '--fix']);
+    } else {
+      this.spawnCommand(packager, ['run', 'lint', '--', '--fix']);
     }
   }
 };

@@ -6,6 +6,7 @@ interface Options extends ObjectionServiceOptions {
 }
 
 export class <%= className %> extends Service {
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(options: Partial<Options>, app: Application) {
     const { Model, ...otherOptions } = options;
 

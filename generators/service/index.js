@@ -232,7 +232,8 @@ module.exports = class ServiceGenerator extends Generator {
         sequelize: [ '@types/bluebird' ],
         mongodb: ['@types/mongodb'],
         mongoose: ['@types/mongoose'],
-        nedb: ['@types/nedb']
+        nedb: ['@types/nedb'],
+        cassandra: ['@types/cassanknex']
       };
 
       if (typeMap[adapter]) {

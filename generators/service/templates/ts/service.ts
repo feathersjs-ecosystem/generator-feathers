@@ -12,7 +12,7 @@ declare module '<%= relativeRoot %>declarations' {
   }
 }
 
-export default function (app: Application) {
+export default function (app: Application): void {
   const options = {<% if (modelName) { %>
     Model: createModel(app),<% } %>
     paginate: app.get('paginate')

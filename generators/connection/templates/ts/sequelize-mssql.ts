@@ -2,7 +2,7 @@ import url from 'url';
 import Sequelize from 'sequelize';
 import { Application } from './declarations';
 
-export default function (app: Application) {
+export default function (app: Application): void {
   const connectionString = app.get('mssql');
   const connection = url.parse(connectionString);
   const database = connection.path.substring(1, connection.path.length);
@@ -26,7 +26,7 @@ export default function (app: Application) {
 
   app.set('sequelizeClient', sequelize);
 
-  app.setup = function (...args) {
+  app.setup = function (...args): Application {
     const result = oldSetup.apply(this, args);
 
     // Set up data relationships
