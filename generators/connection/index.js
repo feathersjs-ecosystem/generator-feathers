@@ -1,6 +1,6 @@
 const { snakeCase } = require('lodash');
 const url = require('url');
-const j = require('@feathersjs/tools').transform;
+const { transform, ts } = require('@feathersjs/tools');
 const Generator = require('../../lib/generator');
 
 module.exports = class ConnectionGenerator extends Generator {
@@ -14,7 +14,7 @@ module.exports = class ConnectionGenerator extends Generator {
   _transformCode (code) {
     const { adapter } = this.props;
 
-    const ast = j(code);
+    const ast = transform(code);
     const appDeclaration = ast.findDeclaration('app');
     const configureMiddleware = ast.findConfigure('middleware');
     const requireCall = `const ${adapter} = require('./${adapter}');`;
@@ -36,7 +36,9 @@ module.exports = class ConnectionGenerator extends Generator {
   _transformCodeTs (code) {
     const { adapter } = this.props;
 
-    const ast = j(code);
+    const ast = transform(code, {
+      parser: ts
+    });
     const appDeclaration = ast.findDeclaration('app');
     const configureMiddleware = ast.findConfigure('middleware');
     const requireCall = `import ${adapter} from './${adapter}';`;

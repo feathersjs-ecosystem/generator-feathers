@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@feathersjs/jscodeshift": "^0.5.0",
-    "@feathersjs/tools": "^0.2.1",
+    "@feathersjs/tools": "^0.2.2",
     "lodash": "^4.17.18",
     "node-dir": "^0.1.17",
     "randomstring": "^1.1.5",

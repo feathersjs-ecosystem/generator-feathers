@@ -1,5 +1,5 @@
 const { kebabCase, camelCase } = require('lodash');
-const j = require('@feathersjs/tools').transform;
+const { transform, ts } = require('@feathersjs/tools');
 const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
 
@@ -29,9 +29,9 @@ module.exports = class MiddlewareGenerator extends Generator {
 
   _transformCode (code) {
     const { props } = this;
-    const ast = j(code);
-    const mainExpression = ast.find(j.FunctionExpression)
-      .closest(j.ExpressionStatement);
+    const ast = transform(code);
+    const mainExpression = ast.find(transform.FunctionExpression)
+      .closest(transform.ExpressionStatement);
 
     if (mainExpression.length !== 1) {
       throw new Error(`${this.libDirectory}/middleware/index.js seems to have more than one function declaration and we can not register the new middleware. Did you modify it?`);
@@ -48,16 +48,18 @@ module.exports = class MiddlewareGenerator extends Generator {
 
   _transformCodeTs (code) {
     const { props } = this;
-    const ast = j(code);
+    const ast = transform(code, {
+      parser: ts
+    });
 
     const middlewareImport = `import ${props.camelName} from './${props.kebabName}';`;
     const middlewareCode = props.path === '*' ? `app.use(${props.camelName}());` : `app.use('${props.path}', ${props.camelName}());`;
 
-    const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
-    const newImport = j(middlewareImport).find(j.ImportDeclaration).get().node;
+    const lastImport = ast.find(transform.ImportDeclaration).at(-1).get();
+    const newImport = transform(middlewareImport).find(transform.ImportDeclaration).get().node;
     lastImport.insertAfter(newImport);
-    const blockStatement = ast.find(j.BlockStatement).get().node;
-    const newCode = j(middlewareCode).find(j.ExpressionStatement).get().node;
+    const blockStatement = ast.find(transform.BlockStatement).get().node;
+    const newCode = transform(middlewareCode).find(transform.ExpressionStatement).get().node;
     blockStatement.body.push(newCode);
 
     return ast.toSource();
