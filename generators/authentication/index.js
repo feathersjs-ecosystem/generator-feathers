@@ -87,12 +87,12 @@ module.exports = class AuthGenerator extends Generator {
     return ast.toSource();
   }
 
-  _writeConfiguration() {
+  _writeConfiguration(context) {
     const config = Object.assign({}, this.defaultConfig);
 
     const authentication = {
-      'entity': 'user',
-      'service': 'users',
+      'entity': context.singularEntity,
+      'service': context.camelEntity,
       'secret': crypto.randomBytes(20).toString('base64'),
       'authStrategies': ['jwt', 'local'],
       'jwtOptions': {
@@ -153,6 +153,7 @@ module.exports = class AuthGenerator extends Generator {
     const context = Object.assign({
       kebabEntity: validate(this.props.entity).validForNewPackages ? this.props.entity : _.kebabCase(this.props.entity),
       camelEntity: _.camelCase(this.props.entity),
+      singularEntity: _.camelCase(this.props.entity).replace(/s$/, ''),
       libDirectory: this.libDirectory
     }, this.props);
 
