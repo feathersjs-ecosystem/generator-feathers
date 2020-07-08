@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const j = require('@feathersjs/tools').transform;
+const { transform, ts } = require('@feathersjs/tools');
 const validate = require('validate-npm-package-name');
 const Generator = require('../../lib/generator');
 
@@ -88,8 +88,8 @@ module.exports = class ServiceGenerator extends Generator {
 
   _transformCode(code) {
     const { kebabName, subfolder } = this.props;
-    const ast = j(code);
-    const mainExpression = ast.find(j.FunctionExpression).closest(j.ExpressionStatement);
+    const ast = transform(code);
+    const mainExpression = ast.find(transform.FunctionExpression).closest(transform.ExpressionStatement);
     const folder = subfolder.concat(kebabName).join('/');
     const camelName = _.camelCase(folder);
     const serviceRequire = `const ${camelName} = require('./${folder}/${kebabName}.service.js');`;
@@ -115,19 +115,21 @@ module.exports = class ServiceGenerator extends Generator {
 
   _transformCodeTs(code) {
     const { kebabName, subfolder } = this.props;
-    const ast = j(code);
+    const ast = transform(code, {
+      parser: ts
+    });
     const folder = subfolder.concat(kebabName).join('/');
     const camelName = _.camelCase(folder);
     const serviceImport = `import ${camelName} from './${folder}/${kebabName}.service';`;
     const serviceCode = `app.configure(${camelName});`;
 
-    const lastImport = ast.find(j.ImportDeclaration).at(-1).get();
-    const newImport = j(serviceImport).find(j.ImportDeclaration).get().node;
+    const lastImport = ast.find(transform.ImportDeclaration).at(-1).get();
+    const newImport = transform(serviceImport).find(transform.ImportDeclaration).get().node;
 
     lastImport.insertAfter(newImport);
 
-    const blockStatement = ast.find(j.BlockStatement).get().node;
-    const newCode = j(serviceCode).find(j.ExpressionStatement).get().node;
+    const blockStatement = ast.find(transform.BlockStatement).get().node;
+    const newCode = transform(serviceCode).find(transform.ExpressionStatement).get().node;
     blockStatement.body.push(newCode);
 
     return ast.toSource();
