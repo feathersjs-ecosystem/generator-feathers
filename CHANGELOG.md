@@ -1,5 +1,24 @@
 # Change Log
 
+## [v4.3.0](https://github.com/feathersjs/generator-feathers/tree/v4.3.0) (2020-07-08)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.2.0...v4.3.0)
+
+**Closed issues:**
+
+- Alternative authentication entity name not fully supported [\#538](https://github.com/feathersjs/generator-feathers/issues/538)
+- Generated sequelize.js should not modify app.setup [\#537](https://github.com/feathersjs/generator-feathers/issues/537)
+- An in-range update of @feathersjs/authentication-oauth is breaking the build 🚨 [\#531](https://github.com/feathersjs/generator-feathers/issues/531)
+
+**Merged pull requests:**
+
+- add support for @typescript-eslint [\#541](https://github.com/feathersjs/generator-feathers/pull/541) ([daffl](https://github.com/daffl))
+- Update all dependencies [\#540](https://github.com/feathersjs/generator-feathers/pull/540) ([daffl](https://github.com/daffl))
+- Fix remaining static 'users' entity [\#539](https://github.com/feathersjs/generator-feathers/pull/539) ([MarcelWaldvogel](https://github.com/MarcelWaldvogel))
+- Fixed typo and variable name in comments [\#536](https://github.com/feathersjs/generator-feathers/pull/536) ([litti](https://github.com/litti))
+- Fixed typo and wrong variable in comments [\#535](https://github.com/feathersjs/generator-feathers/pull/535) ([litti](https://github.com/litti))
+- minor typo [\#529](https://github.com/feathersjs/generator-feathers/pull/529) ([edwardsmarkf](https://github.com/edwardsmarkf))
+- Update feathers-objection to the latest version 🚀 [\#528](https://github.com/feathersjs/generator-feathers/pull/528) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v4.2.0](https://github.com/feathersjs/generator-feathers/tree/v4.2.0) (2020-02-13)
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.1.5...v4.2.0)
 
@@ -82,7 +101,7 @@
 
 **Merged pull requests:**
 
-- Fixes app ignoring configured hostname [\#495](https://github.com/feathersjs/generator-feathers/pull/495) ([Deprofets](https://github.com/Deprofets))
+- Fixes app ignoring configured hostname [\#495](https://github.com/feathersjs/generator-feathers/pull/495) ([hyphenized](https://github.com/hyphenized))
 - Initialize service model and pagination in a single object [\#494](https://github.com/feathersjs/generator-feathers/pull/494) ([daffl](https://github.com/daffl))
 - Update all dependencies [\#492](https://github.com/feathersjs/generator-feathers/pull/492) ([daffl](https://github.com/daffl))
 - Add missing semi [\#481](https://github.com/feathersjs/generator-feathers/pull/481) ([wolfgangwalther](https://github.com/wolfgangwalther))
