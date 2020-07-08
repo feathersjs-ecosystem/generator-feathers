@@ -265,15 +265,11 @@ module.exports = class AppGenerator extends Generator {
         `ts-${this.props.tester}`,
       ]).filter(item => !excluded.includes(item));
 
-      if (this.props.linter === 'eslint') {
-        this.devDependencies = this.devDependencies.concat([
-          this.props.linter,
-          '@typescript-eslint/eslint-plugin',
-          '@typescript-eslint/parser',
-        ]);
-      } else {
-        this.devDependencies.push('tslint');
-      }
+      this.devDependencies = this.devDependencies.concat([
+        this.props.linter,
+        '@typescript-eslint/eslint-plugin',
+        '@typescript-eslint/parser',
+      ]);
     } else {
       this.devDependencies.push(this.props.linter);
     }

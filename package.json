@@ -90,7 +90,6 @@
     "sequelize": "^6.3.0",
     "serve-favicon": "^2.5.0",
     "sqlite3": "^5.0.0",
-    "tslint": "^6.1.2",
     "typescript": "^3.9.6",
     "winston": "^3.3.3",
     "yeoman-assert": "^3.1.1",
