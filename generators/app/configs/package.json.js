@@ -11,8 +11,8 @@ module.exports = function(generator) {
   const isTypescript = props.language === 'ts';
   const lintScripts = {
     eslint: !isTypescript ? 
-      `eslint ${lib}/. test/. --config .eslintrc.json` :
-      `eslint ${lib}/. test/. --config .eslintrc.json --ext .ts`,
+      `eslint ${lib}/. test/. --config .eslintrc.json --fix` :
+      `eslint ${lib}/. test/. --config .eslintrc.json --ext .ts --fix`,
     standard: 'standard'
   };
 
