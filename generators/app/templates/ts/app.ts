@@ -16,9 +16,11 @@ import middleware from './middleware';
 import services from './services';
 import appHooks from './app.hooks';
 import channels from './channels';
+import { HookContext as FeathersHookContext } from '@feathersjs/feathers';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const app: Application = express(feathers());
+export type HookContext<T = any> = { app: Application } & FeathersHookContext<T>;
 
 // Load app configuration
 app.configure(configuration());
