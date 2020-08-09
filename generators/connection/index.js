@@ -313,14 +313,12 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   writing () {
-    const { database, adapter } = this.props;
+    const { adapter } = this.props;
     const context = Object.assign({}, this.props);
     
     let template;
 
-    if (database === 'mssql' && adapter === 'sequelize') {
-      template = `${adapter}-mssql`;
-    } else if (adapter && adapter !== 'nedb') {
+    if (adapter && adapter !== 'nedb') {
       template = `${adapter}`;
     }
 
