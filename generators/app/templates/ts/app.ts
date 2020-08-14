@@ -38,11 +38,11 @@ app.use('/', express.static(app.get('public')));
 <% if (hasProvider('rest')) { %>app.configure(express.rest());<% } %>
 <% if (hasProvider('socketio')) { %>app.configure(socketio());<% } %>
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
-// Configure other middleware (see `middleware/index.js`)
+// Configure other middleware (see `middleware/index.ts`)
 app.configure(middleware);
-// Set up our services (see `services/index.js`)
+// Set up our services (see `services/index.ts`)
 app.configure(services);
-// Set up event channels (see channels.js)
+// Set up event channels (see channels.ts)
 app.configure(channels);
 
 // Configure a middleware for 404s and the error handler

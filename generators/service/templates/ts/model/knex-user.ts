@@ -1,5 +1,5 @@
-// <%= name %>-model.js - A KnexJS
-// 
+// <%= name %>-model.ts - A KnexJS
+//
 // See http://knexjs.org/
 // for more of what you can do here.
 import { Application } from '../declarations';
