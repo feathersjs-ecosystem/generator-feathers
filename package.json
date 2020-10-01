@@ -77,7 +77,7 @@
     "feathers-mongodb": "^6.1.0",
     "feathers-mongoose": "^8.3.1",
     "feathers-nedb": "^5.1.0",
-    "feathers-objection": "^5.6.0",
+    "feathers-objection": "^6.0.0",
     "feathers-sequelize": "^6.2.0",
     "helmet": "^4.1.0",
     "jshint": "^2.11.1",
