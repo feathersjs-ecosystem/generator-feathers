@@ -185,7 +185,8 @@ module.exports = class ConnectionGenerator extends Generator {
           { name: 'MySQL (MariaDB)', value: 'mysql' },
           { name: 'PostgreSQL', value: 'postgres' },
           { name: 'SQLite', value: 'sqlite' },
-          { name: 'SQL Server', value: 'mssql' }
+          { name: 'SQL Server', value: 'mssql' },
+          { name: 'MongoDB', value: 'mongodb' }
         ],
         when (current) {
           const answers = getProps(current);
