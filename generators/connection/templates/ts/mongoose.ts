@@ -10,8 +10,6 @@ export default function (app: Application): void {
     logger.error(err);
     process.exit(1);
   });
-  
-  mongoose.Promise = global.Promise;
 
   app.set('mongooseClient', mongoose);
 }
