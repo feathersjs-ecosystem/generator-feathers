@@ -9,8 +9,6 @@ module.exports = function (app) {
     logger.error(err);
     process.exit(1);
   });
-  
-  mongoose.Promise = global.Promise;
 
   app.set('mongooseClient', mongoose);
 };
