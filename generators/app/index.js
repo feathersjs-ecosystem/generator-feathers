@@ -256,7 +256,6 @@ module.exports = class AppGenerator extends Generator {
       this.devDependencies = this.devDependencies.concat([
         '@types/compression',
         '@types/cors',
-        '@types/helmet',
         '@types/serve-favicon',
         'shx',
         'ts-node-dev',
