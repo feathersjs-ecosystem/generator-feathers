@@ -128,6 +128,7 @@ module.exports = class AuthGenerator extends Generator {
 
         case 'auth0':
           strategyConfig.subdomain = `<${strategy} subdomain>`;
+          strategyConfig.scope = [ 'profile', 'openid', 'email' ];
           break;
         }
 
