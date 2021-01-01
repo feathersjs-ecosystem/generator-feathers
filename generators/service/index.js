@@ -231,9 +231,8 @@ module.exports = class ServiceGenerator extends Generator {
       const typeMap = {
         sequelize: [ '@types/bluebird' ],
         mongodb: ['@types/mongodb'],
-        mongoose: ['@types/mongoose'],
         nedb: ['@types/nedb'],
-        cassandra: ['@types/cassanknex']
+        cassandra: ['@types/cassaknex']
       };
 
       if (typeMap[adapter]) {
