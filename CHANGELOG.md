@@ -1,5 +1,15 @@
 # Changelog
 
+## [v4.3.3](https://github.com/feathersjs/generator-feathers/tree/v4.3.3) (2021-01-01)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.3.2...v4.3.3)
+
+**Merged pull requests:**
+
+- Update dependencies and fix tests [\#587](https://github.com/feathersjs/generator-feathers/pull/587) ([daffl](https://github.com/daffl))
+- Remove unnecessary @types/helmet dependency [\#585](https://github.com/feathersjs/generator-feathers/pull/585) ([BengtHagemeister](https://github.com/BengtHagemeister))
+- Update Auth0 default scope to include email [\#583](https://github.com/feathersjs/generator-feathers/pull/583) ([daffl](https://github.com/daffl))
+
 ## [v4.3.2](https://github.com/feathersjs/generator-feathers/tree/v4.3.2) (2020-11-08)
 
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.3.1...v4.3.2)
@@ -384,7 +394,7 @@
 - Add a dev script with nodemon as a watcher \(\#385\) [\#386](https://github.com/feathersjs/generator-feathers/pull/386) ([Alfredo-Delgado](https://github.com/Alfredo-Delgado))
 - Update dependencies [\#383](https://github.com/feathersjs/generator-feathers/pull/383) ([daffl](https://github.com/daffl))
 - Use new url parser [\#382](https://github.com/feathersjs/generator-feathers/pull/382) ([cashlionjp](https://github.com/cashlionjp))
-- Update yeoman-test to the latest version 🚀 [\#381](https://github.com/feathersjs/generator-feathers/pull/381) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+- Update all dependencies to latest [\#375](https://github.com/feathersjs/generator-feathers/pull/375) ([daffl](https://github.com/daffl))
 
 ## [v2.5.6](https://github.com/feathersjs/generator-feathers/tree/v2.5.6) (2018-07-26)
 
@@ -393,6 +403,7 @@
 **Merged pull requests:**
 
 - Remove space for consistent formatting [\#380](https://github.com/feathersjs/generator-feathers/pull/380) ([Strongbyte-ES](https://github.com/Strongbyte-ES))
+- Fix renaming to preserve dot notation [\#379](https://github.com/feathersjs/generator-feathers/pull/379) ([SassNinja](https://github.com/SassNinja))
 
 ## [v2.5.5](https://github.com/feathersjs/generator-feathers/tree/v2.5.5) (2018-07-10)
 
@@ -404,6 +415,7 @@
 
 **Merged pull requests:**
 
+- Update yeoman-test to the latest version 🚀 [\#381](https://github.com/feathersjs/generator-feathers/pull/381) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Adds 'ws' package if 'primus' is selected [\#378](https://github.com/feathersjs/generator-feathers/pull/378) ([rvanzon](https://github.com/rvanzon))
 
 ## [v2.5.4](https://github.com/feathersjs/generator-feathers/tree/v2.5.4) (2018-07-10)
@@ -424,7 +436,6 @@
 
 **Merged pull requests:**
 
-- Update all dependencies to latest [\#375](https://github.com/feathersjs/generator-feathers/pull/375) ([daffl](https://github.com/daffl))
 - Update yeoman-generator to the latest version 🚀 [\#374](https://github.com/feathersjs/generator-feathers/pull/374) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Update eslint to the latest version 🚀 [\#371](https://github.com/feathersjs/generator-feathers/pull/371) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
@@ -438,7 +449,6 @@
 
 **Merged pull requests:**
 
-- Fix renaming to preserve dot notation [\#379](https://github.com/feathersjs/generator-feathers/pull/379) ([SassNinja](https://github.com/SassNinja))
 - Force installation of Winston 3 [\#370](https://github.com/feathersjs/generator-feathers/pull/370) ([daffl](https://github.com/daffl))
 
 ## [v2.5.1](https://github.com/feathersjs/generator-feathers/tree/v2.5.1) (2018-06-16)
@@ -465,6 +475,11 @@
 - Cannot use sequelize transaction with the default logger hook [\#357](https://github.com/feathersjs/generator-feathers/issues/357)
 - Enhancement Request: Allow for the name spacing of services using dot notation [\#341](https://github.com/feathersjs/generator-feathers/issues/341)
 
+**Merged pull requests:**
+
+- Allow generating services in nested folders [\#360](https://github.com/feathersjs/generator-feathers/pull/360) ([daffl](https://github.com/daffl))
+- Don't use JSON.stringify in the default logger.js hook [\#358](https://github.com/feathersjs/generator-feathers/pull/358) ([zaro](https://github.com/zaro))
+
 ## [v2.4.4](https://github.com/feathersjs/generator-feathers/tree/v2.4.4) (2018-05-21)
 
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v2.4.3...v2.4.4)
@@ -476,13 +491,10 @@
 
 **Merged pull requests:**
 
-- Allow generating services in nested folders [\#360](https://github.com/feathersjs/generator-feathers/pull/360) ([daffl](https://github.com/daffl))
-- Don't use JSON.stringify in the default logger.js hook [\#358](https://github.com/feathersjs/generator-feathers/pull/358) ([zaro](https://github.com/zaro))
 - Make service selection when generating a hook mandatory [\#356](https://github.com/feathersjs/generator-feathers/pull/356) ([daffl](https://github.com/daffl))
 - Remove "and filters" from a comment in the service.js template [\#354](https://github.com/feathersjs/generator-feathers/pull/354) ([jsphpl](https://github.com/jsphpl))
 - Fixed comment typo on line 51 [\#353](https://github.com/feathersjs/generator-feathers/pull/353) ([temowemo](https://github.com/temowemo))
 - Use cors after helmet [\#351](https://github.com/feathersjs/generator-feathers/pull/351) ([AidanGG](https://github.com/AidanGG))
-- Update copyright year in README template [\#350](https://github.com/feathersjs/generator-feathers/pull/350) ([mischah](https://github.com/mischah))
 
 ## [v2.4.3](https://github.com/feathersjs/generator-feathers/tree/v2.4.3) (2018-05-09)
 
@@ -498,7 +510,6 @@
 - Fix summary for generated connection [\#348](https://github.com/feathersjs/generator-feathers/pull/348) ([daffl](https://github.com/daffl))
 - Remove confusing and unnecessary name parameter [\#347](https://github.com/feathersjs/generator-feathers/pull/347) ([daffl](https://github.com/daffl))
 - Update to node 10 in .travis.yml [\#346](https://github.com/feathersjs/generator-feathers/pull/346) ([daffl](https://github.com/daffl))
-- Update sqlite3 to the latest version 🚀 [\#340](https://github.com/feathersjs/generator-feathers/pull/340) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v2.4.2](https://github.com/feathersjs/generator-feathers/tree/v2.4.2) (2018-04-24)
 
@@ -506,9 +517,12 @@
 
 **Merged pull requests:**
 
+- Update copyright year in README template [\#350](https://github.com/feathersjs/generator-feathers/pull/350) ([mischah](https://github.com/mischah))
 - Fix Node version check which did not work with v10.0.0 [\#344](https://github.com/feathersjs/generator-feathers/pull/344) ([daffl](https://github.com/daffl))
+- Update sqlite3 to the latest version 🚀 [\#340](https://github.com/feathersjs/generator-feathers/pull/340) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Improve comments' readability [\#339](https://github.com/feathersjs/generator-feathers/pull/339) ([claforte](https://github.com/claforte))
 - fix typo [\#338](https://github.com/feathersjs/generator-feathers/pull/338) ([claforte](https://github.com/claforte))
+- Fix RethinkDB setup [\#337](https://github.com/feathersjs/generator-feathers/pull/337) ([daffl](https://github.com/daffl))
 
 ## [v2.4.1](https://github.com/feathersjs/generator-feathers/tree/v2.4.1) (2018-02-10)
 
@@ -516,7 +530,6 @@
 
 **Merged pull requests:**
 
-- Fix RethinkDB setup [\#337](https://github.com/feathersjs/generator-feathers/pull/337) ([daffl](https://github.com/daffl))
 - Update feathers-hooks-common to the latest version 🚀 [\#335](https://github.com/feathersjs/generator-feathers/pull/335) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 
 ## [v2.4.0](https://github.com/feathersjs/generator-feathers/tree/v2.4.0) (2018-01-27)
@@ -559,7 +572,7 @@
 **Merged pull requests:**
 
 - Publish to authenticated users by default [\#324](https://github.com/feathersjs/generator-feathers/pull/324) ([daffl](https://github.com/daffl))
-- Remove MariaDB since it will just use MySQL [\#323](https://github.com/feathersjs/generator-feathers/pull/323) ([daffl](https://github.com/daffl))
+- mongodb 3.0.0-rc0 support [\#318](https://github.com/feathersjs/generator-feathers/pull/318) ([rayfoss](https://github.com/rayfoss))
 
 ## [v2.2.0](https://github.com/feathersjs/generator-feathers/tree/v2.2.0) (2017-12-14)
 
@@ -585,8 +598,8 @@
 
 **Merged pull requests:**
 
+- Remove MariaDB since it will just use MySQL [\#323](https://github.com/feathersjs/generator-feathers/pull/323) ([daffl](https://github.com/daffl))
 - Log error if trying to use the generator with incompatible versions [\#319](https://github.com/feathersjs/generator-feathers/pull/319) ([daffl](https://github.com/daffl))
-- mongodb 3.0.0-rc0 support [\#318](https://github.com/feathersjs/generator-feathers/pull/318) ([rayfoss](https://github.com/rayfoss))
 - Update feathers-sequelize to the latest version 🚀 [\#317](https://github.com/feathersjs/generator-feathers/pull/317) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Update feathers-mongoose to the latest version 🚀 [\#316](https://github.com/feathersjs/generator-feathers/pull/316) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Update feathers-memory to the latest version 🚀 [\#314](https://github.com/feathersjs/generator-feathers/pull/314) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
@@ -594,7 +607,6 @@
 - Update feathers-knex to the latest version 🚀 [\#312](https://github.com/feathersjs/generator-feathers/pull/312) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Update feathers-nedb to the latest version 🚀 [\#311](https://github.com/feathersjs/generator-feathers/pull/311) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
 - Update feathers-rethinkdb to the latest version 🚀 [\#310](https://github.com/feathersjs/generator-feathers/pull/310) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
-- add features and fix typos [\#309](https://github.com/feathersjs/generator-feathers/pull/309) ([superlazycoder](https://github.com/superlazycoder))
 
 ## [v2.1.0](https://github.com/feathersjs/generator-feathers/tree/v2.1.0) (2017-11-20)
 
@@ -607,6 +619,8 @@
 
 **Merged pull requests:**
 
+- add features and fix typos [\#309](https://github.com/feathersjs/generator-feathers/pull/309) ([superlazycoder](https://github.com/superlazycoder))
+- Improve logging hook and add Express error logging [\#306](https://github.com/feathersjs/generator-feathers/pull/306) ([daffl](https://github.com/daffl))
 - Use async/await for generated hooks and custom services if available [\#305](https://github.com/feathersjs/generator-feathers/pull/305) ([daffl](https://github.com/daffl))
 - Update for finalized Express bindings [\#302](https://github.com/feathersjs/generator-feathers/pull/302) ([daffl](https://github.com/daffl))
 - Make URL in tests configurable [\#301](https://github.com/feathersjs/generator-feathers/pull/301) ([nueko](https://github.com/nueko))
@@ -624,7 +638,6 @@
 
 **Merged pull requests:**
 
-- Improve logging hook and add Express error logging [\#306](https://github.com/feathersjs/generator-feathers/pull/306) ([daffl](https://github.com/daffl))
 - Install mssql instead of tedious [\#300](https://github.com/feathersjs/generator-feathers/pull/300) ([daffl](https://github.com/daffl))
 - Do not reinstall existing dependencies [\#299](https://github.com/feathersjs/generator-feathers/pull/299) ([daffl](https://github.com/daffl))
 - Move all channel handling into channels.js [\#298](https://github.com/feathersjs/generator-feathers/pull/298) ([daffl](https://github.com/daffl))
@@ -730,11 +743,14 @@
 
 - Add Auth0 to OAuth providers [\#254](https://github.com/feathersjs/generator-feathers/pull/254) ([marshallswain](https://github.com/marshallswain))
 - Re-enable RethinkDB test [\#250](https://github.com/feathersjs/generator-feathers/pull/250) ([daffl](https://github.com/daffl))
-- Use pg@6 [\#247](https://github.com/feathersjs/generator-feathers/pull/247) ([marshallswain](https://github.com/marshallswain))
 
 ## [v1.2.7](https://github.com/feathersjs/generator-feathers/tree/v1.2.7) (2017-07-20)
 
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.6...v1.2.7)
+
+**Merged pull requests:**
+
+- Use pg@6 [\#247](https://github.com/feathersjs/generator-feathers/pull/247) ([marshallswain](https://github.com/marshallswain))
 
 ## [v1.2.6](https://github.com/feathersjs/generator-feathers/tree/v1.2.6) (2017-07-18)
 
@@ -756,15 +772,12 @@
 
 - Fix problem with rethinkdb [\#244](https://github.com/feathersjs/generator-feathers/pull/244) ([ForsakenHarmony](https://github.com/ForsakenHarmony))
 - Minor changes to the generated index.html [\#241](https://github.com/feathersjs/generator-feathers/pull/241) ([chasenlehara](https://github.com/chasenlehara))
+- Postgres connection fix [\#240](https://github.com/feathersjs/generator-feathers/pull/240) ([jdziat](https://github.com/jdziat))
 - Set a name for generated hooks [\#239](https://github.com/feathersjs/generator-feathers/pull/239) ([1beb](https://github.com/1beb))
 
 ## [v1.2.4](https://github.com/feathersjs/generator-feathers/tree/v1.2.4) (2017-07-02)
 
 [Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v1.2.3...v1.2.4)
-
-**Merged pull requests:**
-
-- Postgres connection fix [\#240](https://github.com/feathersjs/generator-feathers/pull/240) ([jdziat](https://github.com/jdziat))
 
 ## [v1.2.3](https://github.com/feathersjs/generator-feathers/tree/v1.2.3) (2017-06-26)
 
@@ -813,7 +826,7 @@
 
 **Merged pull requests:**
 
-- Use Knex createTable workaround [\#231](https://github.com/feathersjs/generator-feathers/pull/231) ([daffl](https://github.com/daffl))
+- Fix and simplify generating a middleware [\#230](https://github.com/feathersjs/generator-feathers/pull/230) ([daffl](https://github.com/daffl))
 - Fix use of both MongoDB and Mongoose in the same app [\#229](https://github.com/feathersjs/generator-feathers/pull/229) ([daffl](https://github.com/daffl))
 
 ## [v1.1.1](https://github.com/feathersjs/generator-feathers/tree/v1.1.1) (2017-06-16)
@@ -828,6 +841,7 @@
 
 **Merged pull requests:**
 
+- Use Knex createTable workaround [\#231](https://github.com/feathersjs/generator-feathers/pull/231) ([daffl](https://github.com/daffl))
 - Update user model to Sequelize 4 [\#227](https://github.com/feathersjs/generator-feathers/pull/227) ([daffl](https://github.com/daffl))
 - Improve order of generated middleware [\#223](https://github.com/feathersjs/generator-feathers/pull/223) ([daffl](https://github.com/daffl))
 - Update eslint to the latest version 🚀 [\#222](https://github.com/feathersjs/generator-feathers/pull/222) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
@@ -843,7 +857,6 @@
 
 **Merged pull requests:**
 
-- Fix and simplify generating a middleware [\#230](https://github.com/feathersjs/generator-feathers/pull/230) ([daffl](https://github.com/daffl))
 - Allow to customize the test directory [\#218](https://github.com/feathersjs/generator-feathers/pull/218) ([daffl](https://github.com/daffl))
 - Test and fix for Yarn saveDev [\#217](https://github.com/feathersjs/generator-feathers/pull/217) ([daffl](https://github.com/daffl))
 - Generate sequelize model according to sequelize 4.0 [\#216](https://github.com/feathersjs/generator-feathers/pull/216) ([jsphpl](https://github.com/jsphpl))
@@ -855,6 +868,7 @@
 **Merged pull requests:**
 
 - Split username and password from URL parsed auth [\#212](https://github.com/feathersjs/generator-feathers/pull/212) ([daffl](https://github.com/daffl))
+- Do not overwrite connection files when generating a service [\#211](https://github.com/feathersjs/generator-feathers/pull/211) ([daffl](https://github.com/daffl))
 - Use proper path to get service in test [\#210](https://github.com/feathersjs/generator-feathers/pull/210) ([daffl](https://github.com/daffl))
 
 ## [v1.0.5](https://github.com/feathersjs/generator-feathers/tree/v1.0.5) (2017-04-19)
@@ -868,7 +882,6 @@
 
 **Merged pull requests:**
 
-- Do not overwrite connection files when generating a service [\#211](https://github.com/feathersjs/generator-feathers/pull/211) ([daffl](https://github.com/daffl))
 - Fix Sequelize MSSQL client reference [\#208](https://github.com/feathersjs/generator-feathers/pull/208) ([daffl](https://github.com/daffl))
 - Update to latest jscodeshift which uses flow parser, add tests for ho… [\#207](https://github.com/feathersjs/generator-feathers/pull/207) ([daffl](https://github.com/daffl))
 
