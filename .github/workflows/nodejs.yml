@@ -21,7 +21,7 @@ jobs:
       uses: supercharge/mongodb-github-action@1.3.0
     - run: npm ci
     - run: npm test
-      if: ${{ matrix.language != 'ts' && matrix.tester != 'jest' }}
+      if: ${{ !(matrix.language == 'ts' && matrix.tester == 'jest') }}
       env:
         GENERATOR_LANGUAGE: ${{matrix.language}}
         GENERATOR_TESTER: ${{matrix.tester}}
