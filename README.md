@@ -1,6 +1,6 @@
 # generator-feathers
 
-[![Build Status](https://travis-ci.org/feathersjs/generator-feathers.png?branch=master)](https://travis-ci.org/feathersjs/generator-feathers)
+[![CI](https://github.com/feathersjs/generator-feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/generator-feathers/actions?query=workflow%3ACI)
 
 > A Yeoman generator for a Feathers application
 

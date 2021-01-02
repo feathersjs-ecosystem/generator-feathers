@@ -1,0 +1,27 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        language: ["js", "ts"]
+        tester: ["mocha", "jest"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.3.0
+    - run: npm ci
+    - run: npm test
+      if: ${{ !(matrix.language == 'ts' && matrix.tester == 'jest') }}
+      env:
+        GENERATOR_LANGUAGE: ${{matrix.language}}
+        GENERATOR_TESTER: ${{matrix.tester}}
