@@ -12,8 +12,9 @@ jobs:
         language: ["js", "ts"]
         tester: ["mocha", "jest"]
     steps:
+    - if: ${{ matrix.language != 'ts' && matrix.tester != 'jest' }}
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v1
       with:
         node-version: 14
