@@ -146,6 +146,17 @@ module.exports = class ConnectionGenerator extends Generator {
         }
       };
 
+    case 'couchbase':
+      this.dependencies.push(adapter);
+
+      return {
+        host: connectionString,
+        options: {
+          username: 'Administrator',
+          password: 'supersecret'
+        }
+      };
+
     default:
       throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
     }
@@ -186,7 +197,8 @@ module.exports = class ConnectionGenerator extends Generator {
           { name: 'PostgreSQL', value: 'postgres' },
           { name: 'SQLite', value: 'sqlite' },
           { name: 'SQL Server', value: 'mssql' },
-          { name: 'MongoDB', value: 'mongodb' }
+          { name: 'MongoDB', value: 'mongodb' },
+          { name: 'Couchbase', value: 'couchbase' }
         ],
         when (current) {
           const answers = getProps(current);
@@ -201,6 +213,7 @@ module.exports = class ConnectionGenerator extends Generator {
           case 'memory':
           case 'mongodb':
           case 'cassandra':
+          case 'couchbase':
             setProps({ database: adapter });
             return false;
           case 'mongoose':
@@ -264,6 +277,7 @@ module.exports = class ConnectionGenerator extends Generator {
           case 'nedb':
           case 'memory':
           case 'cassandra':
+          case 'couchbase':
             return false;
           }
 
@@ -284,7 +298,8 @@ module.exports = class ConnectionGenerator extends Generator {
             postgres: `postgres://postgres:@localhost:5432/${databaseName}`,
             sqlite: `sqlite://${databaseName}.sqlite`,
             mssql: `mssql://root:password@localhost:1433/${databaseName}`,
-            cassandra: `cassandra://localhost:9042/${databaseName}`
+            cassandra: `cassandra://localhost:9042/${databaseName}`,
+            couchbase: 'couchbase://localhost'
           };
 
           return defaultConnectionStrings[database];
@@ -381,6 +396,7 @@ module.exports = class ConnectionGenerator extends Generator {
       // case 'oracle':
       case 'postgres': // eslint-disable-line no-fallthrough
       case 'cassandra':
+      case 'couchbase':
         this.log(`Make sure that your ${database} database is running, the username/role is correct, and "${connectionString}" is reachable and the database has been created.`);
         this.log('Your configuration can be found in the projects config/ folder.');
         break;
