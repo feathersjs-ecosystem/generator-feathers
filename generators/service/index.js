@@ -25,7 +25,8 @@ module.exports = class ServiceGenerator extends Generator {
           { name: 'Sequelize', value: 'sequelize' },
           { name: 'KnexJS', value: 'knex' },
           { name: 'Objection', value: 'objection' },
-          { name: 'Cassandra', value: 'cassandra' }
+          { name: 'Cassandra', value: 'cassandra' },
+          { name: 'Couchbase', value: 'couchbase' }
         ]
       }, {
         name: 'name',
@@ -146,7 +147,8 @@ module.exports = class ServiceGenerator extends Generator {
       sequelize: 'feathers-sequelize',
       knex: 'feathers-knex',
       objection: 'feathers-objection',
-      cassandra: 'feathers-cassandra'
+      cassandra: 'feathers-cassandra',
+      couchbase: 'feathers-couchbase'
     };
     const serviceModule = moduleMappings[adapter];
     const serviceFolder = [this.libDirectory, 'services', ...subfolder, kebabName];
