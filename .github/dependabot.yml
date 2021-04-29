@@ -1,0 +1,62 @@
+version: 2
+registries:
+  npm-registry-registry-npmjs-org:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    token: "${{secrets.NPM_REGISTRY_REGISTRY_NPMJS_ORG_TOKEN}}"
+
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: monthly
+    time: "10:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: mongoose
+    versions:
+    - 5.11.14
+    - 5.11.18
+  - dependency-name: feathers-objection
+    versions:
+    - 7.1.1
+  - dependency-name: eslint
+    versions:
+    - 7.19.0
+    - 7.21.0
+  - dependency-name: mocha
+    versions:
+    - 8.3.0
+  - dependency-name: sqlite3
+    versions:
+    - 5.0.1
+    - 5.0.2
+  - dependency-name: yeoman-test
+    versions:
+    - 5.0.1
+  - dependency-name: typescript
+    versions:
+    - 4.2.2
+  - dependency-name: lodash
+    versions:
+    - 4.17.21
+  - dependency-name: sequelize
+    versions:
+    - 6.5.0
+  - dependency-name: helmet
+    versions:
+    - 4.4.1
+  - dependency-name: objection
+    versions:
+    - 2.2.14
+  - dependency-name: nodemon
+    versions:
+    - 2.0.7
+  - dependency-name: "@feathersjs/tools"
+    versions:
+    - 0.2.3
+  - dependency-name: yeoman-generator
+    versions:
+    - 4.13.0
+  registries:
+  - npm-registry-registry-npmjs-org
