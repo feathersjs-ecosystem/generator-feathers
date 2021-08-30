@@ -1,4 +1,4 @@
-// See http://docs.sequelizejs.com/en/latest/docs/models-definition/
+// See https://sequelize.org/master/manual/model-basics.html
 // for more of what you can do here.
 import { Sequelize, DataTypes, Model } from 'sequelize';
 import { Application } from '../declarations';
@@ -22,7 +22,7 @@ export default function (app: Application): typeof Model {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (<%= camelName %> as any).associate = function (models: any): void {
     // Define associations here
-    // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    // See https://sequelize.org/master/manual/assocs.html
   };
 
   return <%= camelName %>;

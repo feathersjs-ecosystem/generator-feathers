@@ -1,4 +1,4 @@
-// See http://docs.sequelizejs.com/en/latest/docs/models-definition/
+// See https://sequelize.org/master/manual/model-basics.html
 // for more of what you can do here.
 const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
@@ -31,7 +31,7 @@ module.exports = function (app) {
   // eslint-disable-next-line no-unused-vars
   <%= camelName %>.associate = function (models) {
     // Define associations here
-    // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    // See https://sequelize.org/master/manual/assocs.html
   };
 
   return <%= camelName %>;
