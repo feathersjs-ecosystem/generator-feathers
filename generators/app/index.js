@@ -119,6 +119,12 @@ module.exports = class AppGenerator extends Generator {
       message: 'This app uses authentication',
       type: 'confirm',
       default: true
+    },
+    {
+        type: "confirm",
+        name: "sandbox",
+        message: 'This app should include cloud sandbox configuration',
+        default: true
     }];
 
     const jsPrompts = [{
