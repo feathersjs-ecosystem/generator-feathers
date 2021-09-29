@@ -121,10 +121,10 @@ module.exports = class AppGenerator extends Generator {
       default: true
     },
     {
-        type: "confirm",
-        name: "sandbox",
-        message: 'This app should include cloud sandbox configuration',
-        default: true
+      type: "confirm",
+      name: "sandbox",
+      message: 'This app should include cloud sandbox configuration',
+      default: true
     }];
 
     const jsPrompts = [{
