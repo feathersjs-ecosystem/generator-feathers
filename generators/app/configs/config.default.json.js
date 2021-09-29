@@ -1,7 +1,7 @@
 module.exports = function(generator) {
   const { props } = generator;
   const config = {
-    host: 'localhost',
+    host: <% if (props.sandbox) { %>'0.0.0.0'<% } else { %>'localhost'<% } %>,
     port: props.sandbox ? 3000 : 3030, // Glitch mandates port 3000
     public: '../public/',
     paginate: {
@@ -9,7 +9,7 @@ module.exports = function(generator) {
       max: 50
     },
     helmet: {
-      <% if (this.props.sandbox) { %>frameguard: false,<% } %>
+      <% if (props.sandbox) { %>frameguard: false,<% } %>
       contentSecurityPolicy: false
     }
   };
