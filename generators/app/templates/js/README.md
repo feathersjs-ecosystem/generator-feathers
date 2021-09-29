@@ -10,21 +10,32 @@ This project uses [Feathers](http://feathersjs.com). An open source web framewor
 
 ## Getting Started (sandbox)
 
-The following works for CodeSandbox and Glitch. Save this shell script to `sandbox.sh` and run with `bash sandbox.sh`
+The following works for CodeSandbox and Glitch. Save this shell script to `sandbox.sh` and run with `bash sandbox.sh`.  
+Use the CodeSandbox Node HTTP Server Official template or the glitch-hello-node template.
 
 ```
 #!/bin/bash 
 set -euo pipefail
 
-rm src/index.js && rm package.json && rm server.js || :
+rm src/index.js >> /dev/null 2>&1 || :
+rm server.js >> /dev/null 2>&1 || :
+rm .gitignore >> /dev/null 2>&1 || :
+rm README.md >> /dev/null 2>&1 || :
+rm package.json
 cd /tmp
-git clone https://github.com/feathersjs/generator-feathers.git
+git clone https://github.com/rayfoss/generator-feathers.git
 cd generator-feathers
-git checkout master
+git checkout patch-1
 npm install
-cd /app || cd /sandbox
+
+
+cd /sandbox >> /dev/null 2>&1 || :
+cd /app >> /dev/null 2>&1 || :
 npx yo /tmp/generator-feathers
-refresh || echo "PLEASE REFRESH"
+
+refresh >> /dev/null 2>&1 || :
+pkill -9 -f yarn >> /dev/null 2>&1 || :
+echo "Success, please REFRESH"
 ```
 <% } %>
 
