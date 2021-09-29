@@ -26,6 +26,7 @@ export type HookContext<T = any> = { app: Application } & FeathersHookContext<T>
 app.configure(configuration());
 // Enable security, CORS, compression, favicon and body parsing
 app.use(helmet({
+<% if (this.props.sandbox) { %>frameguard: false,<% } %>
   contentSecurityPolicy: false
 }));
 app.use(cors());
