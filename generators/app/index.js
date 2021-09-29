@@ -216,6 +216,13 @@ module.exports = class AppGenerator extends Generator {
         makeConfig.eslintrc(this)
       );
     }
+    
+    if (props.sandbox) {
+      this.fs.writeJSON(
+        this.destinationPath('sandbox.config.json'),
+        makeConfig.sandboxconfig()
+      );
+    }
 
     this.fs.writeJSON(
       this.destinationPath(this.configDirectory, 'default.json'),
