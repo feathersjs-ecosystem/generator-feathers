@@ -5,4 +5,5 @@ module.exports = {
   package: require('./package.json.js'),
   eslintrc: require('./eslintrc.json.js'),
   tsconfig: require('./tsconfig.json.js')
+  sandboxconfig: require('./sandbox.config.json.js')
 };
