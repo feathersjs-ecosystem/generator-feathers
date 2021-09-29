@@ -142,6 +142,10 @@ module.exports = class AppGenerator extends Generator {
       props = Object.assign({}, this.props, props, {
         linter: 'eslint'
       });
+      
+      if (props.sandbox) {
+        props.packager = 'npm' // Glitch uses pnpm, zero support for yarn. CSB is hardcoded to use yarn.
+      }
 
       if (props.language === 'js') {
         return this.prompt(jsPrompts).then(jsProps => {
