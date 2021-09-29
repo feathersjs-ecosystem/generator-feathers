@@ -144,7 +144,7 @@ module.exports = class AppGenerator extends Generator {
       });
       
       if (props.sandbox) {
-        props.packager = 'npm' // Glitch uses pnpm, zero support for yarn. CSB is hardcoded to use yarn.
+        props.packager = 'npm'; // Glitch uses pnpm, zero support for yarn. CSB is hardcoded to use yarn.
       }
 
       if (props.language === 'js') {
