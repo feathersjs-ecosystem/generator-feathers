@@ -8,7 +8,7 @@ This project uses [Feathers](http://feathersjs.com). An open source web framewor
 
 <% if (sandbox) { %>
 
-## Getting Started (Sandbox)
+## Getting Started (sandbox)
 
 The following works for CodeSandbox and Glitch. Save this shell script to `sandbox.sh` and run with `sh sandbox.sh`
 
