@@ -72,7 +72,7 @@ module.exports = function(generator) {
       'start-prod': `${packager} run compile && node lib/`
     };
     pkg.types = 'lib/';
-    pkg.start = props.sandbox ? 'npm run dev' : pkg.scripts['start-prod']
+    pkg.scripts.start = props.sandbox ? 'npm run dev' : pkg.scripts['start-prod']
 
     if (props.linter === 'standard') delete pkg.scripts.lint;
   }
