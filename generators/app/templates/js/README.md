@@ -6,7 +6,27 @@
 
 This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
 
-## Getting Started
+<% if (sandbox) { %>
+
+## Getting Started (Sandbox)
+
+The following works for CodeSandbox and Glitch. Save this shell script to `sandbox.sh` and run with `sh sandbox.sh`
+
+```
+// save to sandbox.sh and run with `bash sandbox.sh`
+cd /tmp
+git clone https://github.com/feathersjs/generator-feathers.git
+cd generator-feathers
+git checkout master
+npm install
+cd /app || cd /sandbox
+rm src/index.js && rm package.json
+npx yo /tmp/generator-feathers
+refresh || echo "PLEASE REFRESH"
+```
+<% } %>
+
+## Getting Started (local installation)
 
 Getting up and running is as easy as 1, 2, 3.
 
