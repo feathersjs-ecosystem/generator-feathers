@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { Server } from 'http';
 import url from 'url';
 import axios from 'axios';
