@@ -177,7 +177,7 @@ module.exports = class AppGenerator extends Generator {
     this.fs.copy(this.templatePath('_gitignore'), this.destinationPath('', '.gitignore'));
 
     this.fs.copyTpl(
-      this.templatePath('README.md'),
+      this.templatePath('..','README.md'),
       this.destinationPath('', 'README.md'),
       context
     );
