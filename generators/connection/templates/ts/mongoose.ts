@@ -5,7 +5,7 @@ import logger from './logger';
 export default function (app: Application): void {
   mongoose.connect(
     app.get('mongodb'),
-    { useCreateIndex: true, useNewUrlParser: true }
+    {}
   ).catch(err => {
     logger.error(err);
     process.exit(1);
