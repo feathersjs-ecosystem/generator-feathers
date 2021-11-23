@@ -1,7 +1,7 @@
 // See https://vincit.github.io/objection.js/#models
 // for more of what you can do here.
 import { Model, JSONSchema } from 'objection';
-import Knex from 'knex';
+import { Knex } from 'knex';
 import { Application } from '../declarations';
 
 class <%= className %> extends Model {
