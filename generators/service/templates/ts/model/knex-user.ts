@@ -3,7 +3,7 @@
 // See http://knexjs.org/
 // for more of what you can do here.
 import { Application } from '../declarations';
-import Knex from 'knex';
+import { Knex } from 'knex';
 
 export default function (app: Application): Knex {
   const db: Knex = app.get('knexClient');
