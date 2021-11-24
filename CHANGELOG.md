@@ -2,18 +2,38 @@
 
 ## [Unreleased](https://github.com/feathersjs/generator-feathers/tree/HEAD)
 
-[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.0...HEAD)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.1...HEAD)
+
+**Merged pull requests:**
+
+- Fix TypeScript issues when generating a new app [\#645](https://github.com/feathersjs/generator-feathers/pull/645) ([daffl](https://github.com/daffl))
+
+## [v4.5.1](https://github.com/feathersjs/generator-feathers/tree/v4.5.1) (2021-11-24)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.0...v4.5.1)
+
+**Closed issues:**
+
+- feathers generate service throws typeError: cannot read property 'jest' of undefined [\#644](https://github.com/feathersjs/generator-feathers/issues/644)
+
+## [v4.5.0](https://github.com/feathersjs/generator-feathers/tree/v4.5.0) (2021-11-23)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.4.0...v4.5.0)
 
 **Security fixes:**
 
 - \[Security\] Bump socket.io from 2.3.0 to 2.4.1 [\#594](https://github.com/feathersjs/generator-feathers/pull/594) ([dependabot-preview[bot]](https://github.com/apps/dependabot-preview))
+
+**Closed issues:**
+
+- New Generated feathersjs app failed when start [\#607](https://github.com/feathersjs/generator-feathers/issues/607)
 
 **Merged pull requests:**
 
 - Fix deprecation warning [\#642](https://github.com/feathersjs/generator-feathers/pull/642) ([bartduisters](https://github.com/bartduisters))
 - Update links for sequelize models and associations [\#640](https://github.com/feathersjs/generator-feathers/pull/640) ([mdougherty3](https://github.com/mdougherty3))
 - Improve type-safety of generated hooks object. [\#638](https://github.com/feathersjs/generator-feathers/pull/638) ([JorgenVatle](https://github.com/JorgenVatle))
-- Add dependency update action [\#633](https://github.com/feathersjs/generator-feathers/pull/633) ([daffl](https://github.com/daffl))
+- Add dependency update action and update all dependencies [\#633](https://github.com/feathersjs/generator-feathers/pull/633) ([daffl](https://github.com/daffl))
 - fix error on new mongodb connection [\#621](https://github.com/feathersjs/generator-feathers/pull/621) ([aon108](https://github.com/aon108))
 - Update dependencies [\#617](https://github.com/feathersjs/generator-feathers/pull/617) ([daffl](https://github.com/daffl))
 - Update all dependencies [\#606](https://github.com/feathersjs/generator-feathers/pull/606) ([daffl](https://github.com/daffl))
@@ -21,14 +41,6 @@
 - Add generator options for feathers-couchbase [\#595](https://github.com/feathersjs/generator-feathers/pull/595) ([daffl](https://github.com/daffl))
 - Update all dependencies [\#593](https://github.com/feathersjs/generator-feathers/pull/593) ([daffl](https://github.com/daffl))
 - Move to GitHub action [\#592](https://github.com/feathersjs/generator-feathers/pull/592) ([daffl](https://github.com/daffl))
-
-## [v4.5.0](https://github.com/feathersjs/generator-feathers/tree/v4.5.0) (2021-11-23)
-
-[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.4.0...v4.5.0)
-
-**Closed issues:**
-
-- New Generated feathersjs app failed when start [\#607](https://github.com/feathersjs/generator-feathers/issues/607)
 
 ## [v4.4.0](https://github.com/feathersjs/generator-feathers/tree/v4.4.0) (2021-01-22)
 
