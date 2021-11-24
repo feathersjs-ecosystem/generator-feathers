@@ -43,7 +43,7 @@ describe('Feathers application tests (with jest)', () => {
             'Accept': 'text/html'
           }
         });
-      } catch (error) {
+      } catch (error: any) {
         const { response } = error;
 
         expect(response.status).toBe(404);
@@ -56,7 +56,7 @@ describe('Feathers application tests (with jest)', () => {
       
       try {
         await axios.get(getUrl('path/to/nowhere'));
-      } catch (error) {
+      } catch (error: any) {
         const { response } = error;
 
         expect(response.status).toBe(404);

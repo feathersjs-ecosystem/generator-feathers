@@ -40,7 +40,7 @@ describe('Feathers application tests', () => {
           }
         });
         assert.fail('should never get here');
-      } catch (error) {
+      } catch (error: any) {
         const { response } = error;
 
         assert.equal(response.status, 404);
@@ -52,7 +52,7 @@ describe('Feathers application tests', () => {
       try {
         await axios.get(getUrl('path/to/nowhere'));
         assert.fail('should never get here');
-      } catch (error) {
+      } catch (error: any) {
         const { response } = error;
 
         assert.equal(response.status, 404);
