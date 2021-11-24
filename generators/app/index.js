@@ -260,10 +260,13 @@ module.exports = class AppGenerator extends Generator {
         'shx',
         'ts-node-dev',
         'typescript',
-        `@types/${this.props.tester}`,
-        `ts-${this.props.tester}`,
+        `@types/${this.props.tester}`
       ]).filter(item => !excluded.includes(item));
 
+      if (this.props.tester === 'jest') {
+        this.devDependencies.push('ts-jest');
+      }
+      
       this.devDependencies = this.devDependencies.concat([
         this.props.linter,
         '@typescript-eslint/eslint-plugin',
