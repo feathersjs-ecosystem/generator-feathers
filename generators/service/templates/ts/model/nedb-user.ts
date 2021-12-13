@@ -1,4 +1,4 @@
-import NeDB from 'nedb';
+import NeDB from '@seald-io/nedb';
 import path from 'path';
 import { Application } from '../declarations';
 

@@ -89,7 +89,7 @@ module.exports = class ConnectionGenerator extends Generator {
 
     switch (database) {
     case 'nedb':
-      this.dependencies.push('nedb');
+      this.dependencies.push('@seald-io/nedb');
       return connectionString.substring(7, connectionString.length);
 
     case 'memory':

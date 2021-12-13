@@ -76,7 +76,7 @@ describe('generator-feathers', function() {
   };
   
   describe('with memory adapter', runTest('memory'));
-  describe('with nedb adapter', runTest('nedb'));
+  describe.only('with nedb adapter', runTest('nedb'));
   describe('with sequelize adapter', runTest('sequelize'));
   describe('with knex adapter', runTest('knex'));
   describe.skip('with objection adapter', runTest('objection'));
