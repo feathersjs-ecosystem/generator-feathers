@@ -34,4 +34,4 @@ export default {
     patch: [],
     remove: []
   }
-} as HooksObject;
+};
