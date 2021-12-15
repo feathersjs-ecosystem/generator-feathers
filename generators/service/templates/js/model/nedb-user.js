@@ -1,4 +1,4 @@
-const NeDB = require('nedb');
+const NeDB = require('@seald-io/nedb');
 const path = require('path');
 
 module.exports = function (app) {

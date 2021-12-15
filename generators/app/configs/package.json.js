@@ -56,7 +56,7 @@ module.exports = function(generator) {
   if ('mocha' === props.tester) {
     pkg.scripts['mocha'] = isTypescript ? 'mocha --require ts-node/register --require source-map-support/register "test/**/*.ts" --recursive --exit' : 'mocha test/ --recursive --exit';
   } else {
-    pkg.scripts['jest'] = 'jest  --forceExit';
+    pkg.scripts['jest'] = 'jest --forceExit';
   }
 
   if (isTypescript) {
