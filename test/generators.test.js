@@ -76,12 +76,13 @@ describe('generator-feathers', function() {
   };
   
   describe('with memory adapter', runTest('memory'));
-  describe('with nedb adapter', runTest('nedb'));
   describe('with sequelize adapter', runTest('sequelize'));
   describe('with knex adapter', runTest('knex'));
   describe.skip('with objection adapter', runTest('objection'));
   
   describe('with mongoose adapter', runTest('mongoose'));
-  // Needs to be skipped for now due to the async setup
+  
+  // Needs to be skipped for now because Jest is finicky
+  (tester === 'jest' ? describe.skip : describe)('with nedb adapter', runTest('nedb'));
   (tester === 'jest' ? describe.skip : describe)('with mongodb adapter', runTest('mongodb'));
 });
