@@ -2,11 +2,18 @@
 
 ## [Unreleased](https://github.com/feathersjs/generator-feathers/tree/HEAD)
 
-[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.1...HEAD)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.2...HEAD)
 
 **Merged pull requests:**
 
-- Fix TypeScript issues when generating a new app [\#645](https://github.com/feathersjs/generator-feathers/pull/645) ([daffl](https://github.com/daffl))
+- Use maintained NeDB fork [\#649](https://github.com/feathersjs/generator-feathers/pull/649) ([daffl](https://github.com/daffl))
+- Use Node 14 LTS in CI and update all dependencies [\#648](https://github.com/feathersjs/generator-feathers/pull/648) ([daffl](https://github.com/daffl))
+- Fix TypeScript hook export to continue working with codemods [\#647](https://github.com/feathersjs/generator-feathers/pull/647) ([daffl](https://github.com/daffl))
+- chore\(dependencies\): Update all dependencies [\#646](https://github.com/feathersjs/generator-feathers/pull/646) ([daffl](https://github.com/daffl))
+
+## [v4.5.2](https://github.com/feathersjs/generator-feathers/tree/v4.5.2) (2021-12-15)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.1...v4.5.2)
 
 ## [v4.5.1](https://github.com/feathersjs/generator-feathers/tree/v4.5.1) (2021-11-24)
 
@@ -15,6 +22,10 @@
 **Closed issues:**
 
 - feathers generate service throws typeError: cannot read property 'jest' of undefined [\#644](https://github.com/feathersjs/generator-feathers/issues/644)
+
+**Merged pull requests:**
+
+- Fix TypeScript issues when generating a new app [\#645](https://github.com/feathersjs/generator-feathers/pull/645) ([daffl](https://github.com/daffl))
 
 ## [v4.5.0](https://github.com/feathersjs/generator-feathers/tree/v4.5.0) (2021-11-23)
 
