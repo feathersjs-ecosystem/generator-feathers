@@ -14,7 +14,9 @@ declare module '<%= relativeRoot %>declarations' {
 
 export default function (app: Application): void {
   const options = {<% if (modelName) { %>
-    Model: createModel(app),<% } %>
+    Model: createModel(app),<% } %><% if (serviceModule === 'feathers-prisma') {%>
+    model: '<%= className[0].toLowerCase() + className.substr(1) %>',
+    client: app.get('prisma'),<% } %>
     paginate: app.get('paginate')
   };
 

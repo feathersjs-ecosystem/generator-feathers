@@ -5,7 +5,9 @@ const hooks = require('./<%= kebabName %>.hooks');
 
 module.exports = function (app) {
   const options = {<% if (modelName) { %>
-    Model: createModel(app),<% } %>
+    Model: createModel(app),<% } %><% if (serviceModule === 'feathers-prisma') {%>
+    model: '<%= className[0].toLowerCase() + className.substr(1) %>',
+    client: app.get('prisma'),<% } %>
     paginate: app.get('paginate')
   };
 
