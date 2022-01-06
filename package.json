@@ -81,7 +81,7 @@
     "feathers-mongoose": "^8.5.1",
     "feathers-nedb": "^6.0.0",
     "feathers-objection": "^7.5.1",
-    "feathers-prisma": "^0.2.2",
+    "feathers-prisma": "^0.2.5",
     "feathers-sequelize": "^6.3.2",
     "helmet": "^4.6.0",
     "jshint": "^2.13.2",
