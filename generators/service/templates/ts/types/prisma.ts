@@ -1,16 +1,11 @@
 import { PrismaService, PrismaServiceOptions } from 'feathers-prisma';
 import { Application } from '<%= relativeRoot %>declarations';
-import { PrismaClient } from '@prisma/client';
 
-interface Options extends PrismaServiceOptions {
-  client: PrismaClient;
-}
+interface Options extends PrismaServiceOptions {}
 
 export class <%= className %> extends PrismaService {
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor({ client, ...options }: Options, app: Application) {
-    super({
-      ...options,
-    }, client);
+  constructor(options: Options, app: Application) {
+    super(options, app.get('prisma'));
   }
 }
