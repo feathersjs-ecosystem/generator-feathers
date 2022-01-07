@@ -241,4 +241,8 @@ module.exports = class ServiceGenerator extends Generator {
       }
     }
   }
+  
+  end () {
+    this._runLintIfAvailable();
+  }
 };
