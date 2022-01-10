@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@feathersjs/tools": "^0.2.3",
+    "colors": "1.4.0",
     "lodash": "^4.17.21",
     "node-dir": "^0.1.17",
     "randomstring": "^1.2.1",
