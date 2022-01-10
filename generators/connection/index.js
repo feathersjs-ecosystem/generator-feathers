@@ -85,6 +85,9 @@ module.exports = class ConnectionGenerator extends Generator {
       if (this.srcType === 'ts') {	
         this.devDependencies.push('@types/validator@^10.0.0');	
       }	
+    } else if (adapter === 'prisma') {
+      this.dependencies.push('@prisma/client');
+      this.devDependencies.push('prisma');
     }
 
     switch (database) {
@@ -96,8 +99,10 @@ module.exports = class ConnectionGenerator extends Generator {
       return null;
 
     case 'mongodb':
-      this.dependencies.push(adapter);
-      this.dependencies.push('mongodb-core');
+      if (adapter !== 'prisma') {
+        this.dependencies.push(adapter);
+        this.dependencies.push('mongodb-core');
+      }
       return connectionString;
 
     case 'mysql':
@@ -105,13 +110,21 @@ module.exports = class ConnectionGenerator extends Generator {
     // case oracle:
     case 'postgres': // eslint-disable-line no-fallthrough
     case 'sqlite':
-      this.dependencies.push(adapter);
+      if (adapter !== 'prisma') {
+        this.dependencies.push(adapter);
+      }
 
-      if (sqlPackages[database]) {
+      if (sqlPackages[database] && adapter !== 'prisma') {
         this.dependencies.push(sqlPackages[database]);
       }
 
       if (adapter === 'sequelize') {
+        return connectionString;
+      }
+      
+      if (adapter === 'prisma' && database === 'sqlite') {
+        return `file:./${connectionString.substr(9)}`;
+      } else if (adapter === 'prisma') {
         return connectionString;
       }
 
@@ -192,14 +205,25 @@ module.exports = class ConnectionGenerator extends Generator {
         type: 'list',
         name: 'database',
         message: 'Which database are you connecting to?',
-        choices: [
-          { name: 'MySQL (MariaDB)', value: 'mysql' },
-          { name: 'PostgreSQL', value: 'postgres' },
-          { name: 'SQLite', value: 'sqlite' },
-          { name: 'SQL Server', value: 'mssql' },
-          { name: 'MongoDB', value: 'mongodb' },
-          { name: 'Couchbase', value: 'couchbase' }
-        ],
+        choices (current) {
+          const answers = getProps(current);
+          const { adapter } = answers;
+
+          const defaultChoices = [
+            { name: 'MySQL (MariaDB)', value: 'mysql' },
+            { name: 'PostgreSQL', value: 'postgres' },
+            { name: 'SQLite', value: 'sqlite' },
+            { name: 'SQL Server', value: 'mssql' },
+            { name: 'MongoDB', value: 'mongodb' },
+            { name: 'Couchbase', value: 'couchbase' }
+          ];
+
+          if (adapter === 'prisma') {
+            return defaultChoices.filter((db) => !['couchbase'].includes(db.value));
+          }
+
+          return defaultChoices;
+        },
         when (current) {
           const answers = getProps(current);
           const { database, adapter } = answers;
@@ -248,7 +272,8 @@ module.exports = class ConnectionGenerator extends Generator {
           const sqlOptions = [
             { name: 'Sequelize', value: 'sequelize' },
             { name: 'KnexJS', value: 'knex' },
-            { name: 'Objection', value: 'objection' }
+            { name: 'Objection', value: 'objection' },
+            { name: 'Prisma', value: 'prisma' }
           ];
           const cassandraOptions = [
             { name: 'Cassandra', value: 'cassandra' }
@@ -289,7 +314,7 @@ module.exports = class ConnectionGenerator extends Generator {
         message: 'What is the database connection string?',
         default (current) {
           const answers = getProps(current);
-          const { database } = answers;
+          const { database, adapter } = answers;
           const defaultConnectionStrings = {
             mongodb: `mongodb://localhost:27017/${databaseName}`,
             mysql: `mysql://root:@localhost:3306/${databaseName}`,
@@ -301,6 +326,10 @@ module.exports = class ConnectionGenerator extends Generator {
             cassandra: `cassandra://localhost:9042/${databaseName}`,
             couchbase: 'couchbase://localhost'
           };
+
+          if (adapter === 'prisma' && database === 'sqlite') {
+            return `file:./${databaseName}.db`;
+          }
 
           return defaultConnectionStrings[database];
         },
@@ -382,7 +411,15 @@ module.exports = class ConnectionGenerator extends Generator {
   }
 
   end () {
-    const { database, connectionString } = this.props;
+    const { database, adapter, connectionString } = this.props;
+
+    if (adapter === 'prisma') {
+      const providers = {
+        mssql: 'sqlserver',
+        postgres: 'postgresql',
+      };
+      this.log(`Run 'npx prisma init --datasource-provider ${providers[database] || database} --url ${connectionString}' in your command line!`);
+    }
 
     // NOTE (EK): If this is the first time we set this up
     // show this nice message.
