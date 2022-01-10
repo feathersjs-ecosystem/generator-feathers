@@ -2,7 +2,21 @@
 
 ## [Unreleased](https://github.com/feathersjs/generator-feathers/tree/HEAD)
 
-[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.2...HEAD)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.6.0...HEAD)
+
+**Merged pull requests:**
+
+- Lock colors dependency for fix broken command line [\#652](https://github.com/feathersjs/generator-feathers/pull/652) ([daffl](https://github.com/daffl))
+- Added option to generate service for feathers-prisma [\#651](https://github.com/feathersjs/generator-feathers/pull/651) ([ps73](https://github.com/ps73))
+- chore\(dependencies\): Update all dependencies [\#650](https://github.com/feathersjs/generator-feathers/pull/650) ([daffl](https://github.com/daffl))
+
+## [v4.6.0](https://github.com/feathersjs/generator-feathers/tree/v4.6.0) (2022-01-10)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.2...v4.6.0)
+
+## [v4.5.2](https://github.com/feathersjs/generator-feathers/tree/v4.5.2) (2021-12-15)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.1...v4.5.2)
 
 **Merged pull requests:**
 
@@ -10,10 +24,6 @@
 - Use Node 14 LTS in CI and update all dependencies [\#648](https://github.com/feathersjs/generator-feathers/pull/648) ([daffl](https://github.com/daffl))
 - Fix TypeScript hook export to continue working with codemods [\#647](https://github.com/feathersjs/generator-feathers/pull/647) ([daffl](https://github.com/daffl))
 - chore\(dependencies\): Update all dependencies [\#646](https://github.com/feathersjs/generator-feathers/pull/646) ([daffl](https://github.com/daffl))
-
-## [v4.5.2](https://github.com/feathersjs/generator-feathers/tree/v4.5.2) (2021-12-15)
-
-[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.1...v4.5.2)
 
 ## [v4.5.1](https://github.com/feathersjs/generator-feathers/tree/v4.5.1) (2021-11-24)
 
