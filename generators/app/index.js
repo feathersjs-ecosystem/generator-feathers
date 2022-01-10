@@ -257,7 +257,6 @@ module.exports = class AppGenerator extends Generator {
         '@types/compression',
         '@types/cors',
         '@types/serve-favicon',
-        '@types/socketio',
         'shx',
         'ts-node-dev',
         'typescript',
