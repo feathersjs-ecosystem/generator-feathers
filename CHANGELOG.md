@@ -2,17 +2,26 @@
 
 ## [Unreleased](https://github.com/feathersjs/generator-feathers/tree/HEAD)
 
-[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.6.0...HEAD)
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.7.0...HEAD)
+
+**Merged pull requests:**
+
+- chore\(dependencies\): Update all dependencies [\#664](https://github.com/feathersjs/generator-feathers/pull/664) ([daffl](https://github.com/daffl))
+- change sequelize import hook path [\#663](https://github.com/feathersjs/generator-feathers/pull/663) ([kmmcc](https://github.com/kmmcc))
+
+## [v4.7.0](https://github.com/feathersjs/generator-feathers/tree/v4.7.0) (2022-06-13)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.6.0...v4.7.0)
+
+## [v4.6.0](https://github.com/feathersjs/generator-feathers/tree/v4.6.0) (2022-01-10)
+
+[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.2...v4.6.0)
 
 **Merged pull requests:**
 
 - Lock colors dependency for fix broken command line [\#652](https://github.com/feathersjs/generator-feathers/pull/652) ([daffl](https://github.com/daffl))
 - Added option to generate service for feathers-prisma [\#651](https://github.com/feathersjs/generator-feathers/pull/651) ([ps73](https://github.com/ps73))
 - chore\(dependencies\): Update all dependencies [\#650](https://github.com/feathersjs/generator-feathers/pull/650) ([daffl](https://github.com/daffl))
-
-## [v4.6.0](https://github.com/feathersjs/generator-feathers/tree/v4.6.0) (2022-01-10)
-
-[Full Changelog](https://github.com/feathersjs/generator-feathers/compare/v4.5.2...v4.6.0)
 
 ## [v4.5.2](https://github.com/feathersjs/generator-feathers/tree/v4.5.2) (2021-12-15)
 
