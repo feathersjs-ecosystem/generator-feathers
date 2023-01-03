@@ -1,5 +1,7 @@
 # generator-feathers
 
+> __Important:__ The Feathers generator has been moved to the [cli package](https://github.com/feathersjs/feathers/tree/dove/packages/cli) in [feathersjs/feathers](https://github.com/feathersjs/feathers )
+
 [![CI](https://github.com/feathersjs/generator-feathers/workflows/CI/badge.svg)](https://github.com/feathersjs/generator-feathers/actions?query=workflow%3ACI)
 
 > A Yeoman generator for a Feathers application
